@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>מועדון ההורים של מיכמוני — לא מגדלים ילדים לבד</title>
+  <meta name="description" content="מועדון ההורים של מיכמוני — מרחב שבועי קבוע בזום. 91 ₪ בלבד לחודש." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Reset & Base ─────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: #ffffff;
+      color: #1a1a2e;
+      direction: rtl;
+      text-align: right;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ─── Tokens ─────────────────────────────────── */
+    :root {
+      --yellow:  #f4bb4f;
+      --teal:    #298c9c;
+      --orange:  #ea6c3a;
+      --dark:    #1a1a2e;
+      --mid:     #4a5568;
+      --light:   #f8f9fb;
+      --border:  #e8edf2;
+      --white:   #ffffff;
+    }
+
+    /* ─── Scroll Reveal ──────────────────────────── */
+    .sr {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .65s cubic-bezier(.22,1,.36,1),
+                  transform .65s cubic-bezier(.22,1,.36,1);
+    }
+    .sr.in { opacity: 1; transform: none; }
+    .sr-d1 { transition-delay: .1s; }
+    .sr-d2 { transition-delay: .2s; }
+    .sr-d3 { transition-delay: .3s; }
+    .sr-d4 { transition-delay: .4s; }
+
+    /* ─── Layout helpers ─────────────────────────── */
+    .container { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
+    .section    { padding: 96px 0; }
+    .section-sm { padding: 64px 0; }
+
+    /* ─── Label chip ──────────────────────────────── */
+    .label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--teal);
+      background: rgba(41,140,156,.08);
+      border: 1px solid rgba(41,140,156,.2);
+      padding: 6px 14px;
+      border-radius: 99px;
+      margin-bottom: 20px;
+    }
+    .label::before {
+      content: '';
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+
+    /* ─── Buttons ────────────────────────────────── */
+    .btn {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all .2s ease;
+      border: 2px solid transparent;
+    }
+    .btn-primary {
+      background: var(--orange);
+      color: #fff;
+      box-shadow: 0 4px 24px rgba(234,108,58,.35);
+    }
+    .btn-primary:hover {
+      background: #d85c2e;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(234,108,58,.45);
+    }
+    .btn-outline {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: transparent;
+    }
+    .btn-outline:hover {
+      background: var(--teal);
+      color: #fff;
+    }
+    .btn-lg { padding: 18px 44px; font-size: 18px; border-radius: 14px; }
+
+    /* CTA pulse ring */
+    @keyframes ring {
+      0%   { box-shadow: 0 0 0 0 rgba(234,108,58,.4); }
+      70%  { box-shadow: 0 0 0 16px rgba(234,108,58,0); }
+      100% { box-shadow: 0 0 0 0 rgba(234,108,58,0); }
+    }
+    .btn-ring { animation: ring 2.4s infinite; }
+
+    /* ─── Navbar ──────────────────────────────────── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      gap: 16px;
+    }
+    .nav__logo { height: 38px; object-fit: contain; flex-shrink: 0; }
+    .nav__tagline {
+      flex: 1;
+      text-align: center;
+      position: relative;
+      height: 24px;
+      overflow: hidden;
+    }
+    .nav__tagline-item {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity .5s ease, transform .5s ease;
+      white-space: nowrap;
+    }
+    .nav__tagline-item.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .nav__cta { font-size: 14px; padding: 10px 22px; flex-shrink: 0; }
+    @media (max-width: 600px) { .nav__tagline { display: none; } }
+
+    /* ─── Hero ────────────────────────────────────── */
+    /* ─── Split-screen Hero ──────────────────────── */
+    .hero {
+      height: calc(100vh - 64px); /* subtract navbar height */
+      max-height: 780px;
+      display: grid;
+      grid-template-columns: 45% 1fr;
+      overflow: hidden;
+      padding: 0;
+      background: #fff;
+    }
+
+    /* Left — full-bleed image panel */
+    .hero__img-side {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero__img-side img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      transform: scale(1.04);
+      transition: transform 1.6s cubic-bezier(.22,1,.36,1);
+    }
+    .hero__img-side img.loaded { transform: scale(1); }
+
+    /* Price badge floating over image */
+    .hero__badge {
+      position: absolute;
+      bottom: 36px;
+      right: 28px;
+      z-index: 2;
+      background: #fff;
+      border-radius: 16px;
+      padding: 14px 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.18);
+      font-size: 13px;
+      color: var(--dark);
+      min-width: 150px;
+    }
+    .hero__badge strong {
+      display: block;
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--orange);
+      margin-bottom: 2px;
+    }
+    .hero__badge span {
+      display: block;
+      color: var(--mid);
+      font-size: 11px;
+      margin-top: 4px;
+      border-top: 1px solid var(--border);
+      padding-top: 5px;
+    }
+
+    /* Right — text */
+    .hero__content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px 64px 48px 56px;
+      background: #fff;
+    }
+    .hero__content h1 {
+      font-size: clamp(28px, 3.2vw, 48px);
+      font-weight: 900;
+      line-height: 1.2;
+      color: var(--dark);
+      margin-bottom: 20px;
+    }
+    .hero__content h1 span { color: var(--teal); }
+    .hero__content p {
+      font-size: 17px;
+      line-height: 1.8;
+      color: var(--mid);
+      margin-bottom: 36px;
+    }
+    .hero__actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .hero__note {
+      font-size: 13px;
+      color: #8896a5;
+      margin-top: 14px;
+    }
+
+    /* ─── Trust bar ───────────────────────────────── */
+    .trustbar {
+      background: var(--light);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 28px 0;
+    }
+    .trustbar__inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .trustbar__item {
+      text-align: center;
+    }
+    .trustbar__item strong {
+      display: block;
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--teal);
+    }
+    .trustbar__item span {
+      font-size: 13px;
+      color: var(--mid);
+      margin-top: 2px;
+      display: block;
+    }
+    .trustbar__divider {
+      width: 1px;
+      height: 40px;
+      background: var(--border);
+    }
+
+    /* ─── Pain section ────────────────────────────── */
+    /* ── Pain scene: sticky bg + normal-flow content ── */
+    .pain-scene {
+      position: relative;
+      overflow: clip; /* clips sticky-bg without breaking sticky */
+    }
+    /* The image layer — sticky so it stays while solution slides over */
+    .pain-sticky-bg {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      margin-bottom: -100vh; /* collapse: doesn't push content down */
+      z-index: 0;
+      background-image: url('family.jpg');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+    }
+    .pain-sticky-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.30);
+    }
+    /* Pain content — normal flow, sits on top of sticky bg */
+    .pain {
+      position: relative;
+      z-index: 1;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      background: transparent;
+      padding: 0;
+    }
+    .pain__grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      will-change: transform, opacity;
+    }
+    /* Solution slides up over the static image */
+    .solution {
+      position: relative;
+      z-index: 2;
+      background: var(--light);
+      border-radius: 28px 28px 0 0;
+      box-shadow: 0 -20px 60px rgba(0,0,0,.20);
+    }
+    .pain__copy h2 {
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 900;
+      line-height: 1.25;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    .pain__copy h2 em { font-style: normal; color: var(--yellow); }
+    .pain__copy p {
+      font-size: 17px;
+      line-height: 1.8;
+      color: rgba(255,255,255,.75);
+      margin-bottom: 16px;
+    }
+    .pain__copy .label {
+      color: var(--yellow);
+      background: rgba(244,187,79,.15);
+      border-color: rgba(244,187,79,.3);
+    }
+    .pain__copy .label::before { background: var(--yellow); }
+    .pain__tiles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .pain__tile {
+      border-radius: 18px;
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      aspect-ratio: 1 / 1;
+      transition: transform .22s ease, box-shadow .22s ease;
+    }
+    .pain__tile:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,.13);
+    }
+    .pain__tile p {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.45;
+      margin: 0;
+    }
+    .pain__tile--teal   { background: var(--teal);   color: #fff; }
+    .pain__tile--yellow { background: var(--yellow); color: #3d2c00; }
+    .pain__tile--orange { background: var(--orange); color: #fff; }
+    .pain__tile--dark   { background: #1a1a2e;       color: #fff; }
+
+    /* ─── Solution ────────────────────────────────── */
+    .solution { background: var(--light); }
+    .solution__head { text-align: center; max-width: 680px; margin: 0 auto 64px; }
+    .solution__head h2 {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 900;
+      color: var(--dark);
+      line-height: 1.25;
+      margin-bottom: 16px;
+    }
+    .solution__head p { font-size: 18px; color: var(--mid); line-height: 1.75; }
+    .solution__cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .sol-card {
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .sol-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 48px rgba(0,0,0,.1);
+    }
+    .sol-card__img {
+      width: 100%;
+      height: 210px;
+      object-fit: cover;
+      display: block;
+    }
+    .sol-card__body {
+      padding: 24px 26px 28px;
+      position: relative;
+    }
+    .sol-card__accent {
+      position: absolute;
+      top: 0; right: 0; left: 0;
+      height: 3px;
+    }
+    .sol-card h3 { font-size: 19px; font-weight: 800; color: var(--dark); margin-bottom: 10px; margin-top: 4px; }
+    .sol-card p  { font-size: 15px; color: var(--mid); line-height: 1.75; }
+
+    /* ─── Features (included) ────────────────────── */
+    .features { background: #fff; }
+    /* ─── Expanding Cards (Features) ─────────────── */
+    .features { background: #f8f9fb; }
+    .features__head { text-align: center; max-width: 600px; margin: 0 auto 56px; }
+    .features__head h2 {
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 900;
+      color: var(--dark);
+      margin-bottom: 14px;
+    }
+    .features__head p { font-size: 17px; color: var(--mid); line-height: 1.75; }
+
+    /* Container */
+    .exp-cards {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 5fr 1fr 1fr 1fr;
+      gap: 14px;
+      height: 480px;
+      transition: grid-template-columns 520ms cubic-bezier(.22,1,.36,1);
+    }
+
+    /* Individual card */
+    .ec {
+      position: relative;
+      border-radius: 22px;
+      overflow: hidden;
+      cursor: pointer;
+      outline: none;
+    }
+    .ec:focus-visible { box-shadow: 0 0 0 3px var(--teal); }
+
+    /* Solid colour bg (always visible) */
+    .ec__bg {
+      position: absolute;
+      inset: 0;
+      transition: opacity .4s ease;
+    }
+    .ec--teal   .ec__bg { background: var(--teal); }
+    .ec--yellow .ec__bg { background: var(--yellow); }
+    .ec--orange .ec__bg { background: var(--orange); }
+    .ec--dark   .ec__bg { background: #1a1a2e; }
+
+    /* Photo — hidden when closed, revealed when open */
+    .ec__img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transform: scale(1.06);
+      transition: opacity .5s ease .1s, transform .5s ease .1s;
+      pointer-events: none;
+    }
+    .ec[data-active="true"] .ec__img {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Dark gradient over photo */
+    .ec__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.18) 60%, transparent 100%);
+      opacity: 0;
+      transition: opacity .4s ease .1s;
+    }
+    .ec[data-active="true"] .ec__overlay { opacity: 1; }
+
+    /* ── CLOSED state: vertical title ── */
+    .ec__title-v {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-90deg);
+      white-space: nowrap;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: .04em;
+      transition: opacity .25s ease;
+    }
+    .ec--teal   .ec__title-v,
+    .ec--orange .ec__title-v,
+    .ec--dark   .ec__title-v { color: rgba(255,255,255,.85); }
+    .ec--yellow .ec__title-v { color: rgba(61,44,0,.75); }
+    /* Hide when open */
+    .ec[data-active="true"] .ec__title-v { opacity: 0; pointer-events: none; }
+
+    /* ── OPEN state: bottom content ── */
+    .ec__body {
+      position: absolute;
+      bottom: 0; right: 0; left: 0;
+      padding: 28px 28px 32px;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity .35s ease .18s, transform .35s ease .18s;
+      pointer-events: none;
+    }
+    .ec[data-active="true"] .ec__body {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .ec__body h3 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 10px;
+      line-height: 1.25;
+    }
+    .ec__body p {
+      font-size: 14px;
+      color: rgba(255,255,255,.82);
+      line-height: 1.7;
+      max-width: 340px;
+    }
+
+    /* Mobile: vertical stack */
+    @media (max-width: 768px) {
+      .exp-cards {
+        grid-template-columns: 1fr;
+        grid-template-rows: 5fr 1fr 1fr 1fr;
+        height: auto;
+        min-height: 560px;
+        transition: grid-template-rows 520ms cubic-bezier(.22,1,.36,1);
+      }
+      .ec__title-v {
+        bottom: auto;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(0deg);
+        font-size: 15px;
+      }
+      .exp-cards.mobile-active-0 { grid-template-rows: 5fr 1fr 1fr 1fr; }
+      .exp-cards.mobile-active-1 { grid-template-rows: 1fr 5fr 1fr 1fr; }
+      .exp-cards.mobile-active-2 { grid-template-rows: 1fr 1fr 5fr 1fr; }
+      .exp-cards.mobile-active-3 { grid-template-rows: 1fr 1fr 1fr 5fr; }
+    }
+
+    /* ─── Topics ──────────────────────────────────── */
+    .topics { background: var(--light); }
+    .topics__head { text-align: center; max-width: 600px; margin: 0 auto 48px; }
+    .topics__head h2 {
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 900;
+      color: var(--dark);
+      margin-bottom: 12px;
+    }
+    .topics__head p { font-size: 17px; color: var(--mid); }
+    .topics__wrap { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+    .topic-tag {
+      padding: 10px 22px;
+      border-radius: 99px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: default;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .topic-tag:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,.1); }
+    .tt-teal   { background: rgba(41,140,156,.1);  color: var(--teal);   border: 1px solid rgba(41,140,156,.2); }
+    .tt-yellow { background: rgba(244,187,79,.15); color: #8a6600;       border: 1px solid rgba(244,187,79,.3); }
+    .tt-orange { background: rgba(234,108,58,.1);  color: var(--orange); border: 1px solid rgba(234,108,58,.2); }
+    .tt-gray   { background: rgba(74,85,104,.07);  color: var(--mid);    border: 1px solid rgba(74,85,104,.15); }
+
+    /* ─── About Oren ──────────────────────────────── */
+    .about { background: #fff; }
+    .about__inner {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 72px;
+      align-items: center;
+    }
+    .about__photo-wrap { position: relative; }
+    .about__photo-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 28px;
+      background: linear-gradient(135deg, var(--teal), var(--yellow));
+      transform: rotate(-3deg) scale(1.03);
+      opacity: .2;
+      z-index: 0;
+    }
+    .about__photo {
+      position: relative;
+      z-index: 1;
+      width: 300px;
+      height: 340px;
+      object-fit: cover;
+      border-radius: 24px;
+      box-shadow: 0 20px 56px rgba(0,0,0,.11);
+    }
+    .about__text h2 {
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 900;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+    .about__text h2 span { color: var(--teal); }
+    .about__subtitle {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--mid);
+      margin-bottom: 24px;
+    }
+    .about__text p {
+      font-size: 17px;
+      line-height: 1.8;
+      color: var(--mid);
+      margin-bottom: 14px;
+    }
+    .about__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--teal);
+      font-weight: 700;
+      font-size: 15px;
+      border-bottom: 2px solid var(--teal);
+      padding-bottom: 2px;
+      margin-top: 8px;
+      transition: opacity .2s;
+    }
+    .about__link:hover { opacity: .65; }
+
+    /* ─── Bonuses ─────────────────────────────────── */
+    .bonuses { background: var(--light); }
+    .bonuses__head { text-align: center; max-width: 580px; margin: 0 auto 56px; }
+    .bonuses__head h2 {
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 900;
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+    .bonuses__head p { font-size: 17px; color: var(--mid); }
+    .bonuses__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .bonus-card {
+      background: #fff;
+      border-radius: 22px;
+      padding: 40px 36px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow .25s ease;
+    }
+    .bonus-card:hover { box-shadow: 0 16px 48px rgba(0,0,0,.08); }
+    .bonus-card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0; left: 0;
+      height: 4px;
+    }
+    .bonus-card--yellow::before { background: var(--yellow); }
+    .bonus-card--teal::before   { background: var(--teal); }
+    .bonus-card__title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 12px;
+    }
+    .bonus-card__desc {
+      font-size: 16px;
+      color: var(--mid);
+      line-height: 1.75;
+      margin-bottom: 20px;
+    }
+    .bonus-card__price {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .bonus-card__original {
+      font-size: 15px;
+      color: #b0bec5;
+      text-decoration: line-through;
+    }
+    .bonus-card__tag {
+      font-size: 13px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 99px;
+      color: #fff;
+    }
+    .tag--yellow { background: var(--yellow); color: var(--dark); }
+    .tag--teal   { background: var(--teal); }
+
+    /* ─── Pricing ─────────────────────────────────── */
+    .pricing {
+      background: #fff;
+      padding: 96px 0;
+    }
+    .pricing__card {
+      max-width: 640px;
+      margin: 0 auto;
+      background: var(--light);
+      border-radius: 28px;
+      border: 1px solid var(--border);
+      padding: 56px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .pricing__card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0; left: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--yellow), var(--teal), var(--orange));
+    }
+    .pricing__label {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 16px;
+    }
+    .pricing__amount {
+      font-size: 72px;
+      font-weight: 900;
+      color: var(--dark);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .pricing__amount sup { font-size: 32px; vertical-align: top; margin-top: 10px; }
+    .pricing__period { font-size: 18px; color: var(--mid); margin-bottom: 36px; }
+    .pricing__divider {
+      height: 1px;
+      background: var(--border);
+      margin: 32px 0;
+    }
+    .pricing__list { list-style: none; text-align: right; display: flex; flex-direction: column; gap: 14px; margin-bottom: 40px; }
+    .pricing__list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 16px;
+      color: var(--dark);
+    }
+    .pricing__list li .check {
+      flex-shrink: 0;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: rgba(41,140,156,.12);
+      color: var(--teal);
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+      font-weight: 900;
+    }
+    .check--gift { background: rgba(244,187,79,.15); color: #8a6600; }
+    .pricing__cta { width: 100%; text-align: center; }
+    .pricing__fine {
+      font-size: 13px;
+      color: #8896a5;
+      margin-top: 16px;
+    }
+
+    /* ─── Footer ──────────────────────────────────── */
+    footer {
+      background: #fff;
+      border-top: 1px solid var(--border);
+      padding: 56px 0 32px;
+    }
+    .footer__inner {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 32px 48px;
+    }
+    /* Logo col — right */
+    .footer__brand { display: flex; flex-direction: column; gap: 10px; }
+    .footer__logo  { height: 40px; object-fit: contain; }
+    .footer__tagline {
+      font-size: 13px;
+      color: var(--mid);
+      line-height: 1.5;
+      max-width: 220px;
+    }
+    /* Center col — accent line */
+    .footer__divider {
+      width: 1px;
+      height: 64px;
+      background: var(--border);
+      justify-self: center;
+    }
+    /* Links col — left */
+    .footer__links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .footer__links a {
+      font-size: 14px;
+      color: var(--mid);
+      transition: color .18s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .footer__links a:hover { color: var(--teal); }
+    .footer__links a::before {
+      content: '';
+      display: inline-block;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: background .18s;
+    }
+    .footer__links a:hover::before { background: var(--teal); }
+    /* Bottom bar — spans full width */
+    .footer__copy {
+      grid-column: 1 / -1;
+      font-size: 12px;
+      color: #b0bec5;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      text-align: center;
+      margin-top: 8px;
+    }
+    @media (max-width: 640px) {
+      .footer__inner {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .footer__divider { display: none; }
+      .footer__brand   { align-items: center; }
+      .footer__tagline { max-width: 100%; }
+      .footer__links   { align-items: center; }
+    }
+
+    /* ─── Mobile sticky CTA ───────────────────────── */
+    .mobile-bar {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 200;
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--border);
+      padding: 12px 16px;
+    }
+    .mobile-bar a { display: block; text-align: center; width: 100%; }
+
+    /* ─── Responsive ───────────────────────────────── */
+    @media (max-width: 768px) {
+      .section    { padding: 64px 0; }
+      .section-sm { padding: 48px 0; }
+
+      .hero { grid-template-columns: 1fr; height: auto; }
+      .hero__img-side { height: 65vw; min-height: 260px; }
+      .hero__badge { bottom: 16px; right: 16px; }
+      .hero__content { padding: 40px 24px 48px; }
+      .hero__actions { flex-direction: column; }
+      .hero__actions .btn { width: 100%; text-align: center; }
+
+      .pain__grid     { grid-template-columns: 1fr; }
+      .solution__cards{ grid-template-columns: 1fr; }
+      /* expanding cards: handled via JS + mobile-active classes */
+      .bonuses__grid  { grid-template-columns: 1fr; }
+
+      .about__inner   { grid-template-columns: 1fr; }
+      .about__photo-wrap { display: flex; justify-content: center; }
+      .about__photo   { width: 240px; height: 280px; }
+
+      .pricing__card  { padding: 36px 24px; }
+      .pricing__amount{ font-size: 56px; }
+
+      .trustbar__divider { display: none; }
+      .trustbar__inner   { gap: 28px; }
+
+      .mobile-bar { display: block; }
+      body { padding-bottom: 72px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAVBAR ─────────────────────────────────────── -->
+<nav class="nav">
+  <div class="container">
+    <div class="nav__inner">
+      <img
+        class="nav__logo"
+        src="https://static.wixstatic.com/media/06e69d_f802a98eb43646ad853337752cccf7d6~mv2.jpeg/v1/fill/w_193,h_61,al_c/06e69d_f802a98eb43646ad853337752cccf7d6~mv2.jpeg"
+        alt="מיכמוני"
+      />
+      <div class="nav__tagline" id="navTagline">
+        <span class="nav__tagline-item active"
+          style="color:#298c9c; font-family:'Heebo',sans-serif;">הזדהות יוצרת הזדמנות</span>
+        <span class="nav__tagline-item"
+          style="color:#ea6c3a; font-family:'Georgia',serif; font-style:italic;">לא מגדלים ילדים לבד</span>
+        <span class="nav__tagline-item"
+          style="color:#8a6600; font-family:'Courier New',monospace; font-weight:800; letter-spacing:.06em;">הורות היא מסע, לא יעד</span>
+        <span class="nav__tagline-item"
+          style="color:#298c9c; font-family:'Arial Rounded MT Bold','Heebo',sans-serif;">ביחד גדלים כהורים</span>
+      </div>
+      <a href="#pricing" class="btn btn-primary nav__cta">הצטרפות למועדון</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── HERO ───────────────────────────────────────── -->
+<section class="hero">
+
+  <!-- LEFT: full-bleed image (first in DOM = left column) -->
+  <div class="hero__img-side">
+    <img
+      src="hero.png"
+      alt="הורים משחקים עם ילד"
+      onload="this.classList.add('loaded')"
+    />
+    <div class="hero__badge sr">
+      <strong>91 ₪</strong>
+      לחודש בלבד
+      <span>ביטול בכל עת &middot; ללא התחייבות</span>
+    </div>
+  </div>
+
+  <!-- RIGHT: text content -->
+  <div class="hero__content">
+    <span class="label sr">מועדון ההורים של מיכמוני</span>
+    <h1 class="sr sr-d1">
+      לא מגדלים ילדים לבד<br/>
+      <span>וביחד גדלים כהורים</span>
+    </h1>
+    <p class="sr sr-d2">
+      מרחב שבועי קבוע בזום. מקום בטוח ללמוד, לשתף, לקבל כלים —
+      ולהבין שאתם לא לבד.
+    </p>
+    <div class="hero__actions sr sr-d3">
+      <a href="#pricing" class="btn btn-primary btn-lg btn-ring">הצטרפות עכשיו — 91 ₪ לחודש</a>
+      <a href="#about" class="btn btn-outline">היכרות עם אורן</a>
+    </div>
+    <p class="hero__note sr sr-d4">בונוסים בשווי 519 ₪ &middot; ביטול בכל עת</p>
+  </div>
+
+</section>
+
+<!-- ─── TRUST BAR ──────────────────────────────────── -->
+<div class="trustbar">
+  <div class="container">
+    <div class="trustbar__inner">
+      <div class="trustbar__item sr">
+        <strong>שבועי</strong>
+        <span>מפגש לייב קבוע</span>
+      </div>
+      <div class="trustbar__divider sr sr-d1"></div>
+      <div class="trustbar__item sr sr-d1">
+        <strong>91 ₪</strong>
+        <span>לחודש בלבד</span>
+      </div>
+      <div class="trustbar__divider sr sr-d2"></div>
+      <div class="trustbar__item sr sr-d2">
+        <strong>519 ₪</strong>
+        <span>שווי בונוסים במתנה</span>
+      </div>
+      <div class="trustbar__divider sr sr-d3"></div>
+      <div class="trustbar__item sr sr-d3">
+        <strong>ביטול</strong>
+        <span>בכל עת, ללא התחייבות</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PAIN + SOLUTION scene (shared sticky bg) ─────── -->
+<div class="pain-scene">
+<div class="pain-sticky-bg"></div>
+
+<section class="pain">
+  <div class="container">
+    <div class="pain__grid">
+
+      <div class="pain__copy">
+        <span class="label sr">הורות — המציאות</span>
+        <h2 class="sr sr-d1">
+          הורות היא אחד<br/>
+          התפקידים החשובים בחיים.<br/>
+          <em>אבל רובנו לא למדנו אותה.</em>
+        </h2>
+        <p class="sr sr-d2">
+          אנחנו מנסים. קוראים. מקשיבים לפודקאסטים.
+          עושים את הכי טוב שאנחנו יכולים.
+        </p>
+        <p class="sr sr-d3">
+          ויש גם הורים שרוצים עזרה — אבל הדרכת הורים פרטנית קבועה יקרה מדי,
+          או שהם כבר איבדו אמונה שאפשר לשנות משהו בבית.
+        </p>
+      </div>
+
+      <div class="pain__tiles">
+        <div class="pain__tile pain__tile--teal sr sr-d1">
+          <p>מתעצבנים יותר ממה שרצינו</p>
+        </div>
+        <div class="pain__tile pain__tile--yellow sr sr-d2">
+          <p>מרגישים אשמה</p>
+        </div>
+        <div class="pain__tile pain__tile--orange sr sr-d3">
+          <p>חוזרים לאותם דפוסים שוב ושוב</p>
+        </div>
+        <div class="pain__tile pain__tile--dark sr sr-d4">
+          <p>מרגישים לפעמים לגמרי לבד</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── SOLUTION (inside pain-scene, slides over sticky bg) ── -->
+<section class="section solution">
+  <div class="container">
+    <div class="solution__head">
+      <span class="label sr">הפתרון</span>
+      <h2 class="sr sr-d1">מועדון ההורים של מיכמוני</h2>
+      <p class="sr sr-d2">
+        מרחב שבועי קבוע בזום — מקום בטוח ללמוד, לשתף, להתייעץ,
+        לקבל כלים, ולהבין שאתם לא לבד.
+      </p>
+    </div>
+
+    <div class="solution__cards">
+      <div class="sol-card sr sr-d1">
+        <img
+          class="sol-card__img"
+          src="https://static.wixstatic.com/media/c183ff_de59b5f1e37e4cc6ab68cae32bdbd997~mv2.jpg/v1/fill/w_600,h_420,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5767257574146686340_y_edited_edite.jpg"
+          alt="קהילה תומכת"
+        />
+        <div class="sol-card__body">
+          <div class="sol-card__accent" style="background:var(--teal)"></div>
+          <h3>קהילה תומכת</h3>
+          <p>הורים שמבינים בדיוק מה אתם עוברים — ללא שיפוטיות, עם הרבה תמיכה וחום.</p>
+        </div>
+      </div>
+
+      <div class="sol-card sr sr-d2">
+        <img
+          class="sol-card__img"
+          src="https://static.wixstatic.com/media/c183ff_e37f8f3a6c7147dda1398621e1df50a5~mv2.jpg/v1/fill/w_600,h_420,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/WhatsApp%20Image%202024-11-18%20at%2013_30_edited.jpg"
+          alt="ידע מקצועי"
+        />
+        <div class="sol-card__body">
+          <div class="sol-card__accent" style="background:var(--yellow)"></div>
+          <h3>ידע מקצועי</h3>
+          <p>כלים מעולמות NLP, CBT ופסיכולוגיה של ילדים — מותאמים לחיי היום-יום.</p>
+        </div>
+      </div>
+
+      <div class="sol-card sr sr-d3">
+        <img
+          class="sol-card__img"
+          src="https://static.wixstatic.com/media/c183ff_d8d8e30ec21847c9b71d1ee3f30a6216~mv2.jpg/v1/fill/w_600,h_420,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5893371940104682991_y_edited.jpg"
+          alt="מפגש שבועי"
+        />
+        <div class="sol-card__body">
+          <div class="sol-card__accent" style="background:var(--orange)"></div>
+          <h3>שבועי ועקבי</h3>
+          <p>מפגש לייב קבוע מדי שבוע — לא קורס חד-פעמי, אלא תהליך אמיתי לאורך זמן.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</div><!-- /pain-scene -->
+
+<!-- ─── FEATURES ───────────────────────────────────── -->
+<section class="section features">
+  <div class="container">
+    <div class="features__head">
+      <span class="label sr">מה כלול בכל שבוע</span>
+      <h2 class="sr sr-d1">מה מקבלים במועדון</h2>
+      <p class="sr sr-d2">ארבעה מרכיבים קבועים שמרכיבים כל מפגש שבועי</p>
+    </div>
+
+    <ul class="exp-cards sr" id="expCards">
+
+      <!-- Card 1 — Teal -->
+      <li class="ec ec--teal" data-active="true" data-index="0" tabindex="0">
+        <div class="ec__bg"></div>
+        <img class="ec__img"
+          src="https://static.wixstatic.com/media/c183ff_e37f8f3a6c7147dda1398621e1df50a5~mv2.jpg/v1/fill/w_900,h_600,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/img.jpg"
+          alt="מפגש לייב" />
+        <div class="ec__overlay"></div>
+        <span class="ec__title-v">מפגש לייב</span>
+        <div class="ec__body">
+          <h3>מפגש לייב עם אורן</h3>
+          <p>כשעה מדי שבוע בזום. שאלות בזמן אמת, דיון קבוצתי — אורן נמצא שם בשבילכם.</p>
+        </div>
+      </li>
+
+      <!-- Card 2 — Yellow -->
+      <li class="ec ec--yellow" data-active="false" data-index="1" tabindex="0">
+        <div class="ec__bg"></div>
+        <img class="ec__img"
+          src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=900&q=80&fit=crop"
+          alt="נושא שבועי" />
+        <div class="ec__overlay"></div>
+        <span class="ec__title-v">נושא שבועי</span>
+        <div class="ec__body">
+          <h3>נושא מרכזי שבועי</h3>
+          <p>תוכן מעמיק מעולם ההורות — מותאם לרמות גיל, מצבים ואתגרים שונים.</p>
+        </div>
+      </li>
+
+      <!-- Card 3 — Orange -->
+      <li class="ec ec--orange" data-active="false" data-index="2" tabindex="0">
+        <div class="ec__bg"></div>
+        <img class="ec__img"
+          src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=900&q=80&fit=crop"
+          alt="שאלות ותשובות" />
+        <div class="ec__overlay"></div>
+        <span class="ec__title-v">שאלות ותשובות</span>
+        <div class="ec__body">
+          <h3>שאלות ותשובות</h3>
+          <p>שואלים, מתייעצים, מקבלים תשובות מקצועיות מאורן — על המצב הספציפי שלכם.</p>
+        </div>
+      </li>
+
+      <!-- Card 4 — Dark -->
+      <li class="ec ec--dark" data-active="false" data-index="3" tabindex="0">
+        <div class="ec__bg"></div>
+        <img class="ec__img"
+          src="https://static.wixstatic.com/media/c183ff_de59b5f1e37e4cc6ab68cae32bdbd997~mv2.jpg/v1/fill/w_900,h_600,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/img.jpg"
+          alt="תמיכה קהילתית" />
+        <div class="ec__overlay"></div>
+        <span class="ec__title-v">תמיכה קהילתית</span>
+        <div class="ec__body">
+          <h3>תמיכה קהילתית</h3>
+          <p>קהילה של הורים שעוברים את אותו המסע — תומכים, מחזקים, לא שיפוטיים.</p>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+</section>
+
+<!-- ─── TOPICS ──────────────────────────────────────── -->
+<section class="section-sm topics">
+  <div class="container">
+    <div class="topics__head">
+      <span class="label sr">תחומי תוכן</span>
+      <h2 class="sr sr-d1">הנושאים שנעסוק בהם</h2>
+      <p class="sr sr-d2">כלים מעולמות ידע מגוונים — כי הורות היא רב-תחומית</p>
+    </div>
+    <div class="topics__wrap sr sr-d1">
+      <span class="topic-tag tt-teal">מיכמוני</span>
+      <span class="topic-tag tt-yellow">NLP</span>
+      <span class="topic-tag tt-orange">CBT</span>
+      <span class="topic-tag tt-teal">פסיכולוגיה של ילדים</span>
+      <span class="topic-tag tt-yellow">תומר דבורה</span>
+      <span class="topic-tag tt-orange">ויסות רגשי</span>
+      <span class="topic-tag tt-gray">חרדות</span>
+      <span class="topic-tag tt-teal">מסכים</span>
+      <span class="topic-tag tt-yellow">גבולות</span>
+      <span class="topic-tag tt-orange">ביטחון עצמי</span>
+      <span class="topic-tag tt-gray">גיל ההתבגרות</span>
+      <span class="topic-tag tt-teal">ADHD ורגישות גבוהה</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ABOUT ────────────────────────────────────────── -->
+<section id="about" class="section about">
+  <div class="container">
+    <div class="about__inner">
+
+      <div class="about__photo-wrap sr">
+        <img
+          class="about__photo"
+          src="https://static.wixstatic.com/media/c183ff_89b4aee7650643cb9f75653b8ce2533f~mv2.jpg/v1/fill/w_600,h_600,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/oren_-1_edited_edited.jpg"
+          alt="אורן ראובן לב"
+        />
+      </div>
+
+      <div class="about__text">
+        <span class="label sr">מי אני?</span>
+        <h2 class="sr sr-d1">אורן ראובן לב<br/><span>מייסד מיכמוני</span></h2>
+        <p class="about__subtitle sr sr-d2">בן 42 מתל אביב &middot; מנחה, מלווה ומוביל תהליכים</p>
+        <p class="sr sr-d2">
+          עו"ד במקצועי עד שבחרתי להיות אמיץ וללכת לכיוון שתמיד חיכה לי.
+        </p>
+        <p class="sr sr-d3">
+          ה"למה" שלי פשוט — שכל ילד בישראל ירגיש, יאמין וידע שהוא חכם, מוכשר ויפה,
+          ושהוא יכול להגשים את החלומות שלו.
+        </p>
+        <p class="sr sr-d4">
+          כיום אני מעביר קורסים, הפעלות ופעילויות קהילתיות — ומלווה הורים
+          עם כלים מעולמות NLP, CBT ופסיכולוגיה חיובית.
+        </p>
+        <a href="https://www.micamoni.com/אודות" target="_blank" rel="noopener" class="about__link sr sr-d4">
+          קרא עוד על אורן
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── BONUSES ──────────────────────────────────────── -->
+<section class="section bonuses">
+  <div class="container">
+    <div class="bonuses__head">
+      <span class="label sr">בונוסים בהצטרפות</span>
+      <h2 class="sr sr-d1">מקבלים במתנה</h2>
+      <p class="sr sr-d2">שווי מתנות כולל — <strong style="color:var(--orange)">519 ₪</strong></p>
+    </div>
+
+    <div class="bonuses__grid">
+      <div class="bonus-card bonus-card--yellow sr sr-d1">
+        <h3 class="bonus-card__title">ספר דיגיטלי</h3>
+        <p class="bonus-card__desc">
+          "מקרב בין הורים וילדים" — ספר שיעזור לכם לבנות קשר עמוק ואמיתי יותר עם ילדיכם.
+        </p>
+        <div class="bonus-card__price">
+          <span class="bonus-card__original">119 ₪</span>
+          <span class="bonus-card__tag tag--yellow">במתנה</span>
+        </div>
+      </div>
+
+      <div class="bonus-card bonus-card--teal sr sr-d2">
+        <h3 class="bonus-card__title">פגישת היכרות וייעוץ</h3>
+        <p class="bonus-card__desc">
+          פגישה אישית עם אורן — היכרות, ייעוץ ראשוני, ומענה על השאלות הספציפיות שלכם.
+        </p>
+        <div class="bonus-card__price">
+          <span class="bonus-card__original">400 ₪</span>
+          <span class="bonus-card__tag tag--teal">במתנה</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRICING ──────────────────────────────────────── -->
+<section id="pricing" class="pricing">
+  <div class="container">
+    <div class="pricing__card sr">
+      <p class="pricing__label">עלות חברות חודשית</p>
+      <div class="pricing__amount"><sup>₪</sup>91</div>
+      <p class="pricing__period">לחודש &middot; ביטול בכל עת</p>
+
+      <div class="pricing__divider"></div>
+
+      <ul class="pricing__list">
+        <li>
+          <span class="check">&#10003;</span>
+          מפגש לייב שבועי עם אורן (כשעה)
+        </li>
+        <li>
+          <span class="check">&#10003;</span>
+          נושא מרכזי מדי שבוע
+        </li>
+        <li>
+          <span class="check">&#10003;</span>
+          שאלות ותשובות ותמיכה קהילתית
+        </li>
+        <li>
+          <span class="check">&#10003;</span>
+          כלים מ-NLP, CBT ופסיכולוגיה של ילדים
+        </li>
+        <li>
+          <span class="check check--gift">&#9733;</span>
+          <span>ספר דיגיטלי <strong>"מקרב בין הורים וילדים"</strong> (שווי 119 ₪) — בחינם</span>
+        </li>
+        <li>
+          <span class="check check--gift">&#9733;</span>
+          <span>פגישת ייעוץ אישית עם אורן (שווי 400 ₪) — בחינם</span>
+        </li>
+      </ul>
+
+      <div class="pricing__cta">
+        <!-- Replace href with your actual Stripe / Cardcom / PayPal payment link -->
+        <a href="#"
+           class="btn btn-primary btn-lg btn-ring"
+           style="width:100%;display:block;text-align:center;"
+           onclick="handlePayment(event)">
+          הצטרפות למועדון עכשיו
+        </a>
+        <p class="pricing__fine">ביטול בכל עת &middot; ללא התחייבות &middot; פחות מ-3 ₪ ליום</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ───────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer__inner">
+
+      <!-- Brand -->
+      <div class="footer__brand">
+        <img
+          class="footer__logo"
+          src="https://static.wixstatic.com/media/06e69d_f802a98eb43646ad853337752cccf7d6~mv2.jpeg/v1/fill/w_193,h_61,al_c/06e69d_f802a98eb43646ad853337752cccf7d6~mv2.jpeg"
+          alt="מיכמוני"
+        />
+        <p class="footer__tagline">לא מגדלים ילדים לבד<br/>וביחד גדלים כהורים</p>
+      </div>
+
+      <!-- Divider -->
+      <div class="footer__divider"></div>
+
+      <!-- Links -->
+      <div class="footer__links">
+        <a href="https://www.micamoni.com" target="_blank" rel="noopener">האתר הראשי</a>
+        <a href="https://www.facebook.com/oren.lev.3" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://www.instagram.com/orenlevv/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.tiktok.com/@orenrlev" target="_blank" rel="noopener">TikTok</a>
+        <a href="mailto:micamonilev@gmail.com">micamonilev@gmail.com</a>
+        <a href="tel:0504800455">050-4800-455</a>
+      </div>
+
+      <!-- Bottom -->
+      <p class="footer__copy">© 2025 מיכמוני — אורן ראובן לב. כל הזכויות שמורות.</p>
+
+    </div>
+  </div>
+</footer>
+
+<!-- ─── MOBILE BAR ──────────────────────────────────── -->
+<div class="mobile-bar">
+  <a href="#pricing" class="btn btn-primary" style="font-size:16px;padding:14px 0;">
+    הצטרפות עכשיו — 91 ₪ לחודש
+  </a>
+</div>
+
+<!-- ─── JS ──────────────────────────────────────────── -->
+<script>
+  // ── Rotating nav taglines ──────────────────────────
+  (function () {
+    const items = document.querySelectorAll('.nav__tagline-item');
+    let cur = 0;
+    setInterval(() => {
+      items[cur].classList.remove('active');
+      cur = (cur + 1) % items.length;
+      items[cur].classList.add('active');
+    }, 3000);
+  })();
+
+  // Scroll reveal
+  const els = document.querySelectorAll('.sr');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  els.forEach(el => io.observe(el));
+
+  // ── Pain content: fade + rise as solution scrolls over ──
+  const painSection = document.querySelector('.pain');
+  const painContent = document.querySelector('.pain__grid');
+
+  function onPainScroll() {
+    if (!painSection || !painContent) return;
+    const rect = painSection.getBoundingClientRect();
+    const vh   = window.innerHeight;
+
+    // progress: 0 = section fully visible, 1 = section fully scrolled past top
+    const progress = Math.min(1, Math.max(0, -rect.top / vh));
+
+    painContent.style.transform = `translateY(-${progress * 80}px)`;
+    painContent.style.opacity   = Math.max(0, 1 - progress * 1.8).toFixed(3);
+  }
+
+  window.addEventListener('scroll', onPainScroll, { passive: true });
+  onPainScroll();
+
+  // ── Expanding Cards ────────────────────────────────
+  (function () {
+    const list  = document.getElementById('expCards');
+    const cards = Array.from(list.querySelectorAll('.ec'));
+    const isMobile = () => window.innerWidth < 768;
+
+    function setActive(index) {
+      cards.forEach((c, i) => {
+        const active = i === index;
+        c.dataset.active = active;
+      });
+
+      if (isMobile()) {
+        // Drive via class on the list (CSS handles rows)
+        list.className = list.className.replace(/mobile-active-\d/, '');
+        list.classList.add('mobile-active-' + index);
+        list.style.gridTemplateColumns = '';
+      } else {
+        // Drive via inline style on the list
+        list.style.gridTemplateColumns = cards
+          .map((_, i) => i === index ? '5fr' : '1fr')
+          .join(' ');
+        list.style.gridTemplateRows = '';
+        list.className = list.className.replace(/mobile-active-\d/, '');
+      }
+    }
+
+    cards.forEach((card, i) => {
+      card.addEventListener('mouseenter', () => setActive(i));
+      card.addEventListener('click',      () => setActive(i));
+      card.addEventListener('focus',      () => setActive(i));
+    });
+
+    // Init
+    setActive(0);
+
+    // Re-init on resize
+    window.addEventListener('resize', () => setActive(
+      cards.findIndex(c => c.dataset.active === 'true') || 0
+    ));
+  })();
+
+  // Payment handler — replace '#' with your payment link
+  function handlePayment(e) {
+    const url = '#'; // <-- החלף בקישור הסליקה שלך
+    if (url === '#') {
+      e.preventDefault();
+      alert('יש לחבר קישור סליקה.\nהחלף את href עם קישור ה-Cardcom / Stripe / PayPal שלך.');
+    }
+  }
+</script>
+
+</body>
+</html>
