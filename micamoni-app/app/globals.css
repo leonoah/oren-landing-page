@@ -1,0 +1,35 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+:root {
+  --yellow:  #f4bb4f;
+  --teal:    #298c9c;
+  --orange:  #ea6c3a;
+  --dark:    #1a1a2e;
+  --mid:     #4a5568;
+  --light:   #f8f9fb;
+  --border:  #e8edf2;
+  --white:   #ffffff;
+  --font-heebo: 'Heebo', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-heebo), sans-serif; direction: rtl; text-align: right; }
+
+/* Scroll reveal */
+.sr { opacity: 0; transform: translateY(28px); transition: opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1); }
+.sr.in { opacity: 1; transform: none; }
+.sr-d1 { transition-delay: .1s; }
+.sr-d2 { transition-delay: .2s; }
+.sr-d3 { transition-delay: .3s; }
+.sr-d4 { transition-delay: .4s; }
+
+/* CTA ring pulse */
+@keyframes ring {
+  0%   { box-shadow: 0 0 0 0 rgba(234,108,58,.4); }
+  70%  { box-shadow: 0 0 0 16px rgba(234,108,58,0); }
+  100% { box-shadow: 0 0 0 0 rgba(234,108,58,0); }
+}
+.btn-ring { animation: ring 2.4s infinite; }
