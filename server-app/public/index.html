@@ -1032,6 +1032,109 @@
       .mobile-bar { display: block; }
       body { padding-bottom: 72px; }
     }
+
+    /* ─── Mobile fixes (768px and below) ───────────────────────────── */
+    @media (max-width: 768px) {
+
+      /* ─ Hero-wrap: release fixed height so trustbar flows below ─ */
+      .hero-wrap {
+        height: auto;
+        overflow: visible;
+      }
+      .hero {
+        height: 60vh;
+        min-height: 420px;
+      }
+      .trustbar {
+        position: static;
+        height: auto;
+        padding: 28px 0 36px;
+        background: #fff;
+      }
+      .trustbar__inner {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        padding: 0 16px;
+        transform: none;
+      }
+
+      /* ① Hero: circle image — top-left corner, behind content */
+      .hero__img-side {
+        display: block;
+        width: 48vw;
+        height: 48vw;
+        left: -8vw;
+        right: auto;
+        transform: none;
+        top: -8vw;
+        bottom: auto;
+        z-index: 0; /* מתחת לתוכן */
+      }
+      .hero__content { position: relative; z-index: 2; }
+
+      /* ② Hero: align text to start, no extra bottom padding */
+      .hero {
+        padding: 64px 20px 80px;
+        align-items: flex-start;
+      }
+      .hero__content { max-width: 100%; }
+      .hero__content h1 { font-size: clamp(26px, 8vw, 40px); }
+      .hero__sub { font-size: 15px; }
+
+      /* ③ Hero chip: smaller on mobile */
+      .hero__chip { font-size: 11px; padding: 5px 14px; }
+
+      /* ④ Pain section: auto height — content can be taller than 100vh on mobile */
+      .pain { height: auto; min-height: 100svh; padding: 48px 0 72px; }
+      .pain__tiles { gap: 10px; }
+      .pain__tile { padding: 20px 16px; }
+      .pain__tile p { font-size: 14px; }
+
+      /* ⑤ Solution cards: reduce image height */
+      .sol-card__img { height: 160px; }
+
+      /* ⑥ Expanding cards: comfortable height on small phones */
+      .exp-cards { min-height: 440px; }
+
+      /* ⑦ Section headings: comfortable margin */
+      .solution__head,
+      .features__head,
+      .topics__head,
+      .bonuses__head { margin-bottom: 36px; }
+
+      /* ⑧ Container: tighter padding on narrow screens */
+      .container { padding: 0 16px; }
+
+      /* ⑨ Pricing: tighter inner padding */
+      .pricing__card { padding: 28px 16px; }
+      .pricing__list li { font-size: 14px; }
+
+      /* ⑩ About: center photo */
+      .about__photo-wrap { display: flex; justify-content: center; }
+
+      /* ⑪ Bonuses: reduce padding */
+      .bonus-card { padding: 28px 24px; }
+
+      /* ⑫ Topic tags: smaller font */
+      .topic-tag { font-size: 13px; padding: 8px 16px; }
+
+      /* ⑬ Label: smaller on mobile */
+      .label { font-size: 13px; padding: 6px 18px; }
+
+      /* ⑭ Section padding */
+      .section { padding: 56px 0; }
+      .section-sm { padding: 40px 0; }
+    }
+
+    /* ─── Very small screens (≤ 400px) ─────────────────────────────── */
+    @media (max-width: 400px) {
+      .hero__content h1 { font-size: 26px; }
+      .btn-lg { padding: 14px 20px; font-size: 15px; }
+      .pain__tile p { font-size: 13px; }
+      .trustbar__item strong { font-size: 22px; }
+      .trustbar__item span { font-size: 12px; }
+      .exp-cards { min-height: 380px; }
+    }
   </style>
 </head>
 <body>
