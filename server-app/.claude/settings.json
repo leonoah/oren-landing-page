@@ -24,7 +24,10 @@
       "Bash(curl -s http://localhost:3000/)",
       "Bash(node -e \"let s='';process.stdin.on\\('data',d=>s+=d\\).on\\('end',\\(\\)=>{const c=JSON.parse\\(s\\);console.log\\('decorImages:',\\(c.pricing.decorImages||[]\\).length, c.pricing.decorImages.map\\(x=>x.size\\)\\)}\\)\")",
       "Bash(curl -s http://localhost:3001/)",
-      "Bash(curl -s http://localhost:3001/admin/)"
+      "Bash(curl -s http://localhost:3001/admin/)",
+      "Bash(ls node_modules/multer)",
+      "Bash(node -e \"const app=require\\('./api/index.js'\\); console.log\\('app loaded OK, type:', typeof app\\);\")",
+      "Bash(node -e ' *)"
     ]
   }
 }

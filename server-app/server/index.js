@@ -24,7 +24,13 @@ app.get('*', (req, res) => {
 });
 
 // ─── Start ──────────────────────────────────────────────────────────────────
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`\n🚀  Server running → http://localhost:${PORT}\n`);
-});
+// Only start a long-lived listener when run directly (local dev / Node hosts).
+// On Vercel the app is imported by api/index.js as a serverless function.
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`\n🚀  Server running → http://localhost:${PORT}\n`);
+  });
+}
+
+module.exports = app;
