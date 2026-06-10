@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ניהול תוכן — מועדון מיכמוני</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --teal:#298c9c; --yellow:#f4bb4f; --orange:#ea6c3a; --dark:#1a1a2e;
+      --mid:#4a5568; --light:#f8f9fb; --border:#e2e8f0; --bg:#eef1f6;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--dark);direction:rtl;line-height:1.5;}
+    /* Topbar */
+    .top{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);
+      display:flex;align-items:center;gap:16px;padding:14px 24px;box-shadow:0 2px 10px rgba(0,0,0,.04);}
+    .top h1{font-size:18px;font-weight:800;}
+    .top .spacer{flex:1;}
+    .top a.preview{font-size:14px;color:var(--teal);font-weight:600;border-bottom:2px solid var(--teal);padding-bottom:1px;}
+    .status{font-size:13px;color:var(--mid);min-width:120px;text-align:left;}
+    .status.ok{color:#1a8a4a;} .status.err{color:#d33;}
+    /* Layout */
+    .wrap{display:grid;grid-template-columns:220px 1fr;gap:0;max-width:1200px;margin:0 auto;}
+    .tabs{padding:20px 12px;border-left:1px solid var(--border);position:sticky;top:62px;align-self:start;}
+    .tabs button{display:block;width:100%;text-align:right;border:none;background:transparent;
+      font-family:inherit;font-size:15px;font-weight:600;color:var(--mid);padding:11px 14px;border-radius:10px;cursor:pointer;margin-bottom:4px;}
+    .tabs button:hover{background:#fff;}
+    .tabs button.active{background:var(--teal);color:#fff;}
+    .panel{padding:28px 32px;min-height:80vh;}
+    .panel h2{font-size:22px;font-weight:800;margin-bottom:6px;}
+    .panel .sub{font-size:14px;color:var(--mid);margin-bottom:24px;}
+    .group{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin-bottom:20px;}
+    .group h3{font-size:15px;font-weight:800;color:var(--teal);margin-bottom:16px;text-transform:uppercase;letter-spacing:.04em;}
+    /* Fields */
+    .fld{display:block;margin-bottom:16px;}
+    .fld__label{display:block;font-size:13px;font-weight:700;color:var(--mid);margin-bottom:6px;}
+    .fld input[type=text],.fld input[type=number],.fld textarea,.fld select{
+      width:100%;font-family:inherit;font-size:14px;padding:10px 12px;border:1px solid var(--border);
+      border-radius:9px;background:#fff;color:var(--dark);}
+    .fld textarea{resize:vertical;min-height:70px;line-height:1.6;}
+    .fld input:focus,.fld textarea:focus,.fld select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(41,140,156,.12);}
+    .fld__hint{display:block;font-size:12px;color:#94a3b8;margin-top:5px;}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px;}
+    /* Image field */
+    .imgrow{display:flex;gap:12px;align-items:flex-start;}
+    .imgprev{width:88px;height:88px;object-fit:cover;border-radius:10px;border:1px solid var(--border);background:var(--light);flex-shrink:0;}
+    .imgcol{flex:1;display:flex;flex-direction:column;gap:8px;}
+    /* Lists */
+    .item{border:1px solid var(--border);border-radius:12px;padding:0 16px 14px;margin-bottom:14px;background:var(--light);}
+    .item__bar{display:flex;align-items:center;justify-content:space-between;padding:10px 0;margin-bottom:6px;border-bottom:1px dashed var(--border);}
+    .item__num{font-size:13px;font-weight:800;color:var(--mid);}
+    .item__actions{display:flex;gap:6px;}
+    .swatch{width:14px;height:14px;border-radius:4px;display:inline-block;vertical-align:middle;margin-left:6px;border:1px solid rgba(0,0,0,.1);}
+    /* Buttons */
+    button{font-family:inherit;}
+    .btn{border:none;border-radius:10px;font-weight:700;font-size:15px;padding:11px 22px;cursor:pointer;transition:.15s;}
+    .btn-save{background:var(--orange);color:#fff;box-shadow:0 4px 16px rgba(234,108,58,.3);}
+    .btn-save:hover{background:#d85c2e;}
+    .btn-save:disabled{opacity:.5;cursor:default;}
+    .btn-sm{background:#fff;border:1px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;padding:8px 12px;cursor:pointer;color:var(--mid);}
+    .btn-sm:hover{border-color:var(--teal);color:var(--teal);}
+    .btn-add{background:rgba(41,140,156,.1);color:var(--teal);border:1px dashed var(--teal);border-radius:10px;
+      font-weight:700;font-size:14px;padding:10px 18px;cursor:pointer;width:100%;}
+    .btn-add:hover{background:rgba(41,140,156,.18);}
+    .mini{width:30px;height:30px;border:1px solid var(--border);background:#fff;border-radius:7px;cursor:pointer;font-size:14px;color:var(--mid);}
+    .mini:hover{border-color:var(--teal);color:var(--teal);}
+    .mini.danger:hover{border-color:#d33;color:#d33;}
+    .loading{padding:60px;text-align:center;color:var(--mid);font-size:16px;}
+    @media(max-width:760px){
+      .wrap{grid-template-columns:1fr;}
+      .tabs{position:static;border-left:none;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:6px;}
+      .tabs button{width:auto;}
+      .panel{padding:20px 16px;}
+      .row2{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="top">
+  <h1>🛠️ ניהול תוכן — מיכמוני</h1>
+  <div class="spacer"></div>
+  <span class="status" id="status"></span>
+  <a class="preview" href="/" target="_blank">תצוגת האתר ↗</a>
+  <button class="btn btn-save" id="saveBtn" onclick="save()">שמירת שינויים</button>
+</div>
+
+<div class="wrap">
+  <nav class="tabs" id="tabs"></nav>
+  <main class="panel" id="panel"><div class="loading">טוען תוכן…</div></main>
+</div>
+
+<script>
+// ─── State ──────────────────────────────────────────────────────────────────
+let data = null;
+let activeTab = 'hero';
+
+const TABS = [
+  ['hero',     '1. הירו'],
+  ['pain',     '2. הורות — המציאות'],
+  ['solution', '3. הפתרון'],
+  ['features', '4. מה כלול בכל שבוע'],
+  ['topics',   '5. תחומי תוכן'],
+  ['about',    '6. אודות'],
+  ['bonuses',  '7. בונוסים'],
+  ['pricing',  '8. עלות חברות'],
+  ['general',  '9. כללי (ניווט/פוטר)'],
+];
+
+const COLORS = { teal:'#298c9c', yellow:'#f4bb4f', orange:'#ea6c3a', dark:'#1a1a2e', gray:'#4a5568' };
+const COLOR_NAMES = { teal:'טורקיז', yellow:'צהוב', orange:'כתום', dark:'כהה', gray:'אפור' };
+
+// ─── Tiny DOM helper ────────────────────────────────────────────────────────
+function h(tag, attrs, children){
+  const e = document.createElement(tag);
+  attrs = attrs || {};
+  for(const k in attrs){
+    const v = attrs[k];
+    if(v == null) continue;
+    if(k === 'class') e.className = v;
+    else if(k === 'style') e.style.cssText = v;
+    else if(k === 'html') e.innerHTML = v;
+    else if(k.slice(0,2) === 'on') e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v);
+  }
+  (Array.isArray(children) ? children : [children]).forEach(c=>{
+    if(c == null || c === false) return;
+    e.appendChild(typeof c === 'object' ? c : document.createTextNode(String(c)));
+  });
+  return e;
+}
+
+// ─── Field components ───────────────────────────────────────────────────────
+function textField(label, obj, key, opts){
+  opts = opts || {};
+  const input = opts.multiline
+    ? h('textarea', { rows: opts.rows || 3, placeholder: opts.placeholder, oninput: e => obj[key] = e.target.value })
+    : h('input',    { type:'text', placeholder: opts.placeholder, oninput: e => obj[key] = e.target.value });
+  input.value = obj[key] == null ? '' : obj[key];
+  return h('label', { class:'fld' }, [
+    h('span', { class:'fld__label' }, label),
+    input,
+    opts.hint ? h('span', { class:'fld__hint' }, opts.hint) : null,
+  ]);
+}
+
+function numberField(label, obj, key, opts){
+  opts = opts || {};
+  const input = h('input', { type:'number', min: opts.min, max: opts.max, placeholder: opts.placeholder,
+    oninput: e => obj[key] = (e.target.value === '' ? '' : Number(e.target.value)) });
+  input.value = obj[key] == null ? '' : obj[key];
+  return h('label', { class:'fld' }, [
+    h('span', { class:'fld__label' }, label),
+    input,
+    opts.hint ? h('span', { class:'fld__hint' }, opts.hint) : null,
+  ]);
+}
+
+function colorField(label, obj, key, allowed){
+  allowed = allowed || ['teal','yellow','orange','dark','gray'];
+  const swatch = h('span', { class:'swatch', style:'background:'+(COLORS[obj[key]]||'#ccc') });
+  const sel = h('select', { onchange: e => { obj[key] = e.target.value; swatch.style.background = COLORS[e.target.value]||'#ccc'; } },
+    allowed.map(c => {
+      const o = h('option', { value:c }, COLOR_NAMES[c] || c);
+      if(obj[key] === c) o.selected = true;
+      return o;
+    }));
+  return h('label', { class:'fld' }, [
+    h('span', { class:'fld__label' }, [label, swatch]),
+    sel,
+  ]);
+}
+
+function imageField(label, obj, key){
+  const preview = h('img', { class:'imgprev' });
+  if(obj[key]){ preview.src = obj[key]; } else { preview.style.display = 'none'; }
+  function setUrl(u){
+    obj[key] = u;
+    if(u){ preview.src = u; preview.style.display = ''; } else { preview.style.display = 'none'; }
+  }
+  const urlInput = h('input', { type:'text', placeholder:'כתובת URL של תמונה', oninput: e => setUrl(e.target.value) });
+  urlInput.value = obj[key] || '';
+  const fileInput = h('input', { type:'file', accept:'image/*', style:'display:none',
+    onchange: async e => {
+      const f = e.target.files[0]; if(!f) return;
+      const url = await uploadImage(f, uploadBtn);
+      if(url){ setUrl(url); urlInput.value = url; }
+      e.target.value = '';
+    }});
+  const uploadBtn = h('button', { type:'button', class:'btn-sm', onclick: () => fileInput.click() }, '⬆ העלאת קובץ');
+  return h('div', { class:'fld' }, [
+    h('span', { class:'fld__label' }, label),
+    h('div', { class:'imgrow' }, [
+      preview,
+      h('div', { class:'imgcol' }, [ urlInput, uploadBtn, fileInput ]),
+    ]),
+  ]);
+}
+
+async function uploadImage(file, btn){
+  const fd = new FormData(); fd.append('image', file);
+  const orig = btn.textContent; btn.disabled = true; btn.textContent = 'מעלה…';
+  try{
+    const r = await fetch('/api/content/upload', { method:'POST', body: fd });
+    const j = await r.json();
+    if(!r.ok) throw new Error(j.error || 'שגיאה');
+    return j.url;
+  }catch(err){ alert('שגיאת העלאה: ' + err.message); return null; }
+  finally{ btn.disabled = false; btn.textContent = orig; }
+}
+
+// ─── Generic list editor ────────────────────────────────────────────────────
+function listEditor(arr, renderItem, makeNew, addLabel){
+  const box = h('div', {}, []);
+  arr.forEach((item, i) => {
+    box.appendChild(h('div', { class:'item' }, [
+      h('div', { class:'item__bar' }, [
+        h('span', { class:'item__num' }, '#' + (i+1)),
+        h('div', { class:'item__actions' }, [
+          h('button', { type:'button', class:'mini', title:'הזז למעלה',
+            onclick: () => { if(i>0){ arr.splice(i-1,0,arr.splice(i,1)[0]); rebuild(); } } }, '↑'),
+          h('button', { type:'button', class:'mini', title:'הזז למטה',
+            onclick: () => { if(i<arr.length-1){ arr.splice(i+1,0,arr.splice(i,1)[0]); rebuild(); } } }, '↓'),
+          h('button', { type:'button', class:'mini danger', title:'מחיקה',
+            onclick: () => { if(confirm('למחוק פריט זה?')){ arr.splice(i,1); rebuild(); } } }, '✕'),
+        ]),
+      ]),
+      renderItem(item, i),
+    ]));
+  });
+  box.appendChild(h('button', { type:'button', class:'btn-add',
+    onclick: () => { arr.push(makeNew()); rebuild(); } }, addLabel || '+ הוספת פריט'));
+  return box;
+}
+
+function group(title, children){
+  return h('div', { class:'group' }, [ title ? h('h3', {}, title) : null ].concat(children));
+}
+
+// ─── Tab renderers ──────────────────────────────────────────────────────────
+const RENDER = {
+  hero(){
+    const d = data.hero;
+    return [
+      group('טקסטים', [
+        textField('צ׳יפ עליון', d, 'chip'),
+        textField('כותרת ראשית', d, 'title', { multiline:true, hint:'שורה חדשה = מעבר שורה בעמוד' }),
+        textField('תת-כותרת', d, 'subtitle', { multiline:true, hint:'שורה חדשה = מעבר שורה' }),
+        h('div', { class:'row2' }, [
+          textField('כפתור ראשי', d, 'ctaPrimary'),
+          textField('כפתור משני', d, 'ctaSecondary'),
+        ]),
+        textField('הערה תחתונה', d, 'note'),
+      ]),
+      group('תמונות', [
+        imageField('לוגו (בתוך ההירו)', d, 'logo'),
+        imageField('תמונת הירו (העיגול)', d, 'image'),
+      ]),
+      group('רצועת נתונים (4 ריבועים)', [
+        listEditor(data.trustbar,
+          (it) => h('div', { class:'row2' }, [
+            textField('מספר/כותרת', it, 'strong'),
+            textField('תיאור', it, 'span'),
+          ]),
+          () => ({ strong:'', span:'' }), '+ הוספת נתון'),
+      ]),
+    ];
+  },
+
+  pain(){
+    const d = data.pain;
+    return [
+      group('כותרות וטקסט', [
+        textField('תווית (Label)', d, 'label'),
+        textField('כותרת', d, 'title', { multiline:true, rows:4,
+          hint:'שורה חדשה = מעבר שורה · עטיפה ב-[[ ]] תצבע בצהוב, למשל: [[אבל רובנו לא למדנו אותה.]]' }),
+        listEditor(d.paragraphs,
+          (it) => textField('פסקה', it, 'text', { multiline:true }),
+          () => ({ text:'' }), '+ הוספת פסקה'),
+      ]),
+      group('ריבועים', [
+        h('p', { class:'fld__hint', style:'margin-bottom:14px' },
+          'לכל ריבוע אפשר להגדיר צבע, כותרת קצרה, וכן כותרת/טקסט מורחב ותמונה שיוצגו בחלונית שתיפתח בלחיצה.'),
+        listEditor(d.tiles,
+          (it) => h('div', {}, [
+            colorField('צבע', it, 'color', ['teal','yellow','orange','dark']),
+            textField('כותרת בריבוע', it, 'text'),
+            textField('כותרת בחלונית (אופציונלי)', it, 'expandedTitle'),
+            textField('טקסט מורחב לחלונית (אופציונלי)', it, 'expandedText', { multiline:true }),
+            imageField('תמונה לחלונית (אופציונלי)', it, 'image'),
+          ]),
+          () => ({ color:'teal', text:'', expandedTitle:'', expandedText:'', image:'' }), '+ הוספת ריבוע'),
+      ]),
+    ];
+  },
+
+  solution(){
+    const d = data.solution;
+    return [
+      group('כותרות', [
+        textField('תווית (Label)', d, 'label'),
+        textField('כותרת', d, 'title'),
+        textField('תת-כותרת', d, 'subtitle', { multiline:true }),
+      ]),
+      group('שלבים / כרטיסים', [
+        h('p', { class:'fld__hint', style:'margin-bottom:14px' },
+          'טקסט מורחב (אם קיים) ייפתח בחלונית בלחיצה על הכרטיס.'),
+        listEditor(d.steps,
+          (it) => h('div', {}, [
+            colorField('צבע פס עליון', it, 'accent', ['teal','yellow','orange','dark','gray']),
+            textField('כותרת', it, 'title'),
+            textField('טקסט', it, 'text', { multiline:true }),
+            imageField('תמונה', it, 'image'),
+            textField('טקסט מורחב (חלונית)', it, 'expandedText', { multiline:true }),
+          ]),
+          () => ({ accent:'teal', title:'', text:'', image:'', expandedText:'' }), '+ הוספת שלב'),
+      ]),
+    ];
+  },
+
+  features(){
+    const d = data.features;
+    return [
+      group('כותרות', [
+        textField('תווית (Label)', d, 'label'),
+        textField('כותרת', d, 'title'),
+        textField('תת-כותרת', d, 'subtitle'),
+      ]),
+      group('שלבים', [
+        h('p', { class:'fld__hint', style:'margin-bottom:14px' },
+          '"כותרת קצרה" מוצגת אנכית כשהכרטיס סגור; "כותרת בחלון" והטקסט המורחב מוצגים כשהכרטיס נפתח.'),
+        listEditor(d.steps,
+          (it) => h('div', {}, [
+            colorField('צבע', it, 'color', ['teal','yellow','orange','dark']),
+            textField('כותרת קצרה (אנכית)', it, 'title'),
+            textField('כותרת בחלון', it, 'subtitle'),
+            textField('טקסט מורחב', it, 'text', { multiline:true }),
+            imageField('תמונה', it, 'image'),
+          ]),
+          () => ({ color:'teal', title:'', subtitle:'', text:'', image:'' }), '+ הוספת שלב'),
+      ]),
+    ];
+  },
+
+  topics(){
+    const d = data.topics;
+    return [
+      group('כותרות', [
+        textField('תווית (Label)', d, 'label'),
+        textField('כותרת', d, 'title'),
+        textField('תת-כותרת', d, 'subtitle'),
+      ]),
+      group('נושאים', [
+        listEditor(d.items,
+          (it) => h('div', { class:'row2' }, [
+            textField('נושא', it, 'text'),
+            colorField('צבע', it, 'color', ['teal','yellow','orange','gray']),
+          ]),
+          () => ({ text:'', color:'teal' }), '+ הוספת נושא'),
+      ]),
+    ];
+  },
+
+  about(){
+    const d = data.about;
+    return [
+      group('תמונה', [ imageField('תמונה של אורן', d, 'image') ]),
+      group('טקסטים', [
+        textField('תווית (Label)', d, 'label'),
+        h('div', { class:'row2' }, [
+          textField('שם / כותרת', d, 'title'),
+          textField('שורת משנה לכותרת (צבעונית)', d, 'titleSpan'),
+        ]),
+        textField('תת-כותרת', d, 'subtitle'),
+        listEditor(d.paragraphs,
+          (it) => textField('פסקה', it, 'text', { multiline:true }),
+          () => ({ text:'' }), '+ הוספת פסקה'),
+      ]),
+      group('קישור "קרא עוד"', [
+        h('div', { class:'row2' }, [
+          textField('טקסט הקישור', d, 'linkText'),
+          textField('כתובת הקישור', d, 'linkUrl'),
+        ]),
+      ]),
+    ];
+  },
+
+  bonuses(){
+    const d = data.bonuses;
+    return [
+      group('כותרות', [
+        textField('תווית (Label)', d, 'label'),
+        textField('כותרת', d, 'title'),
+        textField('תת-כותרת', d, 'subtitle', { hint:'טקסט מודגש בכתום עוטפים ב-[[ ]]' }),
+      ]),
+      group('תמונה (צד שמאל)', [ imageField('תמונת הבונוסים', d, 'image') ]),
+      group('בונוסים', [
+        listEditor(d.items,
+          (it) => h('div', {}, [
+            colorField('צבע', it, 'color', ['yellow','teal']),
+            textField('כותרת', it, 'title'),
+            textField('תיאור', it, 'desc', { multiline:true }),
+            h('div', { class:'row2' }, [
+              textField('מחיר מקורי (מחוק)', it, 'original'),
+              textField('תווית', it, 'tag'),
+            ]),
+          ]),
+          () => ({ color:'yellow', title:'', desc:'', original:'', tag:'במתנה' }), '+ הוספת בונוס'),
+      ]),
+    ];
+  },
+
+  pricing(){
+    const d = data.pricing;
+    return [
+      group('מחיר', [
+        textField('תווית (Label)', d, 'label'),
+        h('div', { class:'row2' }, [
+          textField('סכום', d, 'amount'),
+          textField('סימן מטבע', d, 'currency'),
+        ]),
+        textField('תקופה', d, 'period'),
+      ]),
+      group('רשימת מה כלול', [
+        listEditor(d.features,
+          (it) => h('div', {}, [
+            textField('שורה', it, 'text', { multiline:true }),
+            h('label', { class:'fld', style:'display:flex;align-items:center;gap:8px' }, [
+              (function(){ const cb = h('input', { type:'checkbox', onchange:e=>it.gift=e.target.checked });
+                cb.checked = !!it.gift; return cb; })(),
+              h('span', { class:'fld__label', style:'margin:0' }, 'מתנה (כוכב צהוב במקום וי)'),
+            ]),
+          ]),
+          () => ({ text:'', gift:false }), '+ הוספת שורה'),
+      ]),
+      group('כפתור והערה', [
+        textField('טקסט הכפתור', d, 'cta'),
+        textField('הערה תחתונה', d, 'fine'),
+      ]),
+      group('תמונות מעגליות בצדדים (אנימציה)', [
+        h('p', { class:'fld__hint', style:'margin-bottom:14px' },
+          'עד 5 תמונות שיוצגו בעיגולים צפים בצדי קופסת המחיר. מומלץ תמונות מרובעות של ילדים / משפחה. המיקום מתחלק אוטומטית בין שני הצדדים לפי הסדר.'),
+        listEditor(d.decorImages || (d.decorImages = []),
+          (it) => h('div', {}, [
+            imageField('תמונה', it, 'url'),
+            numberField('גודל העיגול (פיקסלים)', it, 'size',
+              { placeholder:'120', min:50, max:240, hint:'בדרך כלל 80–160. ריק = גודל ברירת מחדל' }),
+          ]),
+          () => ({ url:'', size:120 }), '+ הוספת תמונה'),
+      ]),
+    ];
+  },
+
+  general(){
+    return [
+      group('סלוגנים מתחלפים בניווט', [
+        listEditor(data.nav.taglines,
+          (it) => h('div', {}, [
+            textField('טקסט', it, 'text'),
+            h('div', { class:'row2' }, [
+              textField('צבע (קוד HEX)', it, 'color', { placeholder:'#298c9c' }),
+              textField('פונט (CSS)', it, 'font', { placeholder:"'Heebo',sans-serif" }),
+            ]),
+          ]),
+          () => ({ text:'', color:'#298c9c', font:"'Heebo',sans-serif" }), '+ הוספת סלוגן'),
+        textField('טקסט כפתור הצטרפות בניווט', data.nav, 'cta'),
+      ]),
+      group('פוטר', [
+        imageField('לוגו בפוטר', data.footer, 'logo'),
+        textField('סלוגן', data.footer, 'tagline', { multiline:true, hint:'שורה חדשה = מעבר שורה' }),
+        textField('שורת זכויות יוצרים', data.footer, 'copy'),
+      ]),
+      group('קישורים בפוטר', [
+        listEditor(data.footer.links,
+          (it) => h('div', { class:'row2' }, [
+            textField('טקסט', it, 'text'),
+            textField('כתובת', it, 'url'),
+          ]),
+          () => ({ text:'', url:'' }), '+ הוספת קישור'),
+      ]),
+    ];
+  },
+};
+
+// ─── Render / rebuild ───────────────────────────────────────────────────────
+function rebuild(){
+  const panel = document.getElementById('panel');
+  panel.innerHTML = '';
+  const nodes = RENDER[activeTab]();
+  nodes.forEach(n => panel.appendChild(n));
+  // tabs active state
+  document.querySelectorAll('#tabs button').forEach(b =>
+    b.classList.toggle('active', b.dataset.tab === activeTab));
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+function buildTabs(){
+  const tabs = document.getElementById('tabs');
+  tabs.innerHTML = '';
+  TABS.forEach(([id, label]) => {
+    tabs.appendChild(h('button', { 'data-tab':id,
+      onclick: () => { activeTab = id; rebuild(); } }, label));
+  });
+}
+
+// ─── Save ───────────────────────────────────────────────────────────────────
+async function save(){
+  // collect paragraph boxes back into string arrays
+  data.pain.paragraphs  = _collectPara(data.pain.paragraphs);
+  data.about.paragraphs = _collectPara(data.about.paragraphs);
+
+  const btn = document.getElementById('saveBtn');
+  const st  = document.getElementById('status');
+  btn.disabled = true; st.className = 'status'; st.textContent = 'שומר…';
+  try{
+    const r = await fetch('/api/content', {
+      method:'PUT', headers:{ 'Content-Type':'application/json' },
+      body: JSON.stringify(data),
+    });
+    const j = await r.json();
+    if(!r.ok) throw new Error(j.error || 'שגיאה');
+    st.className = 'status ok'; st.textContent = '✓ נשמר בהצלחה';
+    setTimeout(() => { st.textContent = ''; st.className = 'status'; }, 3000);
+  }catch(err){
+    st.className = 'status err'; st.textContent = '✗ ' + err.message;
+  }finally{ btn.disabled = false; }
+}
+
+// Paragraph arrays: we edit them as arrays of {text}. _collectPara turns them back to strings.
+function _collectPara(arr){
+  return arr.map(x => (x && typeof x === 'object') ? (x.text || '') : x);
+}
+
+// ─── Boot ───────────────────────────────────────────────────────────────────
+(async function init(){
+  try{
+    const r = await fetch('/api/content');
+    data = await r.json();
+    // convert paragraph string arrays into {text} objects for editing
+    data.pain.paragraphs  = data.pain.paragraphs.map(s => ({ text: s }));
+    data.about.paragraphs = data.about.paragraphs.map(s => ({ text: s }));
+    buildTabs();
+    rebuild();
+  }catch(err){
+    document.getElementById('panel').innerHTML =
+      '<div class="loading">שגיאה בטעינת התוכן — ודאו שהשרת פועל.<br>' + err.message + '</div>';
+  }
+})();
+</script>
+</body>
+</html>

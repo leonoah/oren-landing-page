@@ -233,6 +233,36 @@
     }
     .hero__wave svg { display: block; width: 100%; }
 
+    /* ── Scroll-down hint arrow ── */
+    .hero__scroll {
+      position: absolute;
+      bottom: 26px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--orange, #ea6c3a);
+      text-decoration: none;
+      cursor: pointer;
+      animation: heroScrollBounce 1.8s ease-in-out infinite;
+    }
+    .hero__scroll span {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      opacity: .85;
+    }
+    .hero__scroll svg { display: block; }
+    @keyframes heroScrollBounce {
+      0%, 100% { transform: translate(-50%, 0); }
+      50%      { transform: translate(-50%, 8px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero__scroll { animation: none; }
+    }
+
     /* Text — left half of orange area */
     /* Logo — absolute left, doesn't affect content flow */
     .hero__logo-abs {
@@ -781,8 +811,27 @@
     .about__link:hover { opacity: .65; }
 
     /* ─── Bonuses ─────────────────────────────────── */
-    .bonuses { background: var(--light); }
-    .bonuses__head { text-align: center; max-width: 580px; margin: 0 auto 56px; }
+    .bonuses { background: var(--light); padding: 0; overflow: hidden; }
+    .bonuses__split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+      min-height: 640px;
+    }
+    .bonuses__media { position: relative; min-height: 360px; }
+    .bonuses__media img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center 28%;
+      display: block;
+    }
+    .bonuses__content {
+      padding: 96px clamp(28px, 5vw, 72px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .bonuses__head { text-align: right; max-width: none; margin: 0 0 36px; }
     .bonuses__head h2 {
       font-size: clamp(26px, 4vw, 38px);
       font-weight: 900;
@@ -790,36 +839,54 @@
       margin-bottom: 10px;
     }
     .bonuses__head p { font-size: 17px; color: var(--mid); }
-    .bonuses__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .bonuses__grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
     .bonus-card {
       background: #fff;
-      border-radius: 22px;
-      padding: 40px 36px;
+      border-radius: 18px;
+      padding: 26px 28px;
       border: 1px solid var(--border);
       position: relative;
       overflow: hidden;
-      transition: box-shadow .25s ease;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      transition: box-shadow .25s ease, transform .25s ease, border-color .25s ease;
     }
-    .bonus-card:hover { box-shadow: 0 16px 48px rgba(0,0,0,.08); }
+    .bonus-card:hover {
+      box-shadow: 0 16px 48px rgba(0,0,0,.08);
+      transform: translateY(-2px);
+    }
     .bonus-card::before {
       content: '';
       position: absolute;
-      top: 0; right: 0; left: 0;
-      height: 4px;
+      top: 0; bottom: 0; right: 0;
+      width: 4px;
     }
     .bonus-card--yellow::before { background: var(--yellow); }
     .bonus-card--teal::before   { background: var(--teal); }
+    .bonus-card__icon {
+      flex: none;
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+    }
+    .bonus-card__icon svg { width: 28px; height: 28px; }
+    .bonus-card--yellow .bonus-card__icon { background: rgba(244,187,79,.16); color: #c8901f; }
+    .bonus-card--teal   .bonus-card__icon { background: rgba(41,140,156,.12); color: var(--teal); }
+    .bonus-card__body { flex: 1; min-width: 0; }
     .bonus-card__title {
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 800;
       color: var(--dark);
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
     .bonus-card__desc {
-      font-size: 16px;
+      font-size: 15px;
       color: var(--mid);
-      line-height: 1.75;
-      margin-bottom: 20px;
+      line-height: 1.7;
+      margin-bottom: 16px;
     }
     .bonus-card__price {
       display: flex;
@@ -843,19 +910,39 @@
 
     /* ─── Pricing ─────────────────────────────────── */
     .pricing {
-      background: #fff;
+      background: var(--orange);
       padding: 96px 0;
-    }
-    .pricing__card {
-      max-width: 640px;
-      margin: 0 auto;
-      background: var(--light);
-      border-radius: 28px;
-      border: 1px solid var(--border);
-      padding: 56px 48px;
-      text-align: center;
       position: relative;
       overflow: hidden;
+    }
+    .pricing__head {
+      max-width: 640px;
+      margin: 0 auto 48px;
+      text-align: center;
+    }
+    .pricing__title {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+    .pricing__sub {
+      font-size: 18px;
+      color: rgba(255,255,255,.9);
+      line-height: 1.6;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .pricing__card {
+      max-width: 940px;
+      margin: 0 auto;
+      background: var(--white);
+      border-radius: 28px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 14px 40px hsl(202deg 35% 22% / .08);
     }
     .pricing__card::before {
       content: '';
@@ -864,29 +951,57 @@
       height: 5px;
       background: linear-gradient(90deg, var(--yellow), var(--teal), var(--orange));
     }
+    .pricing__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+    /* Right column (RTL-first): plan + price + CTA. Divider sits on its left edge. */
+    .pricing__main {
+      padding: 56px 48px;
+      text-align: center;
+      border-left: 1px solid var(--border);
+    }
+    .pricing__features {
+      padding: 56px 48px;
+    }
+    .pricing__plan {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--dark);
+    }
+    .pricing__plan-sub {
+      font-size: 17px;
+      color: var(--mid);
+      margin-top: 8px;
+    }
     .pricing__label {
       font-size: 13px;
       font-weight: 700;
       letter-spacing: .1em;
       text-transform: uppercase;
       color: var(--teal);
-      margin-bottom: 16px;
+      margin: 32px 0 4px;
     }
     .pricing__amount {
-      font-size: 72px;
+      font-size: 64px;
       font-weight: 900;
       color: var(--dark);
       line-height: 1;
       margin-bottom: 4px;
     }
-    .pricing__amount sup { font-size: 32px; vertical-align: top; margin-top: 10px; }
-    .pricing__period { font-size: 18px; color: var(--mid); margin-bottom: 36px; }
-    .pricing__divider {
-      height: 1px;
-      background: var(--border);
-      margin: 32px 0;
+    .pricing__amount sup { font-size: 30px; vertical-align: top; margin-top: 8px; }
+    .pricing__period { font-size: 17px; color: var(--mid); margin-bottom: 28px; }
+    .pricing__features-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 20px;
+      text-align: right;
     }
-    .pricing__list { list-style: none; text-align: right; display: flex; flex-direction: column; gap: 14px; margin-bottom: 40px; }
+    .pricing__list { list-style: none; text-align: right; display: flex; flex-direction: column; gap: 16px; }
     .pricing__list li {
       display: flex;
       align-items: flex-start;
@@ -913,6 +1028,84 @@
       font-size: 13px;
       color: #8896a5;
       margin-top: 16px;
+    }
+
+    /* ─── Pricing decorative side elements ───────────── */
+    .pricing__decor {
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 22%;
+      max-width: 240px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .pricing__decor--right { right: 0; }
+    .pricing__decor--left  { left: 0; }
+    /* keep the card and text above the decorations */
+    .pricing .container { position: relative; z-index: 1; }
+
+    .pricing__shape {
+      position: absolute;
+      border-radius: 50%;
+      will-change: transform;
+    }
+    /* circular photo bubbles (children / family) */
+    .pricing__shape--photo {
+      overflow: hidden;
+      border: 4px solid #fff;
+      background: var(--light, #f8f9fb);
+      box-shadow: 0 14px 34px hsl(202deg 35% 22% / .20);
+    }
+    .pricing__shape--photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* soft blurred brand-colored blobs sitting behind the photos */
+    .pricing__blobs {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .pricing__blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(2px);
+      opacity: .5;
+      will-change: transform;
+    }
+    .pricing__blob.is-yellow { background: radial-gradient(circle at 30% 30%, #fad48a, var(--yellow)); }
+    .pricing__blob.is-teal   { background: radial-gradient(circle at 30% 30%, #6fc0cd, var(--teal)); }
+    .pricing__blob.is-orange { background: radial-gradient(circle at 30% 30%, #f2a07d, var(--orange)); }
+    @media (max-width: 1080px) { .pricing__blobs { display: none; } }
+
+    /* animations: gentle drifting / bobbing, staggered */
+    @keyframes pricingFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50%      { transform: translateY(-22px) rotate(6deg); }
+    }
+    @keyframes pricingFloatAlt {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50%      { transform: translateY(18px) rotate(-7deg); }
+    }
+    @keyframes pricingPulse {
+      0%, 100% { transform: scale(1); opacity: .55; }
+      50%      { transform: scale(1.25); opacity: 1; }
+    }
+    .pricing__shape[data-anim="float"],
+    .pricing__blob[data-anim="float"]     { animation: pricingFloat 7s ease-in-out infinite; }
+    .pricing__shape[data-anim="floatAlt"],
+    .pricing__blob[data-anim="floatAlt"]  { animation: pricingFloatAlt 8.5s ease-in-out infinite; }
+    .pricing__shape[data-anim="pulse"]    { animation: pricingPulse 4.5s ease-in-out infinite; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .pricing__shape, .pricing__blob { animation: none !important; }
+    }
+    /* hide on smaller screens where the card uses the full width */
+    @media (max-width: 1080px) {
+      .pricing__decor { display: none; }
     }
 
     /* ─── Footer ──────────────────────────────────── */
@@ -1006,6 +1199,9 @@
     @media (max-width: 768px) {
       .section    { padding: 64px 0; }
       .section-sm { padding: 48px 0; }
+      .bonuses__split { grid-template-columns: 1fr; min-height: 0; }
+      .bonuses__media { order: -1; height: 64vw; min-height: 240px; }
+      .bonuses__content { padding: 56px 24px; }
 
       .hero { grid-template-columns: 1fr; height: auto; }
       .hero__img-side { height: 65vw; min-height: 260px; }
@@ -1023,7 +1219,9 @@
       .about__photo-wrap { display: flex; justify-content: center; }
       .about__photo   { width: 240px; height: 280px; }
 
-      .pricing__card  { padding: 36px 24px; }
+      .pricing__grid  { grid-template-columns: 1fr; }
+      .pricing__main  { padding: 40px 24px; border-left: 0; border-bottom: 1px solid var(--border); }
+      .pricing__features { padding: 36px 24px; }
       .pricing__amount{ font-size: 56px; }
 
       .trustbar__divider { display: none; }
@@ -1135,6 +1333,199 @@
       .trustbar__item span { font-size: 12px; }
       .exp-cards { min-height: 380px; }
     }
+
+    /* ─── CMS detail modal (pain tiles / solution cards) ───────────── */
+    .pain__tile[data-clickable="true"],
+    .sol-card[data-clickable="true"] { cursor: pointer; }
+    .bonuses__head em { color: var(--orange); font-style: normal; font-weight: 800; }
+
+    .cms-modal {
+      position: fixed; inset: 0; z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .cms-modal[hidden] { display: none; }
+    .cms-modal__backdrop {
+      position: absolute; inset: 0;
+      background: rgba(15,23,42,.62);
+      backdrop-filter: blur(4px);
+      animation: cmsFade .2s ease;
+    }
+    .cms-modal__box {
+      position: relative; z-index: 1;
+      background: #fff; border-radius: 22px;
+      max-width: 520px; width: 100%;
+      max-height: 88vh; overflow: auto;
+      box-shadow: 0 30px 80px rgba(0,0,0,.3);
+      animation: cmsPop .26s cubic-bezier(.22,1,.36,1);
+    }
+    @keyframes cmsFade { from { opacity: 0; } }
+    @keyframes cmsPop  { from { opacity: 0; transform: translateY(16px) scale(.97); } }
+    .cms-modal__close {
+      position: absolute; top: 12px; left: 12px; z-index: 2;
+      width: 38px; height: 38px; border-radius: 50%;
+      border: none; cursor: pointer;
+      background: rgba(255,255,255,.9); color: var(--dark);
+      font-size: 18px; font-weight: 700;
+      box-shadow: 0 2px 10px rgba(0,0,0,.15);
+    }
+    .cms-modal__close:hover { background: #fff; }
+    .cms-modal__img {
+      width: 100%; height: 240px; object-fit: cover;
+      border-radius: 22px 22px 0 0; display: block;
+    }
+    .cms-modal__body { padding: 28px 30px 34px; }
+    .cms-modal__body h3 {
+      font-size: 24px; font-weight: 900; color: var(--dark);
+      margin-bottom: 14px; line-height: 1.25;
+    }
+    .cms-modal__body p {
+      font-size: 16px; line-height: 1.85; color: var(--mid);
+      white-space: pre-line;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       Cookie consent banner
+       ═══════════════════════════════════════════════════ */
+    .cookie-bar {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%) translateY(140%);
+      width: min(940px, calc(100% - 32px));
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 18px 50px rgba(26,26,46,.18);
+      padding: 22px 26px;
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
+      z-index: 9000;
+      opacity: 0;
+      transition: transform .5s cubic-bezier(.22,1,.36,1), opacity .5s ease;
+    }
+    .cookie-bar.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .cookie-bar__text { flex: 1 1 320px; }
+    .cookie-bar__text h4 {
+      font-size: 18px; font-weight: 800; color: var(--dark); margin-bottom: 6px;
+    }
+    .cookie-bar__text p {
+      font-size: 14.5px; line-height: 1.7; color: var(--mid);
+    }
+    .cookie-bar__text a { color: var(--teal); text-decoration: underline; }
+    .cookie-bar__actions { display: flex; gap: 12px; flex: 0 0 auto; flex-wrap: wrap; }
+    .cookie-btn {
+      font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer;
+      border-radius: 12px; padding: 12px 26px; border: 2px solid transparent;
+      transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .cookie-btn:hover { transform: translateY(-2px); }
+    .cookie-btn--accept {
+      background: var(--teal); color: var(--white);
+      box-shadow: 0 8px 22px rgba(41,140,156,.32);
+    }
+    .cookie-btn--reject {
+      background: var(--white); color: var(--mid); border-color: var(--border);
+    }
+    @media (max-width: 600px) {
+      .cookie-bar { bottom: 14px; padding: 18px 18px; }
+      .cookie-bar__actions { width: 100%; }
+      .cookie-btn { flex: 1; }
+    }
+
+    /* ═══════════════════════════════════════════════════
+       Accessibility widget
+       ═══════════════════════════════════════════════════ */
+    .a11y-toggle {
+      position: fixed;
+      bottom: 22px;
+      inset-inline-start: 22px; /* right side in RTL */
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--teal);
+      color: var(--white);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 10px 26px rgba(41,140,156,.4);
+      z-index: 9001;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .a11y-toggle:hover { transform: scale(1.08); }
+    .a11y-toggle svg { width: 30px; height: 30px; }
+    .a11y-toggle:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+
+    .a11y-panel {
+      position: fixed;
+      bottom: 88px;
+      inset-inline-start: 22px;
+      width: 290px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 18px 50px rgba(26,26,46,.22);
+      padding: 18px;
+      z-index: 9002;
+      transform: translateY(16px) scale(.96);
+      transform-origin: bottom right;
+      opacity: 0; visibility: hidden;
+      transition: transform .25s ease, opacity .25s ease, visibility .25s;
+    }
+    .a11y-panel.open { transform: none; opacity: 1; visibility: visible; }
+    .a11y-panel__head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .a11y-panel__head h4 { font-size: 17px; font-weight: 800; color: var(--dark); }
+    .a11y-panel__close {
+      background: none; border: none; cursor: pointer; font-size: 22px;
+      line-height: 1; color: var(--mid); padding: 4px;
+    }
+    .a11y-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .a11y-opt {
+      font-family: inherit; font-size: 13px; font-weight: 600;
+      background: var(--light); color: var(--dark);
+      border: 2px solid var(--border); border-radius: 12px;
+      padding: 12px 6px; cursor: pointer; text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      transition: border-color .15s ease, background .15s ease;
+    }
+    .a11y-opt span.ico { font-size: 20px; }
+    .a11y-opt:hover { border-color: var(--teal); }
+    .a11y-opt.active { border-color: var(--teal); background: rgba(41,140,156,.1); }
+    .a11y-reset {
+      grid-column: 1 / -1;
+      font-family: inherit; font-size: 13.5px; font-weight: 700;
+      background: var(--orange); color: var(--white);
+      border: none; border-radius: 12px; padding: 12px; cursor: pointer;
+      margin-top: 4px;
+    }
+
+    /* ── Accessibility states applied to <html> ── */
+    html.a11y-contrast body { background: #000 !important; color: #fff !important; }
+    html.a11y-contrast body :where(p,h1,h2,h3,h4,h5,h6,span,li,label) {
+      color: #fff !important;
+    }
+    html.a11y-contrast body :where(section,header,footer,nav) {
+      background-color: #000 !important;
+    }
+    html.a11y-links a { text-decoration: underline !important; }
+    html.a11y-contrast a { color: #ffe600 !important; }
+    html.a11y-grayscale body { filter: grayscale(100%); }
+    html.a11y-spacing body :where(p,li,span,a) {
+      letter-spacing: 1px !important; word-spacing: 4px !important; line-height: 2 !important;
+    }
+    html.a11y-readable body,
+    html.a11y-readable body :where(p,h1,h2,h3,h4,h5,h6,span,li,a,label,button) {
+      font-family: Arial, Helvetica, sans-serif !important;
+      letter-spacing: .3px;
+    }
+    /* a11y panel itself stays readable even in contrast mode */
+    html.a11y-contrast .a11y-panel,
+    html.a11y-contrast .a11y-panel :where(h4,.a11y-opt) {
+      background: var(--white) !important; color: var(--dark) !important;
+    }
   </style>
 </head>
 <body>
@@ -1220,6 +1611,16 @@
       />
     </div>
   </div>
+
+  <!-- ③ Scroll-down hint -->
+  <a href="#about" class="hero__scroll" aria-label="גלילה למטה">
+    <span>יש המשך</span>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.5"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 9l6 6 6-6"/>
+    </svg>
+  </a>
 
 </div><!-- /hero-wrap -->
 
@@ -1480,86 +1881,138 @@
 </section>
 
 <!-- ─── BONUSES ──────────────────────────────────────── -->
-<section class="section bonuses">
-  <div class="container">
-    <div class="bonuses__head">
-      <span class="label sr">בונוסים בהצטרפות</span>
-      <h2 class="sr sr-d1">מקבלים במתנה</h2>
-      <p class="sr sr-d2">שווי מתנות כולל — <strong style="color:var(--orange)">519 ₪</strong></p>
-    </div>
+<section class="bonuses">
+  <div class="bonuses__split">
 
-    <div class="bonuses__grid">
-      <div class="bonus-card bonus-card--yellow sr sr-d1">
-        <h3 class="bonus-card__title">ספר דיגיטלי</h3>
-        <p class="bonus-card__desc">
-          "מקרב בין הורים וילדים" — ספר שיעזור לכם לבנות קשר עמוק ואמיתי יותר עם ילדיכם.
-        </p>
-        <div class="bonus-card__price">
-          <span class="bonus-card__original">119 ₪</span>
-          <span class="bonus-card__tag tag--yellow">במתנה</span>
+    <!-- Content (right in RTL) -->
+    <div class="bonuses__content">
+      <div class="bonuses__head">
+        <span class="label sr">בונוסים בהצטרפות</span>
+        <h2 class="sr sr-d1">מקבלים במתנה</h2>
+        <p class="sr sr-d2">שווי מתנות כולל — <strong style="color:var(--orange)">519 ₪</strong></p>
+      </div>
+
+      <div class="bonuses__grid">
+      <div class="bonus-card bonus-card--teal sr sr-d1">
+        <div class="bonus-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="bonus-card__body">
+          <h3 class="bonus-card__title">פגישת היכרות וייעוץ</h3>
+          <p class="bonus-card__desc">
+            פגישה אישית עם אורן — היכרות, ייעוץ ראשוני, ומענה על השאלות הספציפיות שלכם.
+          </p>
+          <div class="bonus-card__price">
+            <span class="bonus-card__original">400 ₪</span>
+            <span class="bonus-card__tag tag--teal">במתנה</span>
+          </div>
         </div>
       </div>
 
-      <div class="bonus-card bonus-card--teal sr sr-d2">
-        <h3 class="bonus-card__title">פגישת היכרות וייעוץ</h3>
-        <p class="bonus-card__desc">
-          פגישה אישית עם אורן — היכרות, ייעוץ ראשוני, ומענה על השאלות הספציפיות שלכם.
-        </p>
-        <div class="bonus-card__price">
-          <span class="bonus-card__original">400 ₪</span>
-          <span class="bonus-card__tag tag--teal">במתנה</span>
+      <div class="bonus-card bonus-card--yellow sr sr-d2">
+        <div class="bonus-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </div>
+        <div class="bonus-card__body">
+          <h3 class="bonus-card__title">ספר דיגיטלי</h3>
+          <p class="bonus-card__desc">
+            "מקרב בין הורים וילדים" — ספר שיעזור לכם לבנות קשר עמוק ואמיתי יותר עם ילדיכם.
+          </p>
+          <div class="bonus-card__price">
+            <span class="bonus-card__original">119 ₪</span>
+            <span class="bonus-card__tag tag--yellow">במתנה</span>
+          </div>
         </div>
       </div>
+      </div>
     </div>
+
+    <!-- Image (left in RTL) -->
+    <div class="bonuses__media sr">
+      <img src="bonus-photo.jpg" alt="הורים עם תינוקות" loading="lazy" />
+    </div>
+
   </div>
 </section>
 
 <!-- ─── PRICING ──────────────────────────────────────── -->
 <section id="pricing" class="pricing">
+
+  <!-- Soft brand-colored blobs behind the photos -->
+  <div class="pricing__blobs" aria-hidden="true">
+    <span class="pricing__blob is-yellow" data-anim="float"    style="width:170px;height:170px;top:4%;right:-40px;animation-delay:-1s;"></span>
+    <span class="pricing__blob is-teal"   data-anim="floatAlt" style="width:110px;height:110px;bottom:8%;right:18%;animation-delay:-3s;"></span>
+    <span class="pricing__blob is-orange" data-anim="float"    style="width:90px;height:90px;top:40%;right:26%;animation-delay:-2s;"></span>
+    <span class="pricing__blob is-orange" data-anim="floatAlt" style="width:150px;height:150px;bottom:2%;left:-44px;animation-delay:-2.5s;"></span>
+    <span class="pricing__blob is-teal"   data-anim="float"    style="width:100px;height:100px;top:8%;left:16%;animation-delay:-1.5s;"></span>
+    <span class="pricing__blob is-yellow" data-anim="floatAlt" style="width:80px;height:80px;top:48%;left:24%;animation-delay:-4s;"></span>
+  </div>
+
+  <!-- Decorative floating circular photos (children / family) — populated from CMS content -->
+  <div class="pricing__decor pricing__decor--right" aria-hidden="true"></div>
+  <div class="pricing__decor pricing__decor--left" aria-hidden="true"></div>
+
   <div class="container">
+    <div class="pricing__head sr">
+      <h2 class="pricing__title">מחיר אחד פשוט — הכל כלול</h2>
+      <p class="pricing__sub">חברות אחת שמלווה אתכם כל חודש, בלי הפתעות ובלי התחייבות</p>
+    </div>
+
     <div class="pricing__card sr">
-      <p class="pricing__label">עלות חברות חודשית</p>
-      <div class="pricing__amount"><sup>₪</sup>91</div>
-      <p class="pricing__period">לחודש &middot; ביטול בכל עת</p>
+      <div class="pricing__grid">
 
-      <div class="pricing__divider"></div>
+        <!-- Main: plan + price + CTA -->
+        <div class="pricing__main">
+          <h3 class="pricing__plan">חברות במועדון ההורים</h3>
+          <p class="pricing__plan-sub">למשפחות בכל גודל ובכל שלב</p>
 
-      <ul class="pricing__list">
-        <li>
-          <span class="check">&#10003;</span>
-          מפגש לייב שבועי עם אורן (כשעה)
-        </li>
-        <li>
-          <span class="check">&#10003;</span>
-          נושא מרכזי מדי שבוע
-        </li>
-        <li>
-          <span class="check">&#10003;</span>
-          שאלות ותשובות ותמיכה קהילתית
-        </li>
-        <li>
-          <span class="check">&#10003;</span>
-          כלים מ-NLP, CBT ופסיכולוגיה של ילדים
-        </li>
-        <li>
-          <span class="check check--gift">&#9733;</span>
-          <span>ספר דיגיטלי <strong>"מקרב בין הורים וילדים"</strong> (שווי 119 ₪) — בחינם</span>
-        </li>
-        <li>
-          <span class="check check--gift">&#9733;</span>
-          <span>פגישת ייעוץ אישית עם אורן (שווי 400 ₪) — בחינם</span>
-        </li>
-      </ul>
+          <p class="pricing__label">עלות חברות חודשית</p>
+          <div class="pricing__amount"><sup>₪</sup>91</div>
+          <p class="pricing__period">לחודש &middot; ביטול בכל עת</p>
 
-      <div class="pricing__cta">
-        <!-- Replace href with your actual Stripe / Cardcom / PayPal payment link -->
-        <a href="#"
-           class="btn btn-primary btn-lg btn-ring"
-           style="width:100%;display:block;text-align:center;"
-           onclick="handlePayment(event)">
-          הצטרפות למועדון עכשיו
-        </a>
-        <p class="pricing__fine">ביטול בכל עת &middot; ללא התחייבות &middot; פחות מ-3 ₪ ליום</p>
+          <div class="pricing__cta">
+            <!-- Replace href with your actual Stripe / Cardcom / PayPal payment link -->
+            <a href="#"
+               class="btn btn-primary btn-lg btn-ring"
+               style="width:100%;display:block;text-align:center;"
+               onclick="handlePayment(event)">
+              הצטרפות למועדון עכשיו
+            </a>
+            <p class="pricing__fine">ביטול בכל עת &middot; ללא התחייבות &middot; פחות מ-3 ₪ ליום</p>
+          </div>
+        </div>
+
+        <!-- Features list -->
+        <div class="pricing__features">
+          <p class="pricing__features-title">מה כלול בחברות</p>
+          <ul class="pricing__list">
+            <li>
+              <span class="check">&#10003;</span>
+              <span>מפגש לייב שבועי עם אורן (כשעה)</span>
+            </li>
+            <li>
+              <span class="check">&#10003;</span>
+              <span>נושא מרכזי מדי שבוע</span>
+            </li>
+            <li>
+              <span class="check">&#10003;</span>
+              <span>שאלות ותשובות ותמיכה קהילתית</span>
+            </li>
+            <li>
+              <span class="check">&#10003;</span>
+              <span>כלים מ-NLP, CBT ופסיכולוגיה של ילדים</span>
+            </li>
+            <li>
+              <span class="check check--gift">&#9733;</span>
+              <span>ספר דיגיטלי <strong>"מקרב בין הורים וילדים"</strong> (שווי 119 ₪) — בחינם</span>
+            </li>
+            <li>
+              <span class="check check--gift">&#9733;</span>
+              <span>פגישת ייעוץ אישית עם אורן (שווי 400 ₪) — בחינם</span>
+            </li>
+          </ul>
+        </div>
+
       </div>
     </div>
   </div>
@@ -1591,6 +2044,8 @@
         <a href="https://www.tiktok.com/@orenrlev" target="_blank" rel="noopener">TikTok</a>
         <a href="mailto:micamonilev@gmail.com">micamonilev@gmail.com</a>
         <a href="tel:0504800455">050-4800-455</a>
+        <a href="/accessibility.html">הצהרת נגישות</a>
+        <a href="/privacy.html">מדיניות פרטיות</a>
       </div>
 
       <!-- Bottom -->
@@ -1607,101 +2062,442 @@
   </a>
 </div>
 
+<!-- ─── CMS detail modal ────────────────────────────── -->
+<div class="cms-modal" id="cmsModal" hidden>
+  <div class="cms-modal__backdrop" data-close></div>
+  <div class="cms-modal__box">
+    <button class="cms-modal__close" type="button" data-close aria-label="סגירה">✕</button>
+    <img class="cms-modal__img" id="cmsModalImg" alt="" hidden />
+    <div class="cms-modal__body">
+      <h3 id="cmsModalTitle"></h3>
+      <p id="cmsModalText"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Cookie consent banner ──────────────────────── -->
+<div class="cookie-bar" id="cookieBar" role="dialog" aria-live="polite" aria-label="הסכמה לשימוש בעוגיות">
+  <div class="cookie-bar__text">
+    <h4>🍪 אנחנו משתמשים בעוגיות</h4>
+    <p>אתר זה משתמש בעוגיות (Cookies) כדי לשפר את חוויית הגלישה ולנתח את התנועה באתר. בלחיצה על "מאשר" אתם מסכימים לשימוש בעוגיות.</p>
+  </div>
+  <div class="cookie-bar__actions">
+    <button type="button" class="cookie-btn cookie-btn--reject" id="cookieReject">דחייה</button>
+    <button type="button" class="cookie-btn cookie-btn--accept" id="cookieAccept">מאשר</button>
+  </div>
+</div>
+
+<!-- ─── Accessibility widget ───────────────────────── -->
+<button type="button" class="a11y-toggle" id="a11yToggle" aria-label="פתיחת תפריט נגישות" aria-expanded="false">
+  <!-- wheelchair icon -->
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <circle cx="12" cy="3.5" r="2"/>
+    <path d="M19.5 17.5l-1.9.5-1.4-3.6a1.5 1.5 0 0 0-1.4-.95h-3.3v-1.5h3.5a1 1 0 0 0 0-2H11.5V7.4a1.4 1.4 0 0 0-2.8 0v5.6c0 .83.67 1.5 1.5 1.5h3.85l1.6 4.1c.2.5.7.8 1.25.7l2.4-.6a1 1 0 0 0-.5-1.9z"/>
+    <path d="M13.4 17.3a4.5 4.5 0 1 1-4.3-5.8v-2.05a6.5 6.5 0 1 0 6.45 8.35z"/>
+  </svg>
+</button>
+<div class="a11y-panel" id="a11yPanel" role="dialog" aria-label="תפריט נגישות" aria-hidden="true">
+  <div class="a11y-panel__head">
+    <h4>תפריט נגישות</h4>
+    <button type="button" class="a11y-panel__close" id="a11yClose" aria-label="סגירה">&times;</button>
+  </div>
+  <div class="a11y-grid">
+    <button type="button" class="a11y-opt" data-a11y="font-up"><span class="ico">A+</span>הגדלת טקסט</button>
+    <button type="button" class="a11y-opt" data-a11y="font-down"><span class="ico">A-</span>הקטנת טקסט</button>
+    <button type="button" class="a11y-opt" data-a11y="contrast"><span class="ico">◐</span>ניגודיות גבוהה</button>
+    <button type="button" class="a11y-opt" data-a11y="grayscale"><span class="ico">⬤</span>גווני אפור</button>
+    <button type="button" class="a11y-opt" data-a11y="links"><span class="ico">🔗</span>הדגשת קישורים</button>
+    <button type="button" class="a11y-opt" data-a11y="readable"><span class="ico">🔤</span>גופן קריא</button>
+    <button type="button" class="a11y-opt" data-a11y="bigcursor"><span class="ico">🖱️</span>סמן גדול</button>
+    <button type="button" class="a11y-opt" data-a11y="spacing"><span class="ico">↔</span>ריווח טקסט</button>
+    <button type="button" class="a11y-reset" data-a11y="reset">איפוס הגדרות נגישות</button>
+  </div>
+</div>
+
 <!-- ─── JS ──────────────────────────────────────────── -->
 <script>
-  // ── Navbar: transparent on hero, white on scroll ──
-  (function () {
-    const nav = document.querySelector('.nav');
-    function update() {
-      if (window.scrollY > 20) nav.classList.add('scrolled');
-      else nav.classList.remove('scrolled');
-    }
-    window.addEventListener('scroll', update, { passive: true });
-    update();
-  })();
+  // ════════════════════════════════════════════════════════════════════
+  //  CONTENT HYDRATION — pulls editable content from /api/content (CMS)
+  //  and renders it over the static markup. If the fetch fails, the page
+  //  keeps the static default content below.
+  // ════════════════════════════════════════════════════════════════════
 
-  // ── Rotating nav taglines ──────────────────────────
-  (function () {
-    const items = document.querySelectorAll('.nav__tagline-item');
-    let cur = 0;
-    setInterval(() => {
-      items[cur].classList.remove('active');
-      cur = (cur + 1) % items.length;
-      items[cur].classList.add('active');
-    }, 3000);
-  })();
+  const COLOR_HEX = { teal:'#298c9c', yellow:'#f4bb4f', orange:'#ea6c3a', dark:'#1a1a2e', gray:'#4a5568' };
 
-  // Scroll reveal
-  const els = document.querySelectorAll('.sr');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('in');
-        io.unobserve(e.target);
-      }
+  function esc(s){ return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  // \n → <br>, [[text]] → <em>text</em>
+  function rich(s){ return esc(s).replace(/\n/g,'<br/>').replace(/\[\[([\s\S]+?)\]\]/g,'<em>$1</em>'); }
+
+  function setText(sel, val){ const el = document.querySelector(sel); if(el && val != null) el.textContent = val; }
+  function setHTML(sel, val){ const el = document.querySelector(sel); if(el && val != null) el.innerHTML = val; }
+  function setImg(sel, val){ const el = document.querySelector(sel); if(el && val) el.src = val; }
+
+  // Fixed layout slots for the floating circular photos beside the price card.
+  // Positions auto-distribute across both sides by image order; size is overridable per image.
+  const PRICING_DECOR_SLOTS = [
+    { side:'right', pos:'top:6%;right:-26px;',   size:155, anim:'float',    delay:'-1s'   },
+    { side:'right', pos:'bottom:12%;right:24%;', size:92,  anim:'floatAlt', delay:'-3s'   },
+    { side:'right', pos:'top:46%;right:14%;',    size:120, anim:'float',    delay:'-2s'   },
+    { side:'left',  pos:'top:10%;left:20%;',     size:100, anim:'floatAlt', delay:'-1.5s' },
+    { side:'left',  pos:'bottom:8%;left:-22px;', size:150, anim:'float',    delay:'-2.5s' },
+  ];
+  function renderPricingDecor(images){
+    const right = document.querySelector('.pricing__decor--right');
+    const left  = document.querySelector('.pricing__decor--left');
+    if(!right || !left) return;
+    right.innerHTML = ''; left.innerHTML = '';
+    (Array.isArray(images) ? images : []).forEach((im, i) => {
+      const slot = PRICING_DECOR_SLOTS[i];
+      if(!slot || !im || !im.url) return;
+      const size = parseInt(im.size, 10) || slot.size;
+      const el = document.createElement('span');
+      el.className = 'pricing__shape pricing__shape--photo';
+      el.setAttribute('data-anim', slot.anim);
+      el.style.cssText = `width:${size}px;height:${size}px;${slot.pos}animation-delay:${slot.delay};`;
+      el.innerHTML = `<img src="${esc(im.url)}" alt="" loading="lazy"/>`;
+      (slot.side === 'right' ? right : left).appendChild(el);
     });
-  }, { threshold: 0.12 });
-  els.forEach(el => io.observe(el));
-
-  // ── Pain content: fade + rise as solution scrolls over ──
-  const painSection = document.querySelector('.pain');
-  const painContent = document.querySelector('.pain__grid');
-
-  function onPainScroll() {
-    if (!painSection || !painContent) return;
-    const rect = painSection.getBoundingClientRect();
-    const vh   = window.innerHeight;
-
-    // progress: 0 = section fully visible, 1 = section fully scrolled past top
-    const progress = Math.min(1, Math.max(0, -rect.top / vh));
-
-    painContent.style.transform = `translateY(-${progress * 80}px)`;
-    painContent.style.opacity   = Math.max(0, 1 - progress * 1.8).toFixed(3);
   }
 
-  window.addEventListener('scroll', onPainScroll, { passive: true });
-  onPainScroll();
+  function applyContent(c){
+    try{
+      // ── NAV ──────────────────────────────────────────
+      if(c.nav){
+        const tl = document.getElementById('navTagline');
+        if(tl && Array.isArray(c.nav.taglines)){
+          tl.innerHTML = c.nav.taglines.map((t,i) => {
+            const style = `color:${t.color||'#298c9c'};font-family:${t.font||"'Heebo',sans-serif"};`
+              + (t.italic ? 'font-style:italic;' : '');
+            return `<span class="nav__tagline-item${i===0?' active':''}" style="${style}">${esc(t.text)}</span>`;
+          }).join('');
+        }
+        setText('.nav__cta', c.nav.cta);
+      }
 
-  // ── Expanding Cards ────────────────────────────────
-  (function () {
-    const list  = document.getElementById('expCards');
-    const cards = Array.from(list.querySelectorAll('.ec'));
-    const isMobile = () => window.innerWidth < 768;
+      // ── HERO ─────────────────────────────────────────
+      if(c.hero){
+        const d = c.hero;
+        setText('.hero__chip', d.chip);
+        setHTML('.hero__content h1', rich(d.title));
+        setHTML('.hero__sub', rich(d.subtitle));
+        const acts = document.querySelectorAll('.hero__actions .btn');
+        if(acts[0] && d.ctaPrimary)   acts[0].textContent = d.ctaPrimary;
+        if(acts[1] && d.ctaSecondary) acts[1].textContent = d.ctaSecondary;
+        setText('.hero__note', d.note);
+        setImg('.hero__logo-abs img', d.logo);
+        setImg('.hero__img-frame img', d.image);
+      }
 
-    function setActive(index) {
-      cards.forEach((c, i) => {
-        const active = i === index;
-        c.dataset.active = active;
-      });
+      // ── TRUSTBAR ─────────────────────────────────────
+      if(Array.isArray(c.trustbar)){
+        const box = document.querySelector('.trustbar__inner');
+        if(box) box.innerHTML = c.trustbar.map((t,i) =>
+          `<div class="trustbar__item sr sr-d${(i%4)+1}"><strong>${esc(t.strong)}</strong><span>${esc(t.span)}</span></div>`
+        ).join('');
+      }
 
-      if (isMobile()) {
-        // Drive via class on the list (CSS handles rows)
-        list.className = list.className.replace(/mobile-active-\d/, '');
-        list.classList.add('mobile-active-' + index);
-        list.style.gridTemplateColumns = '';
-      } else {
-        // Drive via inline style on the list
-        list.style.gridTemplateColumns = cards
-          .map((_, i) => i === index ? '5fr' : '1fr')
-          .join(' ');
-        list.style.gridTemplateRows = '';
-        list.className = list.className.replace(/mobile-active-\d/, '');
+      // ── PAIN ─────────────────────────────────────────
+      if(c.pain){
+        const d = c.pain;
+        setText('.pain__copy .label', d.label);
+        setHTML('.pain__copy h2', rich(d.title));
+        const copy = document.querySelector('.pain__copy');
+        if(copy && Array.isArray(d.paragraphs)){
+          copy.querySelectorAll('p').forEach(p => p.remove());
+          d.paragraphs.forEach((txt,i) => {
+            const p = document.createElement('p');
+            p.className = 'sr sr-d' + (i+2);
+            p.innerHTML = rich(txt);
+            copy.appendChild(p);
+          });
+        }
+        const tiles = document.querySelector('.pain__tiles');
+        if(tiles && Array.isArray(d.tiles)){
+          tiles.innerHTML = d.tiles.map((t,i) => {
+            const clickable = !!(t.expandedText || t.image);
+            return `<div class="pain__tile pain__tile--${t.color||'teal'} sr sr-d${(i%4)+1}"`
+              + (clickable ? ` data-clickable="true" data-modal="pain" data-idx="${i}"` : '')
+              + `><p>${esc(t.text)}</p></div>`;
+          }).join('');
+        }
+      }
+
+      // ── SOLUTION ─────────────────────────────────────
+      if(c.solution){
+        const d = c.solution;
+        setText('.solution__head .label', d.label);
+        setText('.solution__head h2', d.title);
+        setHTML('.solution__head p', rich(d.subtitle));
+        const cards = document.querySelector('.solution__cards');
+        if(cards && Array.isArray(d.steps)){
+          cards.innerHTML = d.steps.map((s,i) => {
+            const clickable = !!s.expandedText;
+            return `<div class="sol-card sr sr-d${(i%3)+1}"`
+              + (clickable ? ` data-clickable="true" data-modal="solution" data-idx="${i}"` : '') + `>`
+              + (s.image ? `<img class="sol-card__img" src="${esc(s.image)}" alt="${esc(s.title)}" />` : '')
+              + `<div class="sol-card__body">`
+              + `<div class="sol-card__accent" style="background:${COLOR_HEX[s.accent]||s.accent||'#298c9c'}"></div>`
+              + `<h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></div></div>`;
+          }).join('');
+        }
+      }
+
+      // ── FEATURES (expanding cards) ───────────────────
+      if(c.features){
+        const d = c.features;
+        setText('.features__head .label', d.label);
+        setText('.features__head h2', d.title);
+        setText('.features__head p', d.subtitle);
+        const list = document.getElementById('expCards');
+        if(list && Array.isArray(d.steps)){
+          list.removeAttribute('style');
+          list.className = 'exp-cards sr';
+          list.innerHTML = d.steps.map((s,i) =>
+            `<li class="ec ec--${s.color||'teal'}" data-active="${i===0}" data-index="${i}" tabindex="0">`
+            + `<div class="ec__bg"></div>`
+            + (s.image ? `<img class="ec__img" src="${esc(s.image)}" alt="${esc(s.title)}" />` : `<img class="ec__img" alt="" />`)
+            + `<div class="ec__overlay"></div>`
+            + `<span class="ec__title-v">${esc(s.title)}</span>`
+            + `<div class="ec__body"><h3>${esc(s.subtitle||s.title)}</h3><p>${esc(s.text)}</p></div></li>`
+          ).join('');
+        }
+      }
+
+      // ── TOPICS ───────────────────────────────────────
+      if(c.topics){
+        const d = c.topics;
+        setText('.topics__head .label', d.label);
+        setText('.topics__head h2', d.title);
+        setText('.topics__head p', d.subtitle);
+        const wrap = document.querySelector('.topics__wrap');
+        if(wrap && Array.isArray(d.items)){
+          wrap.innerHTML = d.items.map(t =>
+            `<span class="topic-tag tt-${t.color||'teal'}">${esc(t.text)}</span>`
+          ).join('');
+        }
+      }
+
+      // ── ABOUT ────────────────────────────────────────
+      if(c.about){
+        const d = c.about;
+        setImg('.about__photo', d.image);
+        setText('.about__text .label', d.label);
+        setHTML('.about__text h2', esc(d.title) + (d.titleSpan ? `<br/><span>${esc(d.titleSpan)}</span>` : ''));
+        setText('.about__subtitle', d.subtitle);
+        const txt = document.querySelector('.about__text');
+        if(txt && Array.isArray(d.paragraphs)){
+          txt.querySelectorAll('p:not(.about__subtitle)').forEach(p => p.remove());
+          const link = txt.querySelector('.about__link');
+          d.paragraphs.forEach((para,i) => {
+            const p = document.createElement('p');
+            p.className = 'sr sr-d' + (i+2);
+            p.innerHTML = rich(para);
+            txt.insertBefore(p, link);
+          });
+        }
+        const link = document.querySelector('.about__link');
+        if(link){
+          if(d.linkUrl) link.setAttribute('href', d.linkUrl);
+          if(d.linkText){
+            // keep the trailing arrow svg, replace only the leading text node
+            const svg = link.querySelector('svg');
+            link.textContent = d.linkText + ' ';
+            if(svg) link.appendChild(svg);
+          }
+        }
+      }
+
+      // ── BONUSES ──────────────────────────────────────
+      if(c.bonuses){
+        const d = c.bonuses;
+        setText('.bonuses__head .label', d.label);
+        setText('.bonuses__head h2', d.title);
+        setHTML('.bonuses__head p', rich(d.subtitle));
+        setImg('.bonuses__media img', d.image);
+        const grid = document.querySelector('.bonuses__grid');
+        if(grid && Array.isArray(d.items)){
+          const bonusIcons = {
+            teal:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+            yellow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>'
+          };
+          grid.innerHTML = d.items.map((b,i) => {
+            const color = b.color || 'yellow';
+            return `<div class="bonus-card bonus-card--${color} sr sr-d${(i%2)+1}">`
+            + `<div class="bonus-card__icon">${bonusIcons[color] || bonusIcons.yellow}</div>`
+            + `<div class="bonus-card__body">`
+            + `<h3 class="bonus-card__title">${esc(b.title)}</h3>`
+            + `<p class="bonus-card__desc">${esc(b.desc)}</p>`
+            + `<div class="bonus-card__price">`
+            + (b.original ? `<span class="bonus-card__original">${esc(b.original)}</span>` : '')
+            + (b.tag ? `<span class="bonus-card__tag tag--${color}">${esc(b.tag)}</span>` : '')
+            + `</div></div></div>`;
+          }).join('');
+        }
+      }
+
+      // ── PRICING ──────────────────────────────────────
+      if(c.pricing){
+        const d = c.pricing;
+        setText('.pricing__label', d.label);
+        setHTML('.pricing__amount', `<sup>${esc(d.currency||'₪')}</sup>${esc(d.amount)}`);
+        setText('.pricing__period', d.period);
+        const list = document.querySelector('.pricing__list');
+        if(list && Array.isArray(d.features)){
+          list.innerHTML = d.features.map(f => {
+            const mark = f.gift ? `<span class="check check--gift">&#9733;</span>` : `<span class="check">&#10003;</span>`;
+            return `<li>${mark}<span>${rich(f.text)}</span></li>`;
+          }).join('');
+        }
+        const cta = document.querySelector('.pricing__cta .btn');
+        if(cta && d.cta) cta.textContent = d.cta;
+        setText('.pricing__fine', d.fine);
+        renderPricingDecor(d.decorImages);
+      }
+
+      // ── FOOTER ───────────────────────────────────────
+      if(c.footer){
+        const d = c.footer;
+        setImg('.footer__logo', d.logo);
+        setHTML('.footer__tagline', rich(d.tagline));
+        setText('.footer__copy', d.copy);
+        const links = document.querySelector('.footer__links');
+        if(links && Array.isArray(d.links)){
+          links.innerHTML = d.links.map(l => {
+            const ext = /^https?:/.test(l.url);
+            return `<a href="${esc(l.url)}"${ext?' target="_blank" rel="noopener"':''}>${esc(l.text)}</a>`;
+          }).join('');
+        }
+      }
+
+      // expose for modal lookups
+      window.__cms = c;
+    }catch(err){ console.error('[cms] applyContent error', err); }
+  }
+
+  // ── Detail modal (pain tiles / solution cards) ──────
+  function openModal(title, text, image){
+    const m = document.getElementById('cmsModal');
+    const img = document.getElementById('cmsModalImg');
+    if(image){ img.src = image; img.hidden = false; } else { img.hidden = true; img.removeAttribute('src'); }
+    document.getElementById('cmsModalTitle').textContent = title || '';
+    document.getElementById('cmsModalText').textContent  = text  || '';
+    m.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(){
+    document.getElementById('cmsModal').hidden = true;
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('click', (e) => {
+    if(e.target.closest('[data-close]')) { closeModal(); return; }
+    const trigger = e.target.closest('[data-modal]');
+    if(trigger && window.__cms){
+      const kind = trigger.dataset.modal, idx = +trigger.dataset.idx;
+      if(kind === 'pain'){
+        const t = window.__cms.pain.tiles[idx];
+        openModal(t.expandedTitle || t.text, t.expandedText, t.image);
+      } else if(kind === 'solution'){
+        const s = window.__cms.solution.steps[idx];
+        openModal(s.title, s.expandedText, s.image);
       }
     }
+  });
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
 
-    cards.forEach((card, i) => {
-      card.addEventListener('mouseenter', () => setActive(i));
-      card.addEventListener('click',      () => setActive(i));
-      card.addEventListener('focus',      () => setActive(i));
-    });
+  // ════════════════════════════════════════════════════════════════════
+  //  BEHAVIORS — attached after hydration so they bind to the final DOM
+  // ════════════════════════════════════════════════════════════════════
+  function initBehaviors(){
+    // ── Navbar: transparent on hero, white on scroll ──
+    (function () {
+      const nav = document.querySelector('.nav');
+      function update() {
+        if (window.scrollY > 20) nav.classList.add('scrolled');
+        else nav.classList.remove('scrolled');
+      }
+      window.addEventListener('scroll', update, { passive: true });
+      update();
+    })();
 
-    // Init
-    setActive(0);
+    // ── Rotating nav taglines ──────────────────────────
+    (function () {
+      const items = document.querySelectorAll('.nav__tagline-item');
+      if(items.length < 2) return;
+      let cur = 0;
+      setInterval(() => {
+        items[cur].classList.remove('active');
+        cur = (cur + 1) % items.length;
+        items[cur].classList.add('active');
+      }, 3000);
+    })();
 
-    // Re-init on resize
-    window.addEventListener('resize', () => setActive(
-      cards.findIndex(c => c.dataset.active === 'true') || 0
-    ));
+    // Scroll reveal
+    const els = document.querySelectorAll('.sr');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(el => io.observe(el));
+
+    // ── Pain content: fade + rise as solution scrolls over ──
+    const painSection = document.querySelector('.pain');
+    const painContent = document.querySelector('.pain__grid');
+    function onPainScroll() {
+      if (!painSection || !painContent) return;
+      const rect = painSection.getBoundingClientRect();
+      const vh   = window.innerHeight;
+      const progress = Math.min(1, Math.max(0, -rect.top / vh));
+      painContent.style.transform = `translateY(-${progress * 80}px)`;
+      painContent.style.opacity   = Math.max(0, 1 - progress * 1.8).toFixed(3);
+    }
+    window.addEventListener('scroll', onPainScroll, { passive: true });
+    onPainScroll();
+
+    // ── Expanding Cards ────────────────────────────────
+    (function () {
+      const list  = document.getElementById('expCards');
+      if(!list) return;
+      const cards = Array.from(list.querySelectorAll('.ec'));
+      if(!cards.length) return;
+      const isMobile = () => window.innerWidth < 768;
+
+      function setActive(index) {
+        cards.forEach((c, i) => { c.dataset.active = (i === index); });
+        if (isMobile()) {
+          list.className = list.className.replace(/mobile-active-\d/, '');
+          list.classList.add('mobile-active-' + index);
+          list.style.gridTemplateColumns = '';
+        } else {
+          list.style.gridTemplateColumns = cards.map((_, i) => i === index ? '5fr' : '1fr').join(' ');
+          list.style.gridTemplateRows = '';
+          list.className = list.className.replace(/mobile-active-\d/, '');
+        }
+      }
+
+      cards.forEach((card, i) => {
+        card.addEventListener('mouseenter', () => setActive(i));
+        card.addEventListener('click',      () => setActive(i));
+        card.addEventListener('focus',      () => setActive(i));
+      });
+      setActive(0);
+      window.addEventListener('resize', () => setActive(
+        cards.findIndex(c => c.dataset.active === 'true') || 0
+      ));
+    })();
+  }
+
+  // ── Boot: hydrate, then init behaviors ──────────────
+  (async function boot(){
+    try {
+      const r = await fetch('/api/content', { cache: 'no-store' });
+      if (r.ok) applyContent(await r.json());
+    } catch (err) { console.warn('[cms] using static content —', err); }
+    initBehaviors();
   })();
 
   // Payment handler — replace '#' with your payment link
@@ -1712,6 +2508,95 @@
       alert('יש לחבר קישור סליקה.\nהחלף את href עם קישור ה-Cardcom / Stripe / PayPal שלך.');
     }
   }
+
+  // ════════════════════════════════════════════════════════════════════
+  //  COOKIE CONSENT — answer persisted in localStorage ('cookieConsent')
+  // ════════════════════════════════════════════════════════════════════
+  (function cookieConsent() {
+    const KEY = 'cookieConsent';
+    const bar = document.getElementById('cookieBar');
+    if (!bar) return;
+
+    // Show the bar only if no choice was stored yet.
+    if (!localStorage.getItem(KEY)) {
+      setTimeout(() => bar.classList.add('show'), 900);
+    }
+
+    function decide(value) {
+      localStorage.setItem(KEY, value);                         // 'accepted' | 'rejected'
+      localStorage.setItem('cookieConsentDate', new Date().toISOString());
+      bar.classList.remove('show');
+    }
+
+    document.getElementById('cookieAccept').addEventListener('click', () => decide('accepted'));
+    document.getElementById('cookieReject').addEventListener('click', () => decide('rejected'));
+  })();
+
+  // ════════════════════════════════════════════════════════════════════
+  //  ACCESSIBILITY WIDGET — preferences persisted in localStorage ('a11y')
+  // ════════════════════════════════════════════════════════════════════
+  (function accessibility() {
+    const KEY    = 'a11y';
+    const toggle = document.getElementById('a11yToggle');
+    const panel  = document.getElementById('a11yPanel');
+    const closeB = document.getElementById('a11yClose');
+    if (!toggle || !panel) return;
+
+    const MIN_FONT = 87.5, MAX_FONT = 150, STEP = 12.5;   // % of base font size
+    const TOGGLES  = ['contrast', 'grayscale', 'links', 'readable', 'bigcursor', 'spacing'];
+
+    // Load saved state (or defaults)
+    let state = { font: 100, contrast:false, grayscale:false, links:false,
+                  readable:false, bigcursor:false, spacing:false };
+    try { Object.assign(state, JSON.parse(localStorage.getItem(KEY)) || {}); } catch (e) {}
+
+    function save()  { localStorage.setItem(KEY, JSON.stringify(state)); }
+
+    function apply() {
+      document.documentElement.style.fontSize = state.font + '%';
+      TOGGLES.forEach(t => document.documentElement.classList.toggle('a11y-' + t, !!state[t]));
+      // reflect active state on buttons
+      panel.querySelectorAll('.a11y-opt').forEach(btn => {
+        const k = btn.dataset.a11y;
+        if (TOGGLES.includes(k)) btn.classList.toggle('active', !!state[k]);
+      });
+    }
+
+    function handle(action) {
+      switch (action) {
+        case 'font-up':   state.font = Math.min(MAX_FONT, state.font + STEP); break;
+        case 'font-down': state.font = Math.max(MIN_FONT, state.font - STEP); break;
+        case 'reset':
+          state = { font:100, contrast:false, grayscale:false, links:false,
+                    readable:false, bigcursor:false, spacing:false };
+          break;
+        default:
+          if (TOGGLES.includes(action)) state[action] = !state[action];
+      }
+      apply();
+      save();
+    }
+
+    // Wire up option buttons
+    panel.querySelectorAll('[data-a11y]').forEach(btn =>
+      btn.addEventListener('click', () => handle(btn.dataset.a11y)));
+
+    // Open / close panel
+    function setOpen(open) {
+      panel.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+    }
+    toggle.addEventListener('click', () => setOpen(!panel.classList.contains('open')));
+    closeB.addEventListener('click', () => setOpen(false));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+    document.addEventListener('click', e => {
+      if (panel.classList.contains('open') && !panel.contains(e.target) && !toggle.contains(e.target))
+        setOpen(false);
+    });
+
+    apply();   // apply saved preferences on load
+  })();
 </script>
 
 </body>

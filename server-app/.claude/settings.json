@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(lsof -i :3001 -sTCP:LISTEN -n -P)",
+      "Bash(curl -s -o /dev/null -w \"index:%{http_code}\\\\n\" http://localhost:3001/)",
+      "Bash(curl -s -o /dev/null -w \"bonus-photo:%{http_code}\\\\n\" http://localhost:3001/bonus-photo.jpg)",
+      "Bash(awk 'NR>=1701 && NR<=1755' index.html)",
+      "Bash(pkill -f \"server/index.js\")",
+      "Bash(rm -f /tmp/oren-server.log)",
+      "Bash(node server/index.js)",
+      "Bash(curl -s -o /dev/null -w \"index:%{http_code} img:%{http_code}\\\\n\" http://localhost:3001/)",
+      "Bash(node /tmp/oren-shot.mjs)",
+      "Bash(open \"http://localhost:3001/\")",
+      "Bash(python3 -)",
+      "Bash(curl -s http://localhost:3001/api/content)",
+      "Bash(node -e \"let s='';process.stdin.on\\('data',d=>s+=d\\).on\\('end',\\(\\)=>{const j=JSON.parse\\(s\\);console.log\\(JSON.stringify\\(j.bonuses,null,2\\)\\)}\\)\")",
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('server/data/content.json','utf8'\\)\\); console.log\\('JSON valid'\\)\")",
+      "Bash(node -e \"let s='';process.stdin.on\\('data',d=>s+=d\\).on\\('end',\\(\\)=>console.log\\('bonuses.image =', JSON.parse\\(s\\).bonuses.image\\)\\)\")",
+      "Bash(node -e \"const c=require\\('./server/data/content.json'\\); console.log\\(JSON.stringify\\(c.footer,null,2\\)\\);\")",
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('server/data/content.json','utf8'\\)\\); console.log\\('JSON valid ✓'\\);\")",
+      "Bash(node -e \"const c=require\\('./server/data/content.json'\\); console.log\\('decorImages count:', \\(c.pricing.decorImages||[]\\).length\\); console.log\\(JSON.stringify\\(c.pricing.decorImages,null,0\\).slice\\(0,200\\)\\)\")",
+      "Bash(curl -s http://localhost:3000/api/content)",
+      "Bash(node -e \"let s='';process.stdin.on\\('data',d=>s+=d\\).on\\('end',\\(\\)=>{const c=JSON.parse\\(s\\);console.log\\('API decorImages:',\\(c.pricing.decorImages||[]\\).length\\)}\\)\")",
+      "Bash(curl -s http://localhost:3000/)",
+      "Bash(node -e \"let s='';process.stdin.on\\('data',d=>s+=d\\).on\\('end',\\(\\)=>{const c=JSON.parse\\(s\\);console.log\\('decorImages:',\\(c.pricing.decorImages||[]\\).length, c.pricing.decorImages.map\\(x=>x.size\\)\\)}\\)\")",
+      "Bash(curl -s http://localhost:3001/)",
+      "Bash(curl -s http://localhost:3001/admin/)"
+    ]
+  }
+}

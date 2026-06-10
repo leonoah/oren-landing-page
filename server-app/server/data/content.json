@@ -1,0 +1,350 @@
+{
+  "nav": {
+    "taglines": [
+      {
+        "text": "הזדהות יוצרת הזדמנות",
+        "color": "#298c9c",
+        "font": "'Heebo',sans-serif"
+      },
+      {
+        "text": "לא מגדלים ילדים לבד",
+        "color": "#ea6c3a",
+        "font": "'Georgia',serif",
+        "italic": true
+      },
+      {
+        "text": "הורות היא מסע, לא יעד",
+        "color": "#8a6600",
+        "font": "'Courier New',monospace"
+      },
+      {
+        "text": "ביחד גדלים כהורים",
+        "color": "#298c9c",
+        "font": "'Arial Rounded MT Bold','Heebo',sans-serif"
+      }
+    ],
+    "cta": "הצטרפות למועדון"
+  },
+  "hero": {
+    "chip": "מועדון ההורים של מיכמוני",
+    "title": "לא מגדלים\nילדים לבד",
+    "subtitle": "מרחב שבועי קבוע בזום. מקום בטוח ללמוד, לשתף,\nלקבל כלים — ולהבין שאתם לא לבד.",
+    "ctaPrimary": "הצטרפות עכשיו — 91 ₪",
+    "ctaSecondary": "היכרות עם אורן",
+    "note": "בונוסים בשווי 519 ₪ · ביטול בכל עת",
+    "logo": "hero logo.png",
+    "image": "hero.png"
+  },
+  "trustbar": [
+    {
+      "strong": "שבועי",
+      "span": "מפגש לייב קבוע"
+    },
+    {
+      "strong": "91 ₪",
+      "span": "לחודש בלבד"
+    },
+    {
+      "strong": "519 ₪",
+      "span": "שווי בונוסים במתנה"
+    },
+    {
+      "strong": "ביטול",
+      "span": "בכל עת, ללא התחייבות"
+    }
+  ],
+  "pain": {
+    "label": "הורות - המציאות",
+    "title": "הורות היא אחד\nהתפקידים החשובים בחיים.\n[[אבל רובנו לא למדנו אותה.]]",
+    "paragraphs": [
+      "אנחנו מנסים. קוראים. מקשיבים לפודקאסטים. עושים את הכי טוב שאנחנו יכולים.",
+      "ויש גם הורים שרוצים עזרה — אבל הדרכת הורים פרטנית קבועה יקרה מדי, או שהם כבר איבדו אמונה שאפשר לשנות משהו בבית."
+    ],
+    "tiles": [
+      {
+        "color": "teal",
+        "text": "מתעצבנים יותר ממה שרצינו",
+        "expandedTitle": "מתעצבנים יותר ממה שרצינו",
+        "expandedText": "אתם אוהבים את הילדים שלכם יותר מהכל — אבל ברגעי לחץ אתם מוצאים את עצמכם מרימים את הקול ומגיבים בעוצמה שמפתיעה גם אתכם. ואז מגיעה החרטה.\n\nבמועדון לומדים לזהות את הטריגרים מראש ולהגיב מתוך בחירה, לא מתוך תגובה אוטומטית.",
+        "image": "https://static.wixstatic.com/media/c183ff_e37f8f3a6c7147dda1398621e1df50a5~mv2.jpg/v1/fill/w_700,h_700,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/WhatsApp%20Image%202024-11-18%20at%2013_30_edited.jpg"
+      },
+      {
+        "color": "yellow",
+        "text": "מרגישים אשמה",
+        "expandedTitle": "מרגישים אשמה",
+        "expandedText": "כל הורה מכיר את הקול הפנימי שלוחש ״יכולתי לעשות את זה אחרת״. האשמה הזו שוחקת ולא עוזרת לאף אחד.\n\nבמועדון נלמד להחליף ביקורת עצמית בחמלה — ולהבין שהורות טובה אינה הורות מושלמת.",
+        "image": "https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=700&q=80&fit=crop"
+      },
+      {
+        "color": "orange",
+        "text": "חוזרים לאותם דפוסים שוב ושוב",
+        "expandedTitle": "חוזרים לאותם דפוסים שוב ושוב",
+        "expandedText": "אותם ויכוחים, אותן מריבות סביב שיעורי בית, מסכים או שעת השינה. נדמה שהכל חוזר בלולאה אינסופית.\n\nבמועדון נפרק את הדפוסים האלה לגורמים ונבנה יחד דרכים חדשות שבאמת עובדות לאורך זמן.",
+        "image": "https://static.wixstatic.com/media/c183ff_d8d8e30ec21847c9b71d1ee3f30a6216~mv2.jpg/v1/fill/w_700,h_700,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5893371940104682991_y_edited.jpg"
+      },
+      {
+        "color": "dark",
+        "text": "מרגישים לפעמים לגמרי לבד",
+        "expandedTitle": "מרגישים לפעמים לגמרי לבד",
+        "expandedText": "גם כשהבית מלא, ההורות יכולה להרגיש בודדה מאוד — אין עם מי להתייעץ בלי לחשוש משיפוטיות.\n\nמועדון ההורים הוא קהילה של אנשים שמבינים בדיוק מה אתם עוברים: מקום בטוח לשתף, לשאול ולקבל חיזוק.",
+        "image": "https://static.wixstatic.com/media/c183ff_de59b5f1e37e4cc6ab68cae32bdbd997~mv2.jpg/v1/fill/w_700,h_700,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5767257574146686340_y_edited_edite.jpg"
+      }
+    ]
+  },
+  "solution": {
+    "label": "הפתרון",
+    "title": "מועדון ההורים של מיכמוני",
+    "subtitle": "מרחב שבועי קבוע בזום — מקום בטוח ללמוד, לשתף, להתייעץ, לקבל כלים, ולהבין שאתם לא לבד.",
+    "steps": [
+      {
+        "accent": "teal",
+        "title": "קהילה תומכת",
+        "text": "הורים שמבינים בדיוק מה אתם עוברים — ללא שיפוטיות, עם הרבה תמיכה וחום.",
+        "image": "https://static.wixstatic.com/media/c183ff_de59b5f1e37e4cc6ab68cae32bdbd997~mv2.jpg/v1/fill/w_600,h_420,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5767257574146686340_y_edited_edite.jpg",
+        "expandedText": "במועדון תפגשו הורים שמבינים בדיוק מה אתם עוברים — בלי שיפוטיות ובלי ״עצות״ שלא ביקשתם.\n\nזה מרחב בטוח לשתף בקשיים, לשמוע שאתם לא לבד, ולקבל חום ותמיכה אמיתית מאנשים שנמצאים בדיוק באותו מסע."
+      },
+      {
+        "accent": "yellow",
+        "title": "ידע מקצועי",
+        "text": "כלים מעולמות NLP, CBT ופסיכולוגיה של ילדים — מותאמים לחיי היום-יום.",
+        "image": "https://static.wixstatic.com/media/c183ff_e37f8f3a6c7147dda1398621e1df50a5~mv2.jpg/v1/fill/w_600,h_420,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/WhatsApp%20Image%202024-11-18%20at%2013_30_edited.jpg",
+        "expandedText": "כלים מעשיים מעולמות ה-NLP, ה-CBT והפסיכולוגיה של ילדים — מתורגמים לשפה פשוטה ולמצבים שאתם פוגשים בבית כל יום.\n\nלא תיאוריה מנותקת, אלא דרכים קונקרטיות לתקשר, להציב גבולות ולחזק את הקשר עם הילדים."
+      },
+      {
+        "accent": "orange",
+        "title": "שבועי ועקבי",
+        "text": "מפגש לייב קבוע מדי שבוע — לא קורס חד-פעמי, אלא תהליך אמיתי לאורך זמן.",
+        "image": "https://static.wixstatic.com/media/c183ff_d8d8e30ec21847c9b71d1ee3f30a6216~mv2.jpg/v1/fill/w_600,h_420,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5893371940104682991_y_edited.jpg",
+        "expandedText": "מפגש לייב קבוע מדי שבוע — לא קורס חד-פעמי שנשכח אחרי יומיים, אלא תהליך אמיתי שמתפתח לאורך זמן.\n\nהעקביות היא מה שיוצרת שינוי: מפגש אחרי מפגש אתם בונים הרגלים חדשים ורואים את ההשפעה מצטברת בבית."
+      }
+    ]
+  },
+  "features": {
+    "label": "מה כלול בכל שבוע",
+    "title": "מה מקבלים במועדון",
+    "subtitle": "ארבעה מרכיבים קבועים שמרכיבים כל מפגש שבועי",
+    "steps": [
+      {
+        "color": "teal",
+        "title": "מפגש לייב",
+        "subtitle": "מפגש לייב עם אורן",
+        "text": "כשעה מדי שבוע בזום. שאלות בזמן אמת, דיון קבוצתי — אורן נמצא שם בשבילכם.",
+        "image": "https://static.wixstatic.com/media/c183ff_e37f8f3a6c7147dda1398621e1df50a5~mv2.jpg/v1/fill/w_900,h_600,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/img.jpg"
+      },
+      {
+        "color": "yellow",
+        "title": "נושא שבועי",
+        "subtitle": "נושא מרכזי שבועי",
+        "text": "תוכן מעמיק מעולם ההורות — מותאם לרמות גיל, מצבים ואתגרים שונים.",
+        "image": "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=900&q=80&fit=crop"
+      },
+      {
+        "color": "orange",
+        "title": "שאלות ותשובות",
+        "subtitle": "שאלות ותשובות",
+        "text": "שואלים, מתייעצים, מקבלים תשובות מקצועיות מאורן — על המצב הספציפי שלכם.",
+        "image": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=900&q=80&fit=crop"
+      },
+      {
+        "color": "dark",
+        "title": "תמיכה קהילתית",
+        "subtitle": "תמיכה קהילתית",
+        "text": "קהילה של הורים שעוברים את אותו המסע — תומכים, מחזקים, לא שיפוטיים.",
+        "image": "https://static.wixstatic.com/media/c183ff_de59b5f1e37e4cc6ab68cae32bdbd997~mv2.jpg/v1/fill/w_900,h_600,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/img.jpg"
+      },
+      {
+        "color": "teal",
+        "title": "ddd",
+        "subtitle": "ddd",
+        "text": "ddd",
+        "image": "/uploads/1781084717846-272665279.png"
+      }
+    ]
+  },
+  "topics": {
+    "label": "תחומי תוכן",
+    "title": "הנושאים שנעסוק בהם",
+    "subtitle": "כלים מעולמות ידע מגוונים — כי הורות היא רב-תחומית",
+    "items": [
+      {
+        "text": "מיכמוני",
+        "color": "teal"
+      },
+      {
+        "text": "NLP",
+        "color": "yellow"
+      },
+      {
+        "text": "CBT",
+        "color": "orange"
+      },
+      {
+        "text": "פסיכולוגיה של ילדים",
+        "color": "teal"
+      },
+      {
+        "text": "תומר דבורה",
+        "color": "yellow"
+      },
+      {
+        "text": "ויסות רגשי",
+        "color": "orange"
+      },
+      {
+        "text": "חרדות",
+        "color": "gray"
+      },
+      {
+        "text": "מסכים",
+        "color": "teal"
+      },
+      {
+        "text": "גבולות",
+        "color": "yellow"
+      },
+      {
+        "text": "ביטחון עצמי",
+        "color": "orange"
+      },
+      {
+        "text": "גיל ההתבגרות",
+        "color": "gray"
+      },
+      {
+        "text": "ADHD ורגישות גבוהה",
+        "color": "teal"
+      }
+    ]
+  },
+  "about": {
+    "label": "מי אני?",
+    "title": "אורן ראובן לב",
+    "titleSpan": "מייסד מיכמוני",
+    "subtitle": "בן 42 מתל אביב · מנחה, מלווה ומוביל תהליכים",
+    "paragraphs": [
+      "עו\"ד במקצועי עד שבחרתי להיות אמיץ וללכת לכיוון שתמיד חיכה לי.",
+      "ה\"למה\" שלי פשוט — שכל ילד בישראל ירגיש, יאמין וידע שהוא חכם, מוכשר ויפה, ושהוא יכול להגשים את החלומות שלו.",
+      "כיום אני מעביר קורסים, הפעלות ופעילויות קהילתיות — ומלווה הורים עם כלים מעולמות NLP, CBT ופסיכולוגיה חיובית."
+    ],
+    "linkText": "קרא עוד על אורן",
+    "linkUrl": "https://www.micamoni.com/אודות",
+    "image": "https://static.wixstatic.com/media/c183ff_89b4aee7650643cb9f75653b8ce2533f~mv2.jpg/v1/fill/w_600,h_600,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/oren_-1_edited_edited.jpg"
+  },
+  "bonuses": {
+    "label": "בונוסים בהצטרפות",
+    "title": "מקבלים במתנה",
+    "subtitle": "שווי מתנות כולל — 519 ₪",
+    "image": "/uploads/1781087528238-57197147.png",
+    "items": [
+      {
+        "color": "teal",
+        "title": "פגישת היכרות וייעוץ",
+        "desc": "פגישה אישית עם אורן - היכרות, ייעוץ ראשוני, ומענה על השאלות הספציפיות שלכם.",
+        "original": "400 ₪",
+        "tag": "במתנה"
+      },
+      {
+        "color": "yellow",
+        "title": "ספר דיגיטלי",
+        "desc": "\"מקרב בין הורים וילדים\" - ספר שיעזור לכם לבנות קשר עמוק ואמיתי יותר עם ילדיכם.",
+        "original": "119 ₪",
+        "tag": "במתנה"
+      }
+    ]
+  },
+  "pricing": {
+    "label": "עלות חברות חודשית",
+    "amount": "91",
+    "currency": "₪",
+    "period": "לחודש · ביטול בכל עת",
+    "features": [
+      {
+        "text": "מפגש לייב שבועי עם אורן (כשעה)",
+        "gift": false
+      },
+      {
+        "text": "נושא מרכזי מדי שבוע",
+        "gift": false
+      },
+      {
+        "text": "שאלות ותשובות ותמיכה קהילתית",
+        "gift": false
+      },
+      {
+        "text": "כלים מ-NLP, CBT ופסיכולוגיה של ילדים",
+        "gift": false
+      },
+      {
+        "text": "ספר דיגיטלי \"מקרב בין הורים וילדים\" (שווי 119 ₪) - בחינם",
+        "gift": true
+      },
+      {
+        "text": "פגישת ייעוץ אישית עם אורן (שווי 400 ₪) - בחינם",
+        "gift": true
+      }
+    ],
+    "cta": "הצטרפות למועדון עכשיו",
+    "fine": "ביטול בכל עת · ללא התחייבות · פחות מ-3 ₪ ליום",
+    "decorImages": [
+      {
+        "url": "https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=400&q=80&fit=crop",
+        "size": 155
+      },
+      {
+        "url": "https://static.wixstatic.com/media/c183ff_de59b5f1e37e4cc6ab68cae32bdbd997~mv2.jpg/v1/fill/w_400,h_400,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5767257574146686340_y_edited_edite.jpg",
+        "size": 92
+      },
+      {
+        "url": "https://static.wixstatic.com/media/c183ff_e37f8f3a6c7147dda1398621e1df50a5~mv2.jpg/v1/fill/w_400,h_400,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/WhatsApp%20Image%202024-11-18%20at%2013_30_edited.jpg",
+        "size": 120
+      },
+      {
+        "url": "https://static.wixstatic.com/media/c183ff_d8d8e30ec21847c9b71d1ee3f30a6216~mv2.jpg/v1/fill/w_400,h_400,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5893371940104682991_y_edited.jpg",
+        "size": 100
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&q=80&fit=crop",
+        "size": 150
+      }
+    ]
+  },
+  "footer": {
+    "tagline": "לא מגדלים ילדים לבד\nוביחד גדלים כהורים",
+    "logo": "https://static.wixstatic.com/media/06e69d_f802a98eb43646ad853337752cccf7d6~mv2.jpeg/v1/fill/w_193,h_61,al_c/06e69d_f802a98eb43646ad853337752cccf7d6~mv2.jpeg",
+    "links": [
+      {
+        "text": "האתר הראשי",
+        "url": "https://www.micamoni.com"
+      },
+      {
+        "text": "Facebook",
+        "url": "https://www.facebook.com/oren.lev.3"
+      },
+      {
+        "text": "Instagram",
+        "url": "https://www.instagram.com/orenlevv/"
+      },
+      {
+        "text": "TikTok",
+        "url": "https://www.tiktok.com/@orenrlev"
+      },
+      {
+        "text": "micamonilev@gmail.com",
+        "url": "mailto:micamonilev@gmail.com"
+      },
+      {
+        "text": "050-4800-455",
+        "url": "tel:0504800455"
+      },
+      {
+        "text": "הצהרת נגישות",
+        "url": "/accessibility.html"
+      },
+      {
+        "text": "מדיניות פרטיות",
+        "url": "/privacy.html"
+      }
+    ],
+    "copy": "© 2025 מיכמוני — אורן ראובן לב. כל הזכויות שמורות."
+  }
+}

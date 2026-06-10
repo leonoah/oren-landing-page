@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>הצהרת נגישות — מועדון ההורים של מיכמוני</title>
+  <meta name="description" content="הצהרת הנגישות של אתר מועדון ההורים של מיכמוני." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --yellow:#f4bb4f; --teal:#298c9c; --orange:#ea6c3a; --dark:#1a1a2e;
+      --mid:#4a5568; --light:#f8f9fb; --border:#e8edf2; --white:#ffffff;
+    }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Heebo', sans-serif; background: var(--light); color: var(--dark);
+      direction: rtl; text-align: right; -webkit-font-smoothing: antialiased; line-height: 1.8;
+    }
+    .topbar {
+      background: var(--white); border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+    }
+    .container { width: min(820px, calc(100% - 40px)); margin: 0 auto; }
+    .topbar .container { display: flex; align-items: center; justify-content: space-between; }
+    .back-link {
+      color: var(--teal); font-weight: 700; font-size: 15px; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .back-link:hover { text-decoration: underline; }
+    .brand { font-weight: 900; font-size: 18px; color: var(--dark); }
+    main { padding: 48px 0 80px; }
+    .doc {
+      background: var(--white); border: 1px solid var(--border); border-radius: 20px;
+      padding: 40px 44px; box-shadow: 0 12px 40px rgba(26,26,46,.06);
+    }
+    .doc h1 { font-size: 32px; font-weight: 900; margin-bottom: 8px; }
+    .doc .updated { color: var(--mid); font-size: 14px; margin-bottom: 28px; }
+    .doc h2 {
+      font-size: 21px; font-weight: 800; color: var(--teal);
+      margin: 30px 0 12px; padding-top: 6px;
+    }
+    .doc p { color: var(--mid); margin-bottom: 14px; }
+    .doc ul { margin: 0 22px 16px; color: var(--mid); }
+    .doc li { margin-bottom: 8px; }
+    .doc a { color: var(--teal); text-decoration: underline; }
+    .doc strong { color: var(--dark); }
+    .contact-box {
+      background: var(--light); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px 24px; margin-top: 20px;
+    }
+    .contact-box p { margin-bottom: 6px; }
+    footer.mini { text-align: center; color: var(--mid); font-size: 13px; padding: 24px 0 40px; }
+    @media (max-width: 600px) { .doc { padding: 28px 22px; } .doc h1 { font-size: 26px; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <span class="brand">מיכמוני</span>
+      <a class="back-link" href="/">→ חזרה לדף הבית</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <article class="doc">
+        <h1>הצהרת נגישות</h1>
+        <p class="updated">עודכן לאחרונה: יוני 2026</p>
+
+        <p>
+          מועדון ההורים של מיכמוני (להלן: "האתר") רואה חשיבות רבה במתן שירות שוויוני
+          לכלל המשתמשים ובשיפור חוויית הגלישה עבור אנשים עם מוגבלות. אנו פועלים להנגיש
+          את האתר בהתאם לתקנות שוויון זכויות לאנשים עם מוגבלות (התאמות נגישות לשירות),
+          התשע"ג–2013, ולתקן הישראלי <strong>ת"י 5568</strong> המבוסס על הנחיות הנגישות
+          לתכני אינטרנט <strong>WCAG 2.0</strong> ברמה AA.
+        </p>
+
+        <h2>אמצעי הנגישות באתר</h2>
+        <p>באתר מוטמע תפריט נגישות (כפתור כיסא הגלגלים בפינת המסך) המאפשר:</p>
+        <ul>
+          <li>הגדלה והקטנה של גודל הטקסט</li>
+          <li>הפעלת מצב ניגודיות גבוהה</li>
+          <li>הצגת האתר בגווני אפור</li>
+          <li>הדגשת קישורים</li>
+          <li>החלפה לגופן קריא</li>
+          <li>הגדלת סמן העכבר</li>
+          <li>הגדלת מרווחי הטקסט והשורות</li>
+          <li>איפוס מלא של הגדרות הנגישות</li>
+        </ul>
+        <p>בנוסף, האתר תוכנן עם דגש על:</p>
+        <ul>
+          <li>מבנה היררכי וסמנטי של הכותרות והתכנים</li>
+          <li>ניווט מלא באמצעות המקלדת</li>
+          <li>טקסט חלופי (alt) לתמונות</li>
+          <li>תגיות ARIA לרכיבים אינטראקטיביים</li>
+          <li>ניגודיות צבעים מספקת בין הטקסט לרקע</li>
+          <li>התאמה לגלישה במכשירים ניידים</li>
+        </ul>
+
+        <h2>הסדרי נגישות ומגבלות</h2>
+        <p>
+          האתר נבדק ועובר התאמות נגישות באופן שוטף. ייתכן שחלקים מסוימים, ובמיוחד
+          תכנים המוטמעים מצדדים שלישיים (כגון סרטונים, מפות או טפסים חיצוניים), טרם
+          הונגשו במלואם. אנו ממשיכים לפעול לשיפור מתמיד של רמת הנגישות באתר.
+        </p>
+
+        <h2>פנייה בנושאי נגישות</h2>
+        <p>
+          נתקלתם בקושי בגלישה או בבעיית נגישות באתר? נשמח לקבל את פנייתכם. אנו מתחייבים
+          לטפל בפנייה ולחזור אליכם בהקדם האפשרי.
+        </p>
+        <div class="contact-box">
+          <p><strong>רכז הנגישות:</strong> אורן ראובן לב</p>
+          <p><strong>דוא"ל:</strong> <a href="mailto:micamonilev@gmail.com">micamonilev@gmail.com</a></p>
+          <p><strong>טלפון:</strong> <a href="tel:0504800455">050-4800-455</a></p>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="mini">© 2026 מיכמוני — אורן ראובן לב. כל הזכויות שמורות.</footer>
+</body>
+</html>

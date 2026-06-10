@@ -233,6 +233,36 @@
     }
     .hero__wave svg { display: block; width: 100%; }
 
+    /* ── Scroll-down hint arrow ── */
+    .hero__scroll {
+      position: absolute;
+      bottom: 26px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--orange, #ea6c3a);
+      text-decoration: none;
+      cursor: pointer;
+      animation: heroScrollBounce 1.8s ease-in-out infinite;
+    }
+    .hero__scroll span {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      opacity: .85;
+    }
+    .hero__scroll svg { display: block; }
+    @keyframes heroScrollBounce {
+      0%, 100% { transform: translate(-50%, 0); }
+      50%      { transform: translate(-50%, 8px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero__scroll { animation: none; }
+    }
+
     /* Text — left half of orange area */
     /* Logo — absolute left, doesn't affect content flow */
     .hero__logo-abs {
@@ -484,6 +514,10 @@
       gap: 16px;
     }
     .pain__tile {
+      position: relative;
+      border: none;
+      font-family: inherit;
+      cursor: pointer;
       border-radius: 18px;
       padding: 28px 24px;
       display: flex;
@@ -498,16 +532,141 @@
       transform: translateY(-4px);
       box-shadow: 0 16px 40px rgba(0,0,0,.13);
     }
+    .pain__tile:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--teal);
+    }
     .pain__tile p {
       font-size: 17px;
       font-weight: 700;
       line-height: 1.45;
       margin: 0;
     }
+    .pain__tile-more {
+      position: absolute;
+      bottom: 14px;
+      left: 16px;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1;
+      border-radius: 50%;
+      background: rgba(255,255,255,.22);
+      transition: transform .22s ease, background .22s ease;
+    }
+    .pain__tile:hover .pain__tile-more {
+      transform: rotate(90deg);
+      background: rgba(255,255,255,.34);
+    }
     .pain__tile--teal   { background: var(--teal);   color: #fff; }
     .pain__tile--yellow { background: var(--yellow); color: #3d2c00; }
     .pain__tile--orange { background: var(--orange); color: #fff; }
     .pain__tile--dark   { background: #1a1a2e;       color: #fff; }
+    .pain__tile--yellow .pain__tile-more { background: rgba(61,44,0,.16); }
+    .pain__tile--yellow:hover .pain__tile-more { background: rgba(61,44,0,.26); }
+
+    /* ─── Pain modal ──────────────────────────────── */
+    .pain-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(20,16,10,.55);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .28s ease, visibility .28s ease;
+    }
+    .pain-modal.open { opacity: 1; visibility: visible; }
+    .pain-modal__dialog {
+      position: relative;
+      width: min(720px, 100%);
+      max-height: 90vh;
+      overflow: hidden;
+      background: #fff;
+      border-radius: 22px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.35);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      transform: translateY(24px) scale(.97);
+      transition: transform .3s cubic-bezier(.2,.7,.3,1);
+    }
+    .pain-modal.open .pain-modal__dialog { transform: translateY(0) scale(1); }
+    .pain-modal__media {
+      position: relative;
+      min-height: 280px;
+    }
+    .pain-modal__media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .pain-modal__media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,.25));
+    }
+    .pain-modal__body {
+      padding: 40px 38px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow-y: auto;
+    }
+    .pain-modal__tag {
+      display: inline-block;
+      align-self: flex-start;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .pain-modal__body h3 {
+      font-size: clamp(22px, 3vw, 28px);
+      font-weight: 900;
+      color: var(--dark);
+      line-height: 1.3;
+      margin: 0 0 14px;
+    }
+    .pain-modal__body p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--mid);
+      margin: 0;
+    }
+    .pain-modal__close {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      z-index: 2;
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(255,255,255,.92);
+      color: #1a1a2e;
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,.18);
+      transition: transform .2s ease, background .2s ease;
+    }
+    .pain-modal__close:hover { transform: rotate(90deg); background: #fff; }
+    @media (max-width: 640px) {
+      .pain-modal__dialog { grid-template-columns: 1fr; max-height: 88vh; overflow-y: auto; }
+      .pain-modal__media { min-height: 200px; }
+      .pain-modal__body { padding: 28px 24px; }
+    }
 
     /* ─── Solution ────────────────────────────────── */
     .solution { background: var(--light); }
@@ -530,12 +689,26 @@
       border-radius: 20px;
       overflow: hidden;
       border: 1px solid var(--border);
+      cursor: pointer;
       transition: transform .25s ease, box-shadow .25s ease;
     }
     .sol-card:hover {
       transform: translateY(-6px);
       box-shadow: 0 20px 48px rgba(0,0,0,.1);
     }
+    .sol-card:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--teal);
+    }
+    .sol-card__more {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--teal);
+      transition: transform .2s ease;
+    }
+    .sol-card:hover .sol-card__more { transform: translateX(-4px); }
     .sol-card__img {
       width: 100%;
       height: 210px;
@@ -1221,6 +1394,16 @@
     </div>
   </div>
 
+  <!-- ③ Scroll-down hint -->
+  <a href="#about" class="hero__scroll" aria-label="גלילה למטה">
+    <span>יש המשך</span>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2.5"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 9l6 6 6-6"/>
+    </svg>
+  </a>
+
 </div><!-- /hero-wrap -->
 
 <!-- ─── STATS CARDS ───────────────────────────────── -->
@@ -1270,19 +1453,23 @@
         </p>
       </div>
 
-      <div class="pain__tiles">
-        <div class="pain__tile pain__tile--teal sr sr-d1">
+      <div class="pain__tiles" id="painTiles">
+        <button type="button" class="pain__tile pain__tile--teal sr sr-d1" data-pain="0">
           <p>מתעצבנים יותר ממה שרצינו</p>
-        </div>
-        <div class="pain__tile pain__tile--yellow sr sr-d2">
+          <span class="pain__tile-more" aria-hidden="true">+</span>
+        </button>
+        <button type="button" class="pain__tile pain__tile--yellow sr sr-d2" data-pain="1">
           <p>מרגישים אשמה</p>
-        </div>
-        <div class="pain__tile pain__tile--orange sr sr-d3">
+          <span class="pain__tile-more" aria-hidden="true">+</span>
+        </button>
+        <button type="button" class="pain__tile pain__tile--orange sr sr-d3" data-pain="2">
           <p>חוזרים לאותם דפוסים שוב ושוב</p>
-        </div>
-        <div class="pain__tile pain__tile--dark sr sr-d4">
+          <span class="pain__tile-more" aria-hidden="true">+</span>
+        </button>
+        <button type="button" class="pain__tile pain__tile--dark sr sr-d4" data-pain="3">
           <p>מרגישים לפעמים לגמרי לבד</p>
-        </div>
+          <span class="pain__tile-more" aria-hidden="true">+</span>
+        </button>
       </div>
 
     </div>
@@ -1301,8 +1488,8 @@
       </p>
     </div>
 
-    <div class="solution__cards">
-      <div class="sol-card sr sr-d1">
+    <div class="solution__cards" id="solutionCards">
+      <div class="sol-card sr sr-d1" role="button" tabindex="0" data-sol="0">
         <img
           class="sol-card__img"
           src="https://static.wixstatic.com/media/c183ff_de59b5f1e37e4cc6ab68cae32bdbd997~mv2.jpg/v1/fill/w_600,h_420,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5767257574146686340_y_edited_edite.jpg"
@@ -1312,10 +1499,11 @@
           <div class="sol-card__accent" style="background:var(--teal)"></div>
           <h3>קהילה תומכת</h3>
           <p>הורים שמבינים בדיוק מה אתם עוברים — ללא שיפוטיות, עם הרבה תמיכה וחום.</p>
+          <span class="sol-card__more">קראו עוד ←</span>
         </div>
       </div>
 
-      <div class="sol-card sr sr-d2">
+      <div class="sol-card sr sr-d2" role="button" tabindex="0" data-sol="1">
         <img
           class="sol-card__img"
           src="https://static.wixstatic.com/media/c183ff_e37f8f3a6c7147dda1398621e1df50a5~mv2.jpg/v1/fill/w_600,h_420,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/WhatsApp%20Image%202024-11-18%20at%2013_30_edited.jpg"
@@ -1325,10 +1513,11 @@
           <div class="sol-card__accent" style="background:var(--yellow)"></div>
           <h3>ידע מקצועי</h3>
           <p>כלים מעולמות NLP, CBT ופסיכולוגיה של ילדים — מותאמים לחיי היום-יום.</p>
+          <span class="sol-card__more">קראו עוד ←</span>
         </div>
       </div>
 
-      <div class="sol-card sr sr-d3">
+      <div class="sol-card sr sr-d3" role="button" tabindex="0" data-sol="2">
         <img
           class="sol-card__img"
           src="https://static.wixstatic.com/media/c183ff_d8d8e30ec21847c9b71d1ee3f30a6216~mv2.jpg/v1/fill/w_600,h_420,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5893371940104682991_y_edited.jpg"
@@ -1338,6 +1527,7 @@
           <div class="sol-card__accent" style="background:var(--orange)"></div>
           <h3>שבועי ועקבי</h3>
           <p>מפגש לייב קבוע מדי שבוע — לא קורס חד-פעמי, אלא תהליך אמיתי לאורך זמן.</p>
+          <span class="sol-card__more">קראו עוד ←</span>
         </div>
       </div>
     </div>
@@ -1655,8 +1845,15 @@
     // progress: 0 = section fully visible, 1 = section fully scrolled past top
     const progress = Math.min(1, Math.max(0, -rect.top / vh));
 
+    const opacity = Math.max(0, 1 - progress * 1.8);
     painContent.style.transform = `translateY(-${progress * 80}px)`;
-    painContent.style.opacity   = Math.max(0, 1 - progress * 1.8).toFixed(3);
+    painContent.style.opacity   = opacity.toFixed(3);
+
+    // While the tiles are visible, keep them clickable and above the
+    // solution section that slides over them; otherwise let it pass through.
+    const interactive = opacity >= 0.15;
+    painContent.style.pointerEvents = interactive ? 'auto' : 'none';
+    painSection.style.zIndex        = interactive ? '3' : '1';
   }
 
   window.addEventListener('scroll', onPainScroll, { passive: true });
@@ -1712,6 +1909,122 @@
       alert('יש לחבר קישור סליקה.\nהחלף את href עם קישור ה-Cardcom / Stripe / PayPal שלך.');
     }
   }
+</script>
+
+<!-- ─── Pain modal ──────────────────────────────────── -->
+<div class="pain-modal" id="painModal" role="dialog" aria-modal="true" aria-labelledby="painModalTitle">
+  <div class="pain-modal__dialog">
+    <button type="button" class="pain-modal__close" id="painModalClose" aria-label="סגירה">&times;</button>
+    <div class="pain-modal__media">
+      <img id="painModalImg" src="" alt="" />
+    </div>
+    <div class="pain-modal__body">
+      <span class="pain-modal__tag" id="painModalTag"></span>
+      <h3 id="painModalTitle"></h3>
+      <p id="painModalText"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Tiles / cards → modal ──────────────────────────
+  (function () {
+    const painData = [
+      {
+        tag: 'הורות — המציאות', color: 'var(--teal)', tcolor: '#fff',
+        title: 'מתעצבנים יותר ממה שרצינו',
+        text: 'אתם אוהבים את הילדים שלכם יותר מהכל — אבל ברגעי לחץ אתם מוצאים את עצמכם מרימים את הקול ומגיבים בעוצמה שמפתיעה גם אתכם. ואז מגיעה החרטה. במועדון לומדים לזהות את הטריגרים מראש ולהגיב מתוך בחירה, לא מתוך תגובה אוטומטית.',
+        img: 'https://static.wixstatic.com/media/c183ff_e37f8f3a6c7147dda1398621e1df50a5~mv2.jpg/v1/fill/w_700,h_700,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/WhatsApp%20Image%202024-11-18%20at%2013_30_edited.jpg'
+      },
+      {
+        tag: 'הורות — המציאות', color: 'var(--yellow)', tcolor: '#3d2c00',
+        title: 'מרגישים אשמה',
+        text: 'כל הורה מכיר את הקול הפנימי שלוחש "יכולתי לעשות את זה אחרת". האשמה הזו שוחקת ולא עוזרת לאף אחד. במועדון נלמד להחליף ביקורת עצמית בחמלה — ולהבין שהורות טובה אינה הורות מושלמת.',
+        img: 'https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=700&q=80&fit=crop'
+      },
+      {
+        tag: 'הורות — המציאות', color: 'var(--orange)', tcolor: '#fff',
+        title: 'חוזרים לאותם דפוסים שוב ושוב',
+        text: 'אותם ויכוחים, אותן מריבות סביב שיעורי בית, מסכים או שעת השינה. נדמה שהכל חוזר בלולאה אינסופית. במועדון נפרק את הדפוסים האלה לגורמים ונבנה יחד דרכים חדשות שבאמת עובדות לאורך זמן.',
+        img: 'https://static.wixstatic.com/media/c183ff_d8d8e30ec21847c9b71d1ee3f30a6216~mv2.jpg/v1/fill/w_700,h_700,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5893371940104682991_y_edited.jpg'
+      },
+      {
+        tag: 'הורות — המציאות', color: '#1a1a2e', tcolor: '#fff',
+        title: 'מרגישים לפעמים לגמרי לבד',
+        text: 'גם כשהבית מלא, ההורות יכולה להרגיש בודדה מאוד — אין עם מי להתייעץ בלי לחשוש משיפוטיות. מועדון ההורים הוא קהילה של אנשים שמבינים בדיוק מה אתם עוברים: מקום בטוח לשתף, לשאול ולקבל חיזוק.',
+        img: 'https://static.wixstatic.com/media/c183ff_de59b5f1e37e4cc6ab68cae32bdbd997~mv2.jpg/v1/fill/w_700,h_700,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5767257574146686340_y_edited_edite.jpg'
+      }
+    ];
+
+    const solData = [
+      {
+        tag: 'הפתרון', color: 'var(--teal)', tcolor: '#fff',
+        title: 'קהילה תומכת',
+        text: 'במועדון תפגשו הורים שמבינים בדיוק מה אתם עוברים — בלי שיפוטיות ובלי "עצות" שלא ביקשתם. זה מרחב בטוח לשתף בקשיים, לשמוע שאתם לא לבד, ולקבל חום ותמיכה אמיתית מאנשים שנמצאים בדיוק באותו מסע.',
+        img: 'https://static.wixstatic.com/media/c183ff_de59b5f1e37e4cc6ab68cae32bdbd997~mv2.jpg/v1/fill/w_700,h_700,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5767257574146686340_y_edited_edite.jpg'
+      },
+      {
+        tag: 'הפתרון', color: 'var(--yellow)', tcolor: '#3d2c00',
+        title: 'ידע מקצועי',
+        text: 'כלים מעשיים מעולמות ה-NLP, ה-CBT והפסיכולוגיה של ילדים — מתורגמים לשפה פשוטה ולמצבים שאתם פוגשים בבית כל יום. לא תיאוריה מנותקת, אלא דרכים קונקרטיות לתקשר, להציב גבולות ולחזק את הקשר עם הילדים.',
+        img: 'https://static.wixstatic.com/media/c183ff_e37f8f3a6c7147dda1398621e1df50a5~mv2.jpg/v1/fill/w_700,h_700,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/WhatsApp%20Image%202024-11-18%20at%2013_30_edited.jpg'
+      },
+      {
+        tag: 'הפתרון', color: 'var(--orange)', tcolor: '#fff',
+        title: 'שבועי ועקבי',
+        text: 'מפגש לייב קבוע מדי שבוע — לא קורס חד-פעמי שנשכח אחרי יומיים, אלא תהליך אמיתי שמתפתח לאורך זמן. העקביות היא מה שיוצרת שינוי: מפגש אחרי מפגש אתם בונים הרגלים חדשים ורואים את ההשפעה מצטברת בבית.',
+        img: 'https://static.wixstatic.com/media/c183ff_d8d8e30ec21847c9b71d1ee3f30a6216~mv2.jpg/v1/fill/w_700,h_700,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5893371940104682991_y_edited.jpg'
+      }
+    ];
+
+    const modal   = document.getElementById('painModal');
+    const imgEl   = document.getElementById('painModalImg');
+    const tagEl   = document.getElementById('painModalTag');
+    const titleEl = document.getElementById('painModalTitle');
+    const textEl  = document.getElementById('painModalText');
+    const closeEl = document.getElementById('painModalClose');
+    let lastFocused = null;
+
+    function open(d) {
+      if (!d) return;
+      imgEl.src = d.img;
+      imgEl.alt = d.title;
+      titleEl.textContent = d.title;
+      textEl.textContent  = d.text;
+      tagEl.textContent   = d.tag;
+      tagEl.style.background = d.color;
+      tagEl.style.color      = d.tcolor;
+      lastFocused = document.activeElement;
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      closeEl.focus();
+    }
+
+    function close() {
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+      if (lastFocused) lastFocused.focus();
+    }
+
+    document.getElementById('painTiles')
+      .querySelectorAll('.pain__tile')
+      .forEach(tile => tile.addEventListener('click', () => open(painData[+tile.dataset.pain])));
+
+    document.getElementById('solutionCards')
+      .querySelectorAll('.sol-card')
+      .forEach(card => {
+        card.addEventListener('click', () => open(solData[+card.dataset.sol]));
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(solData[+card.dataset.sol]); }
+        });
+      });
+
+    closeEl.addEventListener('click', close);
+    modal.addEventListener('click', e => { if (e.target === modal) close(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) close();
+    });
+  })();
 </script>
 
 </body>
