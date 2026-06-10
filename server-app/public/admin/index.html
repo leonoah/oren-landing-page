@@ -198,11 +198,33 @@ function imageField(label, obj, key){
   ]);
 }
 
+// ─── Admin API helper ─────────────────────────────────────────────────────
+// Writes are open unless the server has ADMIN_PASSWORD set. In that case it
+// answers 401; we prompt once, remember the password for the session, retry.
+function _adminHeaders(extra){
+  const h = Object.assign({}, extra || {});
+  const pw = sessionStorage.getItem('adminPw');
+  if (pw) h['x-admin-password'] = pw;
+  return h;
+}
+async function adminFetch(url, opts){
+  opts = opts || {};
+  let r = await fetch(url, Object.assign({}, opts, { headers: _adminHeaders(opts.headers) }));
+  if (r.status === 401){
+    const pw = prompt('סיסמת ניהול:');
+    if (pw === null) return r;
+    sessionStorage.setItem('adminPw', pw);
+    r = await fetch(url, Object.assign({}, opts, { headers: _adminHeaders(opts.headers) }));
+    if (r.status === 401) sessionStorage.removeItem('adminPw');
+  }
+  return r;
+}
+
 async function uploadImage(file, btn){
   const fd = new FormData(); fd.append('image', file);
   const orig = btn.textContent; btn.disabled = true; btn.textContent = 'מעלה…';
   try{
-    const r = await fetch('/api/content/upload', { method:'POST', body: fd });
+    const r = await adminFetch('/api/content/upload', { method:'POST', body: fd });
     const j = await r.json();
     if(!r.ok) throw new Error(j.error || 'שגיאה');
     return j.url;
@@ -514,7 +536,7 @@ async function save(){
   const st  = document.getElementById('status');
   btn.disabled = true; st.className = 'status'; st.textContent = 'שומר…';
   try{
-    const r = await fetch('/api/content', {
+    const r = await adminFetch('/api/content', {
       method:'PUT', headers:{ 'Content-Type':'application/json' },
       body: JSON.stringify(data),
     });
