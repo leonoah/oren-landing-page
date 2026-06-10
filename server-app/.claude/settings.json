@@ -30,7 +30,11 @@
       "Bash(node -e ' *)",
       "Bash(git check-ignore *)",
       "Bash(echo \"exit: $?\")",
-      "Bash(git ls-tree *)"
+      "Bash(git ls-tree *)",
+      "Bash(node -e \"const c=require\\('./server/data/content.json'\\); console.log\\(Object.keys\\(c\\)\\); console.log\\('size:', JSON.stringify\\(c\\).length, 'bytes'\\)\")",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }
