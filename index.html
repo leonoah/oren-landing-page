@@ -744,10 +744,11 @@
     .exp-cards {
       list-style: none;
       display: grid;
-      grid-template-columns: 5fr 1fr 1fr 1fr;
+      grid-template-columns: 1fr;
+      grid-template-rows: 5fr 1fr 1fr 1fr;
       gap: 14px;
-      height: 480px;
-      transition: grid-template-columns 520ms cubic-bezier(.22,1,.36,1);
+      height: 620px;
+      transition: grid-template-rows 520ms cubic-bezier(.22,1,.36,1);
     }
 
     /* Individual card */
@@ -776,7 +777,8 @@
       position: absolute;
       inset: 0;
       width: 100%; height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      object-position: center;
       opacity: 0;
       transform: scale(1.06);
       transition: opacity .5s ease .1s, transform .5s ease .1s;
@@ -802,7 +804,7 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%) rotate(-90deg);
+      transform: translate(-50%, -50%);
       white-space: nowrap;
       font-size: 22px;
       font-weight: 900;
@@ -848,23 +850,12 @@
     /* Mobile: vertical stack */
     @media (max-width: 768px) {
       .exp-cards {
-        grid-template-columns: 1fr;
-        grid-template-rows: 5fr 1fr 1fr 1fr;
         height: auto;
         min-height: 560px;
-        transition: grid-template-rows 520ms cubic-bezier(.22,1,.36,1);
       }
       .ec__title-v {
-        bottom: auto;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) rotate(0deg);
-        font-size: 15px;
+        font-size: 16px;
       }
-      .exp-cards.mobile-active-0 { grid-template-rows: 5fr 1fr 1fr 1fr; }
-      .exp-cards.mobile-active-1 { grid-template-rows: 1fr 5fr 1fr 1fr; }
-      .exp-cards.mobile-active-2 { grid-template-rows: 1fr 1fr 5fr 1fr; }
-      .exp-cards.mobile-active-3 { grid-template-rows: 1fr 1fr 1fr 5fr; }
     }
 
     /* ─── Topics ──────────────────────────────────── */
@@ -1189,7 +1180,7 @@
 
       .pain__grid     { grid-template-columns: 1fr; }
       .solution__cards{ grid-template-columns: 1fr; }
-      /* expanding cards: handled via JS + mobile-active classes */
+      /* expanding cards: vertical accordion handled via JS (grid rows) */
       .bonuses__grid  { grid-template-columns: 1fr; }
 
       .about__inner   { grid-template-columns: 1fr; }
@@ -1547,7 +1538,7 @@
     <ul class="exp-cards sr" id="expCards">
 
       <!-- Card 1 — Teal -->
-      <li class="ec ec--teal" data-active="true" data-index="0" tabindex="0">
+      <li class="ec ec--teal" data-active="false" data-index="0" tabindex="0">
         <div class="ec__bg"></div>
         <img class="ec__img"
           src="https://static.wixstatic.com/media/c183ff_e37f8f3a6c7147dda1398621e1df50a5~mv2.jpg/v1/fill/w_900,h_600,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/img.jpg"
@@ -1863,7 +1854,6 @@
   (function () {
     const list  = document.getElementById('expCards');
     const cards = Array.from(list.querySelectorAll('.ec'));
-    const isMobile = () => window.innerWidth < 768;
 
     function setActive(index) {
       cards.forEach((c, i) => {
@@ -1871,19 +1861,11 @@
         c.dataset.active = active;
       });
 
-      if (isMobile()) {
-        // Drive via class on the list (CSS handles rows)
-        list.className = list.className.replace(/mobile-active-\d/, '');
-        list.classList.add('mobile-active-' + index);
-        list.style.gridTemplateColumns = '';
-      } else {
-        // Drive via inline style on the list
-        list.style.gridTemplateColumns = cards
-          .map((_, i) => i === index ? '5fr' : '1fr')
-          .join(' ');
-        list.style.gridTemplateRows = '';
-        list.className = list.className.replace(/mobile-active-\d/, '');
-      }
+      // Vertical accordion — active row expands top→bottom
+      list.style.gridTemplateRows = cards
+        .map((_, i) => i === index ? '5fr' : '1fr')
+        .join(' ');
+      list.style.gridTemplateColumns = '';
     }
 
     cards.forEach((card, i) => {
@@ -1892,12 +1874,13 @@
       card.addEventListener('focus',      () => setActive(i));
     });
 
-    // Init
-    setActive(0);
+    // Start with the fan fully closed; close again when pointer leaves
+    list.addEventListener('mouseleave', () => setActive(-1));
+    setActive(-1);
 
     // Re-init on resize
     window.addEventListener('resize', () => setActive(
-      cards.findIndex(c => c.dataset.active === 'true') || 0
+      cards.findIndex(c => c.dataset.active === 'true')
     ));
   })();
 

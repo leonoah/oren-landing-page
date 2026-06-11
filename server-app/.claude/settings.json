@@ -34,7 +34,9 @@
       "Bash(node -e \"const c=require\\('./server/data/content.json'\\); console.log\\(Object.keys\\(c\\)\\); console.log\\('size:', JSON.stringify\\(c\\).length, 'bytes'\\)\")",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(grep -n \"grid-template-columns: 5fr\\\\|\\\\.ec__title-v {\\\\|transform: translate\\(-50%, -50%\\) rotate\\(-90deg\\)\\\\|gridTemplateColumns = cards.map\\\\|grid-template-rows: 5fr 1fr 1fr 1fr\" index.html)",
+      "Bash(grep -n 'class=\"ec ec--teal\" data-active=\"true\"\\\\|data-active=\"${i===0}\"' index.html server-app/public/index.html)"
     ]
   }
 }
