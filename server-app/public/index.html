@@ -568,7 +568,8 @@
     }
     .sol-card__img {
       width: 100%;
-      height: 210px;
+      height: auto;
+      aspect-ratio: 1 / 1.5;   /* portrait 1:1.5 so all steps fit one screen */
       object-fit: cover;
       display: block;
     }
@@ -1300,8 +1301,6 @@
       .pain__tile { padding: 20px 16px; }
       .pain__tile p { font-size: 14px; }
 
-      /* ⑤ Solution cards: reduce image height */
-      .sol-card__img { height: 160px; }
 
 
       /* ⑦ Section headings: comfortable margin */
@@ -1391,6 +1390,28 @@
     .cms-modal__body p {
       font-size: 16px; line-height: 1.85; color: var(--mid);
       white-space: pre-line;
+    }
+
+    /* Solution detail modal: enlarged to 80% of screen height, image shown in its own proportions */
+    .cms-modal[data-kind="solution"] .cms-modal__box {
+      max-width: none;
+      width: min(36vh, 92vw);    /* narrow box so the portrait image fits at 80vh */
+      height: 80vh;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .cms-modal[data-kind="solution"] .cms-modal__img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1 / 1.5;   /* portrait 1:1.5, matching the step cards */
+      flex: 0 0 auto;
+    }
+    .cms-modal[data-kind="solution"] .cms-modal__body {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: auto;
     }
 
     /* ═══════════════════════════════════════════════════
@@ -2385,9 +2406,10 @@
   }
 
   // ── Detail modal (pain tiles / solution cards) ──────
-  function openModal(title, text, image){
+  function openModal(title, text, image, kind){
     const m = document.getElementById('cmsModal');
     const img = document.getElementById('cmsModalImg');
+    m.dataset.kind = kind || '';
     if(image){ img.src = image; img.hidden = false; } else { img.hidden = true; img.removeAttribute('src'); }
     document.getElementById('cmsModalTitle').textContent = title || '';
     document.getElementById('cmsModalText').textContent  = text  || '';
@@ -2405,10 +2427,10 @@
       const kind = trigger.dataset.modal, idx = +trigger.dataset.idx;
       if(kind === 'pain'){
         const t = window.__cms.pain.tiles[idx];
-        openModal(t.expandedTitle || t.text, t.expandedText, t.image);
+        openModal(t.expandedTitle || t.text, t.expandedText, t.image, 'pain');
       } else if(kind === 'solution'){
         const s = window.__cms.solution.steps[idx];
-        openModal(s.title, s.expandedText, s.image);
+        openModal(s.title, s.expandedText, s.image, 'solution');
       }
     }
   });
