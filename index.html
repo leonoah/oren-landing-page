@@ -742,12 +742,17 @@
 
     /* Container */
     .exp-cards {
+      --ec-open: 30vw;                      /* active card height — keeps 2:1 (width 60vw : height 30vw) */
+      --ec-closed: clamp(40px, 3.2vw, 56px); /* collapsed strip — small enough that all 4 stay visible */
       list-style: none;
       display: grid;
       grid-template-columns: 1fr;
-      grid-template-rows: 5fr 1fr 1fr 1fr;
+      grid-template-rows: repeat(4, var(--ec-closed));
       gap: 14px;
-      height: 620px;
+      /* Card length fixed at 60% of the viewport, centred (breaks out of the 1060px container) */
+      width: 60vw;
+      margin-left: 50%;
+      transform: translateX(-50%);
       transition: grid-template-rows 520ms cubic-bezier(.22,1,.36,1);
     }
 
@@ -777,7 +782,7 @@
       position: absolute;
       inset: 0;
       width: 100%; height: 100%;
-      object-fit: contain;
+      object-fit: cover;
       object-position: center;
       opacity: 0;
       transform: scale(1.06);
@@ -815,14 +820,26 @@
     .ec--orange .ec__title-v,
     .ec--dark   .ec__title-v { color: rgba(255,255,255,.85); }
     .ec--yellow .ec__title-v { color: rgba(61,44,0,.75); }
-    /* Hide when open */
-    .ec[data-active="true"] .ec__title-v { opacity: 0; pointer-events: none; }
+    /* ── OPEN state: title pinned vertically to the right edge (top→bottom) ── */
+    .ec[data-active="true"] .ec__title-v {
+      top: 50%;
+      left: auto;
+      right: 26px;
+      transform: translateY(-50%);
+      writing-mode: vertical-rl;
+      font-size: 26px;
+      color: #fff;
+      text-shadow: 0 2px 16px rgba(0,0,0,.6);
+      transition: opacity .25s ease .15s;
+    }
 
-    /* ── OPEN state: bottom content ── */
+    /* ── OPEN state: bottom content (right-side panel under the title) ── */
     .ec__body {
       position: absolute;
-      bottom: 0; right: 0; left: 0;
+      bottom: 0; right: 0; left: auto;
+      max-width: min(72%, 460px);
       padding: 28px 28px 32px;
+      border-top-left-radius: 18px;
       opacity: 0;
       transform: translateY(12px);
       transition: opacity .35s ease .18s, transform .35s ease .18s;
@@ -832,7 +849,15 @@
       opacity: 1;
       transform: translateY(0);
       pointer-events: auto;
+      padding-right: 76px; /* clear the vertical title on the right */
     }
+    /* Translucent panel in the card's chosen colour (60% opacity) */
+    .ec--teal[data-active="true"]   .ec__body { background: rgba(41,140,156,.6); }
+    .ec--yellow[data-active="true"] .ec__body { background: rgba(244,187,79,.6); }
+    .ec--orange[data-active="true"] .ec__body { background: rgba(234,108,58,.6); }
+    .ec--dark[data-active="true"]   .ec__body { background: rgba(26,26,46,.6); }
+    /* title now lives on the right edge — hide the duplicate heading */
+    .ec[data-active="true"] .ec__body h3 { display: none; }
     .ec__body h3 {
       font-size: 20px;
       font-weight: 800;
@@ -849,10 +874,6 @@
 
     /* Mobile: vertical stack */
     @media (max-width: 768px) {
-      .exp-cards {
-        height: auto;
-        min-height: 560px;
-      }
       .ec__title-v {
         font-size: 16px;
       }
@@ -1257,8 +1278,6 @@
       /* ⑤ Solution cards: reduce image height */
       .sol-card__img { height: 160px; }
 
-      /* ⑥ Expanding cards: comfortable height on small phones */
-      .exp-cards { min-height: 440px; }
 
       /* ⑦ Section headings: comfortable margin */
       .solution__head,
@@ -1297,7 +1316,6 @@
       .pain__tile p { font-size: 13px; }
       .trustbar__item strong { font-size: 22px; }
       .trustbar__item span { font-size: 12px; }
-      .exp-cards { min-height: 380px; }
     }
   </style>
 </head>
@@ -1863,7 +1881,7 @@
 
       // Vertical accordion — active row expands top→bottom
       list.style.gridTemplateRows = cards
-        .map((_, i) => i === index ? '5fr' : '1fr')
+        .map((_, i) => i === index ? 'var(--ec-open)' : 'var(--ec-closed)')
         .join(' ');
       list.style.gridTemplateColumns = '';
     }
