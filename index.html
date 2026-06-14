@@ -785,13 +785,13 @@
       object-fit: cover;
       object-position: center;
       opacity: 0;
-      transform: scale(1.06);
-      transition: opacity .5s ease .1s, transform .5s ease .1s;
+      /* slight constant zoom so any baked-in border on the image is clipped to the card edges */
+      transform: scale(1.1);
+      transition: opacity .5s ease .1s;
       pointer-events: none;
     }
     .ec[data-active="true"] .ec__img {
       opacity: 1;
-      transform: scale(1);
     }
 
     /* Dark gradient over photo */
@@ -802,7 +802,7 @@
       opacity: 0;
       transition: opacity .4s ease .1s;
     }
-    .ec[data-active="true"] .ec__overlay { opacity: 1; }
+    .ec[data-active="true"] .ec__overlay { opacity: 0; }
 
     /* ── CLOSED state: vertical title ── */
     .ec__title-v {
@@ -851,11 +851,11 @@
       pointer-events: auto;
       padding-right: 76px; /* clear the vertical title on the right */
     }
-    /* Translucent panel in the card's chosen colour (60% opacity) */
-    .ec--teal[data-active="true"]   .ec__body { background: rgba(41,140,156,.6); }
-    .ec--yellow[data-active="true"] .ec__body { background: rgba(244,187,79,.6); }
-    .ec--orange[data-active="true"] .ec__body { background: rgba(234,108,58,.6); }
-    .ec--dark[data-active="true"]   .ec__body { background: rgba(26,26,46,.6); }
+    /* Translucent panel in the card's chosen colour, darkened for legible text */
+    .ec--teal[data-active="true"]   .ec__body { background: linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)), rgba(41,140,156,.8); }
+    .ec--yellow[data-active="true"] .ec__body { background: linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)), rgba(244,187,79,.8); }
+    .ec--orange[data-active="true"] .ec__body { background: linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)), rgba(234,108,58,.8); }
+    .ec--dark[data-active="true"]   .ec__body { background: linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)), rgba(26,26,46,.85); }
     /* title now lives on the right edge — hide the duplicate heading */
     .ec[data-active="true"] .ec__body h3 { display: none; }
     .ec__body h3 {
