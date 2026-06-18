@@ -267,7 +267,7 @@
     /* Logo — absolute left, doesn't affect content flow */
     .hero__logo-abs {
       position: absolute;
-      left: 32px;
+      left: -8px;
       top: 8%;
       transform: none;
       z-index: 5;
@@ -288,30 +288,50 @@
       direction: rtl;
       text-align: center;
       position: relative;
-      z-index: 4;
+      z-index: 12;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
     .hero__chip {
       display: inline-block;
-      background: rgba(255,255,255,.22);
-      border: 1px solid rgba(255,255,255,.35);
       color: #fff;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .07em;
-      padding: 6px 18px;
-      border-radius: 99px;
-      margin-bottom: 20px;
-    }
-    .hero__content h1 {
-      font-size: clamp(28px, 3.6vw, 54px);
+      font-size: clamp(34px, 5.2vw, 68px);
       font-weight: 900;
-      line-height: 1.14;
-      color: #fff;
+      line-height: 1.1;
+      letter-spacing: -.01em;
+      text-shadow:
+        1.5px -1.5px 0 rgba(255,255,255,.45),   /* עדין: outline לבן בזווית */
+        0 3px 16px rgba(0,0,0,.28);
+      margin-bottom: 18px;
+    }
+    .hero__chip span { display: inline-block; }
+    .hero__chip .word { white-space: nowrap; }
+    .hero__chip .m-br { display: none; }
+    .hero__chip .c1,
+    .hero__chip .c2,
+    .hero__chip .c3,
+    .hero__chip .c4 { color: var(--teal); }
+    .hero__content h1 {
+      font-size: clamp(18px, 2vw, 24px);
+      font-weight: 800;
+      line-height: 1.18;
+      color: rgba(255,255,255,.95);
       margin-bottom: 16px;
     }
+    .hero__tagline {
+      font-size: clamp(28px, 3.6vw, 46px);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 24px;
+      text-align: center;
+      text-shadow:
+        1.5px -1.5px 0 rgba(255,255,255,.45),   /* outline לבן עדין בזווית */
+        0 3px 16px rgba(0,0,0,.28);
+    }
+    .hero__tagline .tw1 { color: var(--orange); }   /* ביחד */
+    .hero__tagline .tw2 { color: var(--teal);   }   /* גדלים */
+    .hero__tagline .tw3 { color: var(--yellow); }   /* כהורים */
     .hero__sub {
       font-size: 16px;
       line-height: 1.8;
@@ -340,10 +360,10 @@
       right: -60px;
       top: -60px;
       /* גובה 70% מה-viewport, רוחב זהה (עיגול) */
-      height: 70vh;
-      width: 70vh;
-      max-height: 620px;
-      max-width: 620px;
+      height: 62vh;
+      width: 62vh;
+      max-height: 540px;
+      max-width: 540px;
       z-index: 10;
     }
     .hero__img-frame {
@@ -1273,11 +1293,12 @@
         align-items: flex-start;
       }
       .hero__content { max-width: 100%; }
-      .hero__content h1 { font-size: clamp(26px, 8vw, 40px); }
+      .hero__content h1 { font-size: clamp(18px, 2vw, 24px); }
       .hero__sub { font-size: 15px; }
 
-      /* ③ Hero chip: smaller on mobile */
-      .hero__chip { font-size: 11px; padding: 5px 14px; }
+      /* ③ Hero title: dominant on mobile */
+      .hero__chip { font-size: clamp(50px, 13.5vw, 70px); margin-bottom: 14px; }
+      .hero__chip .m-br { display: inline; }  /* שתי שורות במובייל */
 
       /* ④ Pain section: auto height — content can be taller than 100vh on mobile */
       .pain { height: auto; min-height: 100svh; padding: 48px 0 72px; }
@@ -1356,7 +1377,8 @@
 
     /* ─── Very small screens (≤ 400px) ─────────────────────────────── */
     @media (max-width: 400px) {
-      .hero__content h1 { font-size: 26px; }
+      .hero__content h1 { font-size: 18px; }
+      .hero__chip { font-size: 52px; }
       .btn-lg { padding: 14px 20px; font-size: 15px; }
       .pain__tile p { font-size: 12px; }
       .pain__tiles { grid-template-columns: 1fr; } /* single column at 320–400px */
@@ -1408,10 +1430,11 @@
 
     <!-- Text — centered -->
     <div class="hero__content sr">
-      <span class="hero__chip sr">מועדון ההורים של מיכמוני</span>
+      <span class="hero__chip sr"><span class="word"><span class="c1">מ</span><span class="c2">ו</span><span class="c3">ע</span><span class="c4">ד</span><span class="c1">ו</span><span class="c2">ן</span></span> <span class="word"><span class="c3">ה</span><span class="c4">ה</span><span class="c1">ו</span><span class="c2">ר</span><span class="c3">י</span><span class="c4">ם</span></span> <br class="m-br"><span class="word"><span class="c1">ש</span><span class="c2">ל</span></span> <span class="word"><span class="c3">מ</span><span class="c4">י</span><span class="c1">כ</span><span class="c2">מ</span><span class="c3">ו</span><span class="c4">נ</span><span class="c1">י</span></span></span>
       <h1 class="sr sr-d1">
         לא מגדלים<br/>ילדים לבד
       </h1>
+      <p class="hero__tagline sr sr-d1"><span class="tw1">ביחד</span> <span class="tw2">גדלים</span> <span class="tw3">כהורים</span></p>
       <p class="hero__sub sr sr-d2">
         מרחב שבועי קבוע בזום. מקום בטוח ללמוד, לשתף,
         לקבל כלים — ולהבין שאתם לא לבד.
