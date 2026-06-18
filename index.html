@@ -1306,15 +1306,50 @@
       /* ⑭ Section padding */
       .section { padding: 56px 0; }
       .section-sm { padding: 40px 0; }
+
+      /* ⑮ Expanding cards: full-width accordion on mobile */
+      .exp-cards {
+        width: 100%;
+        margin-left: 0;
+        transform: none;
+        /* Open card taller so content is readable; closed strips are bigger touch targets */
+        --ec-open: clamp(220px, 58vw, 320px);
+        --ec-closed: 54px;
+        gap: 10px;
+      }
+      /* Body panel inside open card — narrower right padding so text has room */
+      .ec__body {
+        max-width: 90%;
+        padding: 18px 18px 22px;
+      }
+      .ec[data-active="true"] .ec__body {
+        padding-right: 56px; /* tighter gap from vertical title */
+      }
+      .ec__body p { font-size: 13px; }
+
+      /* ⑯ About photo: remove fixed height so it scales naturally */
+      .about__photo {
+        height: auto;
+        aspect-ratio: 300 / 340;
+      }
+
+      /* ⑰ Nav CTA: slightly tighter on narrow screens */
+      .nav__cta { font-size: 13px; padding: 9px 16px; }
+
+      /* ⑱ Pain tiles: switch to single column on very narrow screens so text isn't crushed */
+      /* (kept at 2-col down to 400px, single below) */
     }
 
     /* ─── Very small screens (≤ 400px) ─────────────────────────────── */
     @media (max-width: 400px) {
       .hero__content h1 { font-size: 26px; }
       .btn-lg { padding: 14px 20px; font-size: 15px; }
-      .pain__tile p { font-size: 13px; }
+      .pain__tile p { font-size: 12px; }
+      .pain__tiles { grid-template-columns: 1fr; } /* single column at 320–400px */
+      .pain__tile { aspect-ratio: unset; padding: 18px 16px; }
       .trustbar__item strong { font-size: 22px; }
       .trustbar__item span { font-size: 12px; }
+      .nav__cta { font-size: 12px; padding: 8px 12px; }
     }
   </style>
 </head>
