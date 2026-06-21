@@ -1486,29 +1486,29 @@
     </svg>
   </a>
 
-</div><!-- /hero-wrap -->
-
-<!-- ─── STATS CARDS ───────────────────────────────── -->
-<div class="trustbar">
-  <div class="trustbar__inner">
-    <div class="trustbar__item sr sr-d1">
-      <strong>שבועי</strong>
-      <span>מפגש לייב קבוע</span>
-    </div>
-    <div class="trustbar__item sr sr-d2">
-      <strong>91 ₪</strong>
-      <span>לחודש בלבד</span>
-    </div>
-    <div class="trustbar__item sr sr-d3">
-      <strong>519 ₪</strong>
-      <span>שווי בונוסים במתנה</span>
-    </div>
-    <div class="trustbar__item sr sr-d4">
-      <strong>ביטול</strong>
-      <span>בכל עת, ללא התחייבות</span>
+  <!-- ─── STATS CARDS ───────────────────────────────── -->
+  <div class="trustbar">
+    <div class="trustbar__inner">
+      <div class="trustbar__item sr sr-d1">
+        <strong>שבועי</strong>
+        <span>מפגש לייב קבוע</span>
+      </div>
+      <div class="trustbar__item sr sr-d2">
+        <strong>91 ₪</strong>
+        <span>לחודש בלבד</span>
+      </div>
+      <div class="trustbar__item sr sr-d3">
+        <strong>519 ₪</strong>
+        <span>שווי בונוסים במתנה</span>
+      </div>
+      <div class="trustbar__item sr sr-d4">
+        <strong>ביטול</strong>
+        <span>בכל עת, ללא התחייבות</span>
+      </div>
     </div>
   </div>
-</div>
+
+</div><!-- /hero-wrap -->
 
 <!-- ─── PAIN + SOLUTION scene (shared sticky bg) ─────── -->
 <div class="pain-scene">
@@ -1875,99 +1875,293 @@
 
 <!-- ─── JS ──────────────────────────────────────────── -->
 <script>
-  // ── Navbar: transparent on hero, white on scroll ──
-  (function () {
-    const nav = document.querySelector('.nav');
-    function update() {
-      if (window.scrollY > 20) nav.classList.add('scrolled');
-      else nav.classList.remove('scrolled');
-    }
-    window.addEventListener('scroll', update, { passive: true });
-    update();
-  })();
+  // ─── Content rendering (reads admin content from /api/content) ────────────
+  // The page ships with full static markup as a fallback. On load we fetch the
+  // live content (stored in Vercel Blob in production) and render every section
+  // from it, so admin edits — texts AND images — show up on the public site.
+  window.Site = window.Site || {};
+  const S = window.Site;
 
-  // ── Rotating nav taglines ──────────────────────────
-  (function () {
-    const items = document.querySelectorAll('.nav__tagline-item');
-    let cur = 0;
-    setInterval(() => {
-      items[cur].classList.remove('active');
-      cur = (cur + 1) % items.length;
-      items[cur].classList.add('active');
-    }, 3000);
-  })();
+  S.esc = s => String(s == null ? '' : s).replace(/[&<>"]/g,
+    c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
 
-  // Scroll reveal
-  const els = document.querySelectorAll('.sr');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('in');
-        io.unobserve(e.target);
+  // Resolve an image reference: full URLs / protocol-relative / absolute paths
+  // pass through; bare names (e.g. "hero.png") become root-absolute.
+  S.img = src => {
+    if (!src) return '';
+    if (/^(https?:)?\/\//.test(src) || /^data:/.test(src) || src.charAt(0) === '/') return src;
+    return '/' + src;
+  };
+
+  S.multiline = s => S.esc(s).replace(/\n/g, '<br>');
+  // Heading: \n → <br>, [[text]] → <em>text</em>
+  S.heading = s => S.esc(s).replace(/\n/g, '<br>').replace(/\[\[(.+?)\]\]/g, '<em>$1</em>');
+
+  S.tileColor = c => c === 'yellow' ? 'var(--yellow)'
+    : c === 'orange' ? 'var(--orange)'
+    : c === 'teal' ? 'var(--teal)'
+    : (c === 'dark' || !c) ? '#1a1a2e' : c;
+  S.tileText = c => c === 'yellow' ? '#3d2c00' : '#fff';
+
+  S.chipHTML = text => {
+    let n = 0;
+    return String(text || '').split(' ').map(w =>
+      '<span class="word">' + Array.from(w).map(ch => {
+        n = (n % 4) + 1;
+        return '<span class="c' + n + '">' + S.esc(ch) + '</span>';
+      }).join('') + '</span>'
+    ).join(' ');
+  };
+
+  const $  = sel => document.querySelector(sel);
+  const txt = (sel, v) => { const el = $(sel); if (el && v != null) el.textContent = v; };
+  const html = (sel, v) => { const el = $(sel); if (el && v != null) el.innerHTML = v; };
+
+  S.render = function (d) {
+    try {
+      // NAV
+      if (d.nav) {
+        const nt = document.getElementById('navTagline');
+        if (nt && Array.isArray(d.nav.taglines)) {
+          nt.innerHTML = d.nav.taglines.map((t, i) => {
+            let style = 'color:' + (t.color || '#298c9c') + ';';
+            if (t.font)   style += 'font-family:' + t.font + ';';
+            if (t.italic) style += 'font-style:italic;';
+            return '<span class="nav__tagline-item' + (i === 0 ? ' active' : '') +
+                   '" style="' + style + '">' + S.esc(t.text) + '</span>';
+          }).join('');
+        }
+        txt('.nav__cta', d.nav.cta);
       }
-    });
-  }, { threshold: 0.12 });
-  els.forEach(el => io.observe(el));
 
-  // ── Pain content: fade + rise as solution scrolls over ──
-  const painSection = document.querySelector('.pain');
-  const painContent = document.querySelector('.pain__grid');
+      // HERO
+      if (d.hero) {
+        html('.hero__chip', S.chipHTML(d.hero.chip));
+        html('.hero__content h1', S.heading(d.hero.title));
+        html('.hero__sub', S.multiline(d.hero.subtitle));
+        txt('.hero__actions .btn-primary', d.hero.ctaPrimary);
+        txt('.hero__actions .btn-outline', d.hero.ctaSecondary);
+        txt('.hero__note', d.hero.note);
+        const lg = $('.hero__logo-abs img'); if (lg && d.hero.logo)  lg.src = S.img(d.hero.logo);
+        const hi = $('.hero__img-side img');  if (hi && d.hero.image) hi.src = S.img(d.hero.image);
+      }
 
-  function onPainScroll() {
-    if (!painSection || !painContent) return;
-    const rect = painSection.getBoundingClientRect();
-    const vh   = window.innerHeight;
+      // TRUSTBAR (stats cards)
+      if (Array.isArray(d.trustbar)) {
+        const inner = $('.trustbar__inner');
+        if (inner) inner.innerHTML = d.trustbar.map((t, i) =>
+          '<div class="trustbar__item sr sr-d' + (i + 1) + '">' +
+            '<strong>' + S.esc(t.strong) + '</strong>' +
+            '<span>' + S.esc(t.span) + '</span>' +
+          '</div>').join('');
+      }
 
-    // progress: 0 = section fully visible, 1 = section fully scrolled past top
-    const progress = Math.min(1, Math.max(0, -rect.top / vh));
+      // PAIN
+      if (d.pain) {
+        txt('.pain__copy .label', d.pain.label);
+        html('.pain__copy h2', S.heading(d.pain.title));
+        const ps = document.querySelectorAll('.pain__copy p');
+        (d.pain.paragraphs || []).forEach((p, i) => { if (ps[i]) ps[i].textContent = p; });
+        const tiles = document.getElementById('painTiles');
+        if (tiles && Array.isArray(d.pain.tiles)) {
+          tiles.innerHTML = d.pain.tiles.map((t, i) =>
+            '<button type="button" class="pain__tile pain__tile--' + (t.color || 'teal') +
+            ' sr sr-d' + (i + 1) + '" data-pain="' + i + '">' +
+              '<p>' + S.esc(t.text) + '</p>' +
+              '<span class="pain__tile-more" aria-hidden="true">+</span>' +
+            '</button>').join('');
+        }
+      }
 
-    const opacity = Math.max(0, 1 - progress * 1.8);
-    painContent.style.transform = `translateY(-${progress * 80}px)`;
-    painContent.style.opacity   = opacity.toFixed(3);
+      // SOLUTION
+      if (d.solution) {
+        txt('.solution__head .label', d.solution.label);
+        txt('.solution__head h2', d.solution.title);
+        html('.solution__head p', S.multiline(d.solution.subtitle));
+        const cards = document.getElementById('solutionCards');
+        if (cards && Array.isArray(d.solution.steps)) {
+          cards.innerHTML = d.solution.steps.map((s, i) =>
+            '<div class="sol-card sr sr-d' + (i + 1) + '" role="button" tabindex="0" data-sol="' + i + '">' +
+              '<img class="sol-card__img" src="' + S.img(s.image) + '" alt="' + S.esc(s.title) + '">' +
+              '<div class="sol-card__body">' +
+                '<div class="sol-card__accent" style="background:var(--' + (s.accent || 'teal') + ')"></div>' +
+                '<h3>' + S.esc(s.title) + '</h3>' +
+                '<p>' + S.esc(s.text) + '</p>' +
+                '<span class="sol-card__more">קראו עוד ←</span>' +
+              '</div>' +
+            '</div>').join('');
+        }
+      }
 
-    // While the tiles are visible, keep them clickable and above the
-    // solution section that slides over them; otherwise let it pass through.
-    const interactive = opacity >= 0.15;
-    painContent.style.pointerEvents = interactive ? 'auto' : 'none';
-    painSection.style.zIndex        = interactive ? '3' : '1';
-  }
+      // FEATURES (expanding cards)
+      if (d.features) {
+        txt('.features__head .label', d.features.label);
+        txt('.features__head h2', d.features.title);
+        txt('.features__head p', d.features.subtitle);
+        const list = document.getElementById('expCards');
+        if (list && Array.isArray(d.features.steps)) {
+          list.innerHTML = d.features.steps.map((s, i) =>
+            '<li class="ec ec--' + (s.color || 'teal') + ' sr" data-active="false" data-index="' + i + '" tabindex="0">' +
+              '<div class="ec__bg"></div>' +
+              '<img class="ec__img" src="' + S.img(s.image) + '" alt="' + S.esc(s.title) + '">' +
+              '<div class="ec__overlay"></div>' +
+              '<span class="ec__title-v">' + S.esc(s.title) + '</span>' +
+              '<div class="ec__body"><h3>' + S.esc(s.subtitle) + '</h3><p>' + S.esc(s.text) + '</p></div>' +
+            '</li>').join('');
+        }
+      }
 
-  window.addEventListener('scroll', onPainScroll, { passive: true });
-  onPainScroll();
+      // TOPICS
+      if (d.topics) {
+        txt('.topics__head .label', d.topics.label);
+        txt('.topics__head h2', d.topics.title);
+        txt('.topics__head p', d.topics.subtitle);
+        const wrap = $('.topics__wrap');
+        if (wrap && Array.isArray(d.topics.items)) {
+          wrap.innerHTML = d.topics.items.map(t =>
+            '<span class="topic-tag tt-' + (t.color || 'teal') + '">' + S.esc(t.text) + '</span>').join('');
+        }
+      }
 
-  // ── Expanding Cards ────────────────────────────────
-  (function () {
-    const list  = document.getElementById('expCards');
-    const cards = Array.from(list.querySelectorAll('.ec'));
+      // ABOUT
+      if (d.about) {
+        txt('.about__text .label', d.about.label);
+        html('.about__text h2', S.esc(d.about.title) + '<br><span>' + S.esc(d.about.titleSpan) + '</span>');
+        txt('.about__subtitle', d.about.subtitle);
+        const aps = document.querySelectorAll('.about__text p:not(.about__subtitle)');
+        (d.about.paragraphs || []).forEach((p, i) => { if (aps[i]) aps[i].textContent = p; });
+        const link = $('.about__link');
+        if (link) {
+          const svg = link.querySelector('svg');
+          if (d.about.linkUrl) link.setAttribute('href', d.about.linkUrl);
+          link.innerHTML = S.esc(d.about.linkText) + (svg ? svg.outerHTML : '');
+        }
+        const photo = $('.about__photo'); if (photo && d.about.image) photo.src = S.img(d.about.image);
+      }
 
-    function setActive(index) {
-      cards.forEach((c, i) => {
-        const active = i === index;
-        c.dataset.active = active;
-      });
+      // BONUSES
+      if (d.bonuses) {
+        txt('.bonuses__head .label', d.bonuses.label);
+        txt('.bonuses__head h2', d.bonuses.title);
+        txt('.bonuses__head p', d.bonuses.subtitle);
+        const grid = $('.bonuses__grid');
+        if (grid && Array.isArray(d.bonuses.items)) {
+          grid.innerHTML = d.bonuses.items.map((b, i) =>
+            '<div class="bonus-card bonus-card--' + (b.color || 'teal') + ' sr sr-d' + (i + 1) + '">' +
+              '<h3 class="bonus-card__title">' + S.esc(b.title) + '</h3>' +
+              '<p class="bonus-card__desc">' + S.esc(b.desc) + '</p>' +
+              '<div class="bonus-card__price">' +
+                '<span class="bonus-card__original">' + S.esc(b.original) + '</span>' +
+                '<span class="bonus-card__tag tag--' + (b.color || 'teal') + '">' + S.esc(b.tag) + '</span>' +
+              '</div>' +
+            '</div>').join('');
+        }
+      }
 
-      // Vertical accordion — active row expands top→bottom
-      list.style.gridTemplateRows = cards
-        .map((_, i) => i === index ? 'var(--ec-open)' : 'var(--ec-closed)')
-        .join(' ');
-      list.style.gridTemplateColumns = '';
+      // PRICING
+      if (d.pricing) {
+        txt('.pricing__label', d.pricing.label);
+        html('.pricing__amount', '<sup>' + S.esc(d.pricing.currency) + '</sup>' + S.esc(d.pricing.amount));
+        txt('.pricing__period', d.pricing.period);
+        const ul = $('.pricing__list');
+        if (ul && Array.isArray(d.pricing.features)) {
+          ul.innerHTML = d.pricing.features.map(f =>
+            '<li><span class="check' + (f.gift ? ' check--gift' : '') + '">' +
+            (f.gift ? '★' : '✓') + '</span><span>' + S.esc(f.text) + '</span></li>').join('');
+        }
+        txt('.pricing__cta .btn', d.pricing.cta);
+        txt('.pricing__fine', d.pricing.fine);
+      }
+
+      // FOOTER
+      if (d.footer) {
+        const fl = $('.footer__logo'); if (fl && d.footer.logo) fl.src = S.img(d.footer.logo);
+        html('.footer__tagline', S.multiline(d.footer.tagline));
+        const links = $('.footer__links');
+        if (links && Array.isArray(d.footer.links)) {
+          links.innerHTML = d.footer.links.map(l => {
+            const ext = /^https?:\/\//.test(l.url || '');
+            return '<a href="' + S.esc(l.url) + '"' +
+              (ext ? ' target="_blank" rel="noopener"' : '') + '>' + S.esc(l.text) + '</a>';
+          }).join('');
+        }
+        txt('.footer__copy', d.footer.copy);
+      }
+    } catch (err) {
+      console.error('[content] render error', err);
+    }
+  };
+
+  // ─── Interactive behaviours (run after content is rendered) ───────────────
+  S.initBasics = function () {
+    // Navbar: transparent on hero, white on scroll
+    const nav = document.querySelector('.nav');
+    if (nav) {
+      const update = () => nav.classList.toggle('scrolled', window.scrollY > 20);
+      window.addEventListener('scroll', update, { passive: true });
+      update();
     }
 
-    cards.forEach((card, i) => {
-      card.addEventListener('mouseenter', () => setActive(i));
-      card.addEventListener('click',      () => setActive(i));
-      card.addEventListener('focus',      () => setActive(i));
-    });
+    // Rotating nav taglines
+    const items = document.querySelectorAll('.nav__tagline-item');
+    if (items.length > 1) {
+      let cur = 0;
+      setInterval(() => {
+        items[cur].classList.remove('active');
+        cur = (cur + 1) % items.length;
+        items[cur].classList.add('active');
+      }, 3000);
+    }
 
-    // Start with the fan fully closed; close again when pointer leaves
-    list.addEventListener('mouseleave', () => setActive(-1));
-    setActive(-1);
+    // Scroll reveal
+    const els = document.querySelectorAll('.sr');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(el => io.observe(el));
 
-    // Re-init on resize
-    window.addEventListener('resize', () => setActive(
-      cards.findIndex(c => c.dataset.active === 'true')
-    ));
-  })();
+    // Pain content: fade + rise as solution scrolls over
+    const painSection = document.querySelector('.pain');
+    const painContent = document.querySelector('.pain__grid');
+    function onPainScroll() {
+      if (!painSection || !painContent) return;
+      const rect = painSection.getBoundingClientRect();
+      const vh   = window.innerHeight;
+      const progress = Math.min(1, Math.max(0, -rect.top / vh));
+      const opacity  = Math.max(0, 1 - progress * 1.8);
+      painContent.style.transform = `translateY(-${progress * 80}px)`;
+      painContent.style.opacity   = opacity.toFixed(3);
+      const interactive = opacity >= 0.15;
+      painContent.style.pointerEvents = interactive ? 'auto' : 'none';
+      painSection.style.zIndex        = interactive ? '3' : '1';
+    }
+    window.addEventListener('scroll', onPainScroll, { passive: true });
+    onPainScroll();
+
+    // Expanding cards
+    const list = document.getElementById('expCards');
+    if (list) {
+      const cards = Array.from(list.querySelectorAll('.ec'));
+      function setActive(index) {
+        cards.forEach((c, i) => { c.dataset.active = i === index; });
+        list.style.gridTemplateRows = cards
+          .map((_, i) => i === index ? 'var(--ec-open)' : 'var(--ec-closed)').join(' ');
+        list.style.gridTemplateColumns = '';
+      }
+      cards.forEach((card, i) => {
+        card.addEventListener('mouseenter', () => setActive(i));
+        card.addEventListener('click',      () => setActive(i));
+        card.addEventListener('focus',      () => setActive(i));
+      });
+      list.addEventListener('mouseleave', () => setActive(-1));
+      setActive(-1);
+      window.addEventListener('resize', () => setActive(
+        cards.findIndex(c => c.dataset.active === 'true')
+      ));
+    }
+  };
 
   // Payment handler — replace '#' with your payment link
   function handlePayment(e) {
@@ -1995,55 +2189,27 @@
 </div>
 
 <script>
-  // ── Tiles / cards → modal ──────────────────────────
-  (function () {
-    const painData = [
-      {
-        tag: 'הורות — המציאות', color: 'var(--teal)', tcolor: '#fff',
-        title: 'מתעצבנים יותר ממה שרצינו',
-        text: 'אתם אוהבים את הילדים שלכם יותר מהכל — אבל ברגעי לחץ אתם מוצאים את עצמכם מרימים את הקול ומגיבים בעוצמה שמפתיעה גם אתכם. ואז מגיעה החרטה. במועדון לומדים לזהות את הטריגרים מראש ולהגיב מתוך בחירה, לא מתוך תגובה אוטומטית.',
-        img: 'https://static.wixstatic.com/media/c183ff_e37f8f3a6c7147dda1398621e1df50a5~mv2.jpg/v1/fill/w_700,h_700,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/WhatsApp%20Image%202024-11-18%20at%2013_30_edited.jpg'
-      },
-      {
-        tag: 'הורות — המציאות', color: 'var(--yellow)', tcolor: '#3d2c00',
-        title: 'מרגישים אשמה',
-        text: 'כל הורה מכיר את הקול הפנימי שלוחש "יכולתי לעשות את זה אחרת". האשמה הזו שוחקת ולא עוזרת לאף אחד. במועדון נלמד להחליף ביקורת עצמית בחמלה — ולהבין שהורות טובה אינה הורות מושלמת.',
-        img: 'https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=700&q=80&fit=crop'
-      },
-      {
-        tag: 'הורות — המציאות', color: 'var(--orange)', tcolor: '#fff',
-        title: 'חוזרים לאותם דפוסים שוב ושוב',
-        text: 'אותם ויכוחים, אותן מריבות סביב שיעורי בית, מסכים או שעת השינה. נדמה שהכל חוזר בלולאה אינסופית. במועדון נפרק את הדפוסים האלה לגורמים ונבנה יחד דרכים חדשות שבאמת עובדות לאורך זמן.',
-        img: 'https://static.wixstatic.com/media/c183ff_d8d8e30ec21847c9b71d1ee3f30a6216~mv2.jpg/v1/fill/w_700,h_700,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5893371940104682991_y_edited.jpg'
-      },
-      {
-        tag: 'הורות — המציאות', color: '#1a1a2e', tcolor: '#fff',
-        title: 'מרגישים לפעמים לגמרי לבד',
-        text: 'גם כשהבית מלא, ההורות יכולה להרגיש בודדה מאוד — אין עם מי להתייעץ בלי לחשוש משיפוטיות. מועדון ההורים הוא קהילה של אנשים שמבינים בדיוק מה אתם עוברים: מקום בטוח לשתף, לשאול ולקבל חיזוק.',
-        img: 'https://static.wixstatic.com/media/c183ff_de59b5f1e37e4cc6ab68cae32bdbd997~mv2.jpg/v1/fill/w_700,h_700,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5767257574146686340_y_edited_edite.jpg'
-      }
-    ];
+  // ── Tiles / cards → modal (data-driven from the rendered content) ─────────
+  S.initModal = function (d) {
+    const painData = (d && d.pain && Array.isArray(d.pain.tiles))
+      ? d.pain.tiles.map(t => ({
+          tag: (d.pain.label || 'הורות — המציאות'),
+          color: S.tileColor(t.color), tcolor: S.tileText(t.color),
+          title: t.expandedTitle || t.text,
+          text:  (t.expandedText || '').replace(/\n+/g, ' '),
+          img:   S.img(t.image)
+        }))
+      : [];
 
-    const solData = [
-      {
-        tag: 'הפתרון', color: 'var(--teal)', tcolor: '#fff',
-        title: 'קהילה תומכת',
-        text: 'במועדון תפגשו הורים שמבינים בדיוק מה אתם עוברים — בלי שיפוטיות ובלי "עצות" שלא ביקשתם. זה מרחב בטוח לשתף בקשיים, לשמוע שאתם לא לבד, ולקבל חום ותמיכה אמיתית מאנשים שנמצאים בדיוק באותו מסע.',
-        img: 'https://static.wixstatic.com/media/c183ff_de59b5f1e37e4cc6ab68cae32bdbd997~mv2.jpg/v1/fill/w_700,h_700,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5767257574146686340_y_edited_edite.jpg'
-      },
-      {
-        tag: 'הפתרון', color: 'var(--yellow)', tcolor: '#3d2c00',
-        title: 'ידע מקצועי',
-        text: 'כלים מעשיים מעולמות ה-NLP, ה-CBT והפסיכולוגיה של ילדים — מתורגמים לשפה פשוטה ולמצבים שאתם פוגשים בבית כל יום. לא תיאוריה מנותקת, אלא דרכים קונקרטיות לתקשר, להציב גבולות ולחזק את הקשר עם הילדים.',
-        img: 'https://static.wixstatic.com/media/c183ff_e37f8f3a6c7147dda1398621e1df50a5~mv2.jpg/v1/fill/w_700,h_700,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/WhatsApp%20Image%202024-11-18%20at%2013_30_edited.jpg'
-      },
-      {
-        tag: 'הפתרון', color: 'var(--orange)', tcolor: '#fff',
-        title: 'שבועי ועקבי',
-        text: 'מפגש לייב קבוע מדי שבוע — לא קורס חד-פעמי שנשכח אחרי יומיים, אלא תהליך אמיתי שמתפתח לאורך זמן. העקביות היא מה שיוצרת שינוי: מפגש אחרי מפגש אתם בונים הרגלים חדשים ורואים את ההשפעה מצטברת בבית.',
-        img: 'https://static.wixstatic.com/media/c183ff_d8d8e30ec21847c9b71d1ee3f30a6216~mv2.jpg/v1/fill/w_700,h_700,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5893371940104682991_y_edited.jpg'
-      }
-    ];
+    const solData = (d && d.solution && Array.isArray(d.solution.steps))
+      ? d.solution.steps.map(s => ({
+          tag: (d.solution.label || 'הפתרון'),
+          color: 'var(--' + (s.accent || 'teal') + ')', tcolor: S.tileText(s.accent),
+          title: s.title,
+          text:  (s.expandedText || s.text || '').replace(/\n+/g, ' '),
+          img:   S.img(s.image)
+        }))
+      : [];
 
     const modal   = document.getElementById('painModal');
     const imgEl   = document.getElementById('painModalImg');
@@ -2051,17 +2217,18 @@
     const titleEl = document.getElementById('painModalTitle');
     const textEl  = document.getElementById('painModalText');
     const closeEl = document.getElementById('painModalClose');
+    if (!modal) return;
     let lastFocused = null;
 
-    function open(d) {
-      if (!d) return;
-      imgEl.src = d.img;
-      imgEl.alt = d.title;
-      titleEl.textContent = d.title;
-      textEl.textContent  = d.text;
-      tagEl.textContent   = d.tag;
-      tagEl.style.background = d.color;
-      tagEl.style.color      = d.tcolor;
+    function open(item) {
+      if (!item) return;
+      imgEl.src = item.img;
+      imgEl.alt = item.title;
+      titleEl.textContent = item.title;
+      textEl.textContent  = item.text;
+      tagEl.textContent   = item.tag;
+      tagEl.style.background = item.color;
+      tagEl.style.color      = item.tcolor;
       lastFocused = document.activeElement;
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
@@ -2074,24 +2241,37 @@
       if (lastFocused) lastFocused.focus();
     }
 
-    document.getElementById('painTiles')
-      .querySelectorAll('.pain__tile')
-      .forEach(tile => tile.addEventListener('click', () => open(painData[+tile.dataset.pain])));
+    const tiles = document.getElementById('painTiles');
+    if (tiles) tiles.querySelectorAll('.pain__tile').forEach(tile =>
+      tile.addEventListener('click', () => open(painData[+tile.dataset.pain])));
 
-    document.getElementById('solutionCards')
-      .querySelectorAll('.sol-card')
-      .forEach(card => {
-        card.addEventListener('click', () => open(solData[+card.dataset.sol]));
-        card.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(solData[+card.dataset.sol]); }
-        });
+    const cards = document.getElementById('solutionCards');
+    if (cards) cards.querySelectorAll('.sol-card').forEach(card => {
+      card.addEventListener('click', () => open(solData[+card.dataset.sol]));
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(solData[+card.dataset.sol]); }
       });
+    });
 
     closeEl.addEventListener('click', close);
     modal.addEventListener('click', e => { if (e.target === modal) close(); });
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && modal.classList.contains('open')) close();
     });
+  };
+
+  // ── Boot: fetch live content → render → wire up interactivity ─────────────
+  (async function () {
+    let data = null;
+    try {
+      const r = await fetch('/api/content', { cache: 'no-store' });
+      if (r.ok) data = await r.json();
+    } catch (err) {
+      console.warn('[content] fetch failed — using static fallback', err);
+    }
+    if (data) S.render(data);
+    S.initBasics();
+    S.initModal(data);
   })();
 </script>
 
