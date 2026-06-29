@@ -549,7 +549,11 @@ const RENDER = {
 };
 
 // ─── Render / rebuild ───────────────────────────────────────────────────────
-function rebuild(){
+function rebuild(opts){
+  // Default: keep the user's scroll position (e.g. when adding/removing list
+  // items). Only jump to top when explicitly asked (tab switch).
+  const toTop = opts && opts.toTop;
+  const y = window.scrollY;
   const panel = document.getElementById('panel');
   panel.innerHTML = '';
   const nodes = RENDER[activeTab]();
@@ -557,7 +561,8 @@ function rebuild(){
   // tabs active state
   document.querySelectorAll('#tabs button').forEach(b =>
     b.classList.toggle('active', b.dataset.tab === activeTab));
-  window.scrollTo({ top:0, behavior:'smooth' });
+  if (toTop) window.scrollTo({ top:0, behavior:'smooth' });
+  else window.scrollTo({ top:y });
 }
 
 function buildTabs(){
@@ -565,7 +570,7 @@ function buildTabs(){
   tabs.innerHTML = '';
   TABS.forEach(([id, label]) => {
     tabs.appendChild(h('button', { 'data-tab':id,
-      onclick: () => { activeTab = id; rebuild(); } }, label));
+      onclick: () => { activeTab = id; rebuild({ toTop:true }); } }, label));
   });
 }
 
