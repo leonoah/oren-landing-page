@@ -36,7 +36,24 @@
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
       "Bash(grep -n \"grid-template-columns: 5fr\\\\|\\\\.ec__title-v {\\\\|transform: translate\\(-50%, -50%\\) rotate\\(-90deg\\)\\\\|gridTemplateColumns = cards.map\\\\|grid-template-rows: 5fr 1fr 1fr 1fr\" index.html)",
-      "Bash(grep -n 'class=\"ec ec--teal\" data-active=\"true\"\\\\|data-active=\"${i===0}\"' index.html server-app/public/index.html)"
+      "Bash(grep -n 'class=\"ec ec--teal\" data-active=\"true\"\\\\|data-active=\"${i===0}\"' index.html server-app/public/index.html)",
+      "Bash(grep -iE '\\\\.\\(jpg|jpeg|png|webp|gif|avif\\)$')",
+      "Bash(python3 -c \"import json; d=json.load\\(open\\('server/data/content.json'\\)\\); print\\(list\\(d.keys\\(\\)\\)\\); print\\(\\); print\\('PRICING:', json.dumps\\(d.get\\('pricing'\\), ensure_ascii=False, indent=2\\)[:800]\\)\")",
+      "Bash(python3 -c \"import json; d=json.load\\(open\\('server/data/content.json'\\)\\); print\\(json.dumps\\(d['pricing'].get\\('decorImages'\\), ensure_ascii=False, indent=2\\)\\); print\\('---testimonials key?---'\\); print\\('testimonials' in d['pricing'], [k for k in d['pricing']]\\)\")",
+      "Bash(python3 -c \"import json,sys; print\\(json.load\\(sys.stdin\\).get\\('scripts'\\)\\)\")",
+      "Bash(\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless --disable-gpu --hide-scrollbars --window-size=1600,1100 --screenshot=/tmp/oren-pricing.png --virtual-time-budget=4000 \"http://localhost:3001/#pricing\")",
+      "Bash(echo \"exit=$?\")",
+      "Bash(npm ls *)",
+      "Bash(\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless=new --disable-gpu --window-size=1600,1100 --dump-dom \"http://localhost:3001/\")",
+      "Bash(python3)",
+      "Bash(sips -g pixelWidth -g pixelHeight /tmp/oren-full.png)",
+      "Bash(magick -version)",
+      "Bash(convert -version)",
+      "Bash(python3 -m pip install --quiet Pillow)",
+      "Bash(python3 -c \"from PIL import Image; print\\('PIL-ok'\\)\")",
+      "Bash(\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless=new --disable-gpu --remote-debugging-port=9222 --window-size=1600,1000 about:blank)",
+      "Bash(curl -s localhost:9222/json/version)",
+      "Bash(python3 -c \"import json,sys; print\\(json.load\\(sys.stdin\\)['webSocketDebuggerUrl']\\)\")"
     ]
   }
 }

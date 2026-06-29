@@ -285,28 +285,112 @@
     ],
     "cta": "הצטרפות למועדון עכשיו",
     "fine": "ביטול בכל עת · ללא התחייבות · פחות מ-3 ₪ ליום",
-    "decorImages": [
-      {
-        "url": "https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=400&q=80&fit=crop",
-        "size": 155
-      },
-      {
-        "url": "https://static.wixstatic.com/media/c183ff_de59b5f1e37e4cc6ab68cae32bdbd997~mv2.jpg/v1/fill/w_400,h_400,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5767257574146686340_y_edited_edite.jpg",
-        "size": 92
-      },
-      {
-        "url": "https://static.wixstatic.com/media/c183ff_e37f8f3a6c7147dda1398621e1df50a5~mv2.jpg/v1/fill/w_400,h_400,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/WhatsApp%20Image%202024-11-18%20at%2013_30_edited.jpg",
-        "size": 120
-      },
-      {
-        "url": "https://static.wixstatic.com/media/c183ff_d8d8e30ec21847c9b71d1ee3f30a6216~mv2.jpg/v1/fill/w_400,h_400,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5893371940104682991_y_edited.jpg",
-        "size": 100
-      },
-      {
-        "url": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&q=80&fit=crop",
-        "size": 150
-      }
-    ]
+    "sideCols": {
+      "right": [
+        {
+          "kind": "image",
+          "url": "family.jpg"
+        },
+        {
+          "kind": "quote",
+          "text": "תוך חודש ראיתי שינוי אמיתי באיך שאני מדבר עם הבן שלי.",
+          "author": "יעל, אמא לשניים",
+          "stars": true
+        },
+        {
+          "kind": "image",
+          "url": "/uploads/1781084484506-811726401.png"
+        },
+        {
+          "kind": "quote",
+          "text": "סוף סוף יש לי כלים מעשיים, לא רק תיאוריה.",
+          "author": "דנה, אמא לשלושה",
+          "stars": true
+        },
+        {
+          "kind": "image",
+          "url": "/uploads/1781084717846-272665279.png"
+        },
+        {
+          "kind": "quote",
+          "text": "המפגשים השבועיים הפכו לחלק הכי חשוב בשבוע שלנו.",
+          "author": "מיכל, אמא לתאומים",
+          "stars": true
+        },
+        {
+          "kind": "image",
+          "url": "/uploads/1781087486871-759135568.png"
+        },
+        {
+          "kind": "quote",
+          "text": "הילד נפתח, והבית נעשה הרבה יותר רגוע.",
+          "author": "רונית, אמא לארבעה",
+          "stars": true
+        },
+        {
+          "kind": "image",
+          "url": "/uploads/1781087528238-57197147.png"
+        },
+        {
+          "kind": "quote",
+          "text": "אורן נותן יחס אישי ומענה לכל שאלה.",
+          "author": "נועה, אמא לילד אחד",
+          "stars": true
+        }
+      ],
+      "left": [
+        {
+          "kind": "image",
+          "url": "bonus-photo.jpg"
+        },
+        {
+          "kind": "quote",
+          "text": "למדתי להקשיב לילדים שלי באמת, בלי לשפוט.",
+          "author": "שירה, אמא לשניים",
+          "stars": true
+        },
+        {
+          "kind": "image",
+          "url": "https://static.wixstatic.com/media/c183ff_de59b5f1e37e4cc6ab68cae32bdbd997~mv2.jpg/v1/fill/w_400,h_400,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5767257574146686340_y_edited_edite.jpg"
+        },
+        {
+          "kind": "quote",
+          "text": "הקשר עם הבת שלי השתנה מקצה לקצה.",
+          "author": "אורית, אמא לשלושה",
+          "stars": true
+        },
+        {
+          "kind": "image",
+          "url": "https://static.wixstatic.com/media/c183ff_e37f8f3a6c7147dda1398621e1df50a5~mv2.jpg/v1/fill/w_400,h_400,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/WhatsApp%20Image%202024-11-18%20at%2013_30_edited.jpg"
+        },
+        {
+          "kind": "quote",
+          "text": "כל מפגש משאיר אותי עם כלי חדש ליישם מיד.",
+          "author": "תמר, אמא לשניים",
+          "stars": true
+        },
+        {
+          "kind": "image",
+          "url": "https://static.wixstatic.com/media/c183ff_d8d8e30ec21847c9b71d1ee3f30a6216~mv2.jpg/v1/fill/w_400,h_400,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/photo_5893371940104682991_y_edited.jpg"
+        },
+        {
+          "kind": "quote",
+          "text": "הפסקנו לצעוק בבית, וזה מרגיש כמו נס.",
+          "author": "הילה, אמא לארבעה",
+          "stars": true
+        },
+        {
+          "kind": "image",
+          "url": "https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=400&q=80&fit=crop"
+        },
+        {
+          "kind": "quote",
+          "text": "הקהילה נותנת תחושה שאנחנו לא לבד בהורות.",
+          "author": "גלית, אמא לשלושה",
+          "stars": true
+        }
+      ]
+    }
   },
   "footer": {
     "tagline": "לא מגדלים ילדים לבד\nוביחד גדלים כהורים",

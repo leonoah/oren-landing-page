@@ -172,6 +172,19 @@ function colorField(label, obj, key, allowed){
   ]);
 }
 
+function selectField(label, obj, key, options, onchange){
+  const sel = h('select', { onchange: e => { obj[key] = e.target.value; if(onchange) onchange(e.target.value); } },
+    options.map(o => {
+      const opt = h('option', { value:o.value }, o.label);
+      if(obj[key] === o.value) opt.selected = true;
+      return opt;
+    }));
+  return h('label', { class:'fld' }, [
+    h('span', { class:'fld__label' }, label),
+    sel,
+  ]);
+}
+
 function imageField(label, obj, key){
   const preview = h('img', { class:'imgprev' });
   if(obj[key]){ preview.src = obj[key]; } else { preview.style.display = 'none'; }
@@ -258,6 +271,36 @@ function listEditor(arr, renderItem, makeNew, addLabel){
 
 function group(title, children){
   return h('div', { class:'group' }, [ title ? h('h3', {}, title) : null ].concat(children));
+}
+
+// Editor for one side column of the pricing marquee (mix of images + quotes)
+function sideColEditor(cols, side, title){
+  const arr = cols[side];
+  return h('div', { class:'group', style:'background:rgba(0,0,0,.02);border:1px solid #eee;border-radius:12px;padding:12px 14px;margin-bottom:14px' }, [
+    h('h3', { style:'font-size:15px;margin-bottom:8px' }, title),
+    listEditor(arr,
+      (it) => {
+        if (!it.kind) it.kind = it.text ? 'quote' : 'image';
+        const fields = it.kind === 'quote'
+          ? h('div', {}, [
+              textField('טקסט ההמלצה', it, 'text', { multiline:true }),
+              textField('שם הממליץ/ה', it, 'author', { placeholder:'יעל, אמא לשניים' }),
+              h('label', { class:'fld', style:'display:flex;align-items:center;gap:8px' }, [
+                (function(){ const cb = h('input', { type:'checkbox', onchange:e=>it.stars=e.target.checked });
+                  cb.checked = it.stars !== false; return cb; })(),
+                h('span', { class:'fld__label', style:'margin:0' }, 'הצגת 5 כוכבים'),
+              ]),
+            ])
+          : imageField('תמונה', it, 'url');
+        return h('div', {}, [
+          selectField('סוג פריט', it, 'kind',
+            [{ value:'image', label:'תמונה' }, { value:'quote', label:'המלצה' }],
+            () => rebuild()),
+          fields,
+        ]);
+      },
+      () => ({ kind:'image', url:'' }), '+ הוספת פריט'),
+  ]);
 }
 
 // ─── Tab renderers ──────────────────────────────────────────────────────────
@@ -435,6 +478,9 @@ const RENDER = {
 
   pricing(){
     const d = data.pricing;
+    if (!d.sideCols || typeof d.sideCols !== 'object') d.sideCols = {};
+    if (!Array.isArray(d.sideCols.right)) d.sideCols.right = [];
+    if (!Array.isArray(d.sideCols.left))  d.sideCols.left  = [];
     return [
       group('מחיר', [
         textField('תווית (Label)', d, 'label'),
@@ -460,16 +506,13 @@ const RENDER = {
         textField('טקסט הכפתור', d, 'cta'),
         textField('הערה תחתונה', d, 'fine'),
       ]),
-      group('תמונות מעגליות בצדדים (אנימציה)', [
+      group('גלריה נעה בצדי הכרטיסייה', [
         h('p', { class:'fld__hint', style:'margin-bottom:14px' },
-          'עד 5 תמונות שיוצגו בעיגולים צפים בצדי קופסת המחיר. מומלץ תמונות מרובעות של ילדים / משפחה. המיקום מתחלק אוטומטית בין שני הצדדים לפי הסדר.'),
-        listEditor(d.decorImages || (d.decorImages = []),
-          (it) => h('div', {}, [
-            imageField('תמונה', it, 'url'),
-            numberField('גודל העיגול (פיקסלים)', it, 'size',
-              { placeholder:'120', min:50, max:240, hint:'בדרך כלל 80–160. ריק = גודל ברירת מחדל' }),
-          ]),
-          () => ({ url:'', size:120 }), '+ הוספת תמונה'),
+          'שתי עמודות שמרחפות בצדי קופסת המחיר ונעות לאט: העמודה הימנית יורדת והשמאלית עולה. ' +
+          'כל פריט יכול להיות תמונה או המלצה. מומלץ ~5 תמונות ו-5 המלצות בכל עמודה. ' +
+          'מוצג רק במסכים רחבים (מעל 1460px) — במובייל מוסתר.'),
+        sideColEditor(d.sideCols, 'right', 'עמודה ימנית (יורדת)'),
+        sideColEditor(d.sideCols, 'left',  'עמודה שמאלית (עולה)'),
       ]),
     ];
   },
